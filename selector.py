@@ -7,10 +7,10 @@ st.set_page_config(page_title="Pump Selector", layout="wide")
 # -- Custom Header with Logo and Title --
 col_logo, col_title = st.columns([1, 8])
 with col_logo:
-    st.image("https://www.hungpump.com/images/340357", width=120)
+    st.image("https://www.hungpump.com/images/340357", width=160)  # ✅ Logo enlarged here
 with col_title:
     st.markdown("""
-        <div style='display: flex; align-items: center; height: 100%; padding-left: 10px;'>
+        <div style='display: flex; align-items: center; height: 100%; padding-left: 15px;'>
             <h1 style='color: #0057B8; margin: 0;'>Hung Pump</h1>
         </div>
     """, unsafe_allow_html=True)
@@ -42,10 +42,14 @@ if st.button("🔍 Search"):
 
     # Convert units
     flow_lpm = flow_value
-    if flow_unit == "L/sec": flow_lpm *= 60
-    elif flow_unit == "m³/hr": flow_lpm = flow_value * 1000 / 60
-    elif flow_unit == "m³/min": flow_lpm *= 1000
-    elif flow_unit == "US gpm": flow_lpm *= 3.785
+    if flow_unit == "L/sec":
+        flow_lpm *= 60
+    elif flow_unit == "m³/hr":
+        flow_lpm = flow_value * 1000 / 60
+    elif flow_unit == "m³/min":
+        flow_lpm *= 1000
+    elif flow_unit == "US gpm":
+        flow_lpm *= 3.785
 
     head_m = head_value if head_unit == "m" else head_value * 0.3048
 
