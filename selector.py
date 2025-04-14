@@ -5,7 +5,7 @@ st.title("🛠️ Pump Selection Tool")
 
 # ✅ Load the local CSV file
 try:
-    pumps = pd.read_csv("Pump Selection Data.csv")
+    pumps = pd.read_csv("Pump Selection Data - 工作表1.csv")
 except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
@@ -55,9 +55,24 @@ if st.button("🔍 Search"):
         head_m = head_value if head_unit == "m" else head_value * 0.3048
         filtered_pumps = filtered_pumps[filtered_pumps["Max Head (M)"] >= head_m]
 
-    # Display results
     st.subheader("✅ Matching Pumps")
+
     if not filtered_pumps.empty:
-        st.dataframe(filtered_pumps.reset_index(drop=True))
+        # Make product link clickable
+        def make_clickable(url):
+            return f'<a href="{url}" target="_blank">🔗 View Product</a>'
+
+        results = filtered_pumps.copy()
+        results["Product Link"] = results["Product Link"].apply(make_clickable)
+
+        # Optional: Show selected columns only (you can adjust this list)
+        columns_to_display = [
+            "Model No.", "Frequency (Hz)", "Power(KW)", "Max Flow (LPM)",
+            "Max Head (M)", "Category", "Product Link"
+        ]
+        results = results[columns_to_display]
+
+        # Show table with HTML links
+        st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
