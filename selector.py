@@ -7,7 +7,7 @@ st.title("🛠️ Pump Selection Tool")
 
 # ✅ Load the local CSV file
 try:
-    pumps = pd.read_csv("Pump Selection Data.csv")
+    pumps = pd.read_csv("Pump Selection Data - 工作表1.csv")
 except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
@@ -70,16 +70,23 @@ if st.button("🔍 Search"):
         # Show full table with clickable model numbers
         st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
 
-        # --- Graph: Flow vs Head ---
+        # --- Draw Pump Curve-style Graph ---
+        st.subheader("📈 Pump Curve Comparison")
         fig, ax = plt.subplots()
-        ax.scatter(results["Max Flow (LPM)"], results["Max Head (M)"], label="Matching Pumps", s=80)
-        ax.scatter([flow_lpm], [head_m], color="red", marker="x", s=120, label="User Requirement")
+
+        for _, row in filtered_pumps.iterrows():
+            model = row["Model No."]
+            flow = row["Max Flow (LPM)"]
+            head = row["Max Head (M)"]
+            ax.plot([0, flow], [head, 0], label=model, linewidth=1.5)
+
+        ax.scatter([flow_lpm], [head_m], color='red', marker='x', s=100, label='User Requirement')
 
         ax.set_xlabel("Flow (LPM)")
         ax.set_ylabel("Head (m)")
-        ax.set_title("Pump Comparison: Flow vs Head")
+        ax.set_title("Pump Performance Curves")
         ax.grid(True)
-        ax.legend()
+        ax.legend(fontsize="small", loc="upper right")
 
         st.pyplot(fig)
 
