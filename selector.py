@@ -11,18 +11,16 @@ except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
 
-# --- UI for User Input ---
-col1, col2 = st.columns(2)
+# --- UI Inputs (Vertical Layout) ---
+frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
 
-with col1:
-    frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
-    flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
-    flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0)
+category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
 
-with col2:
-    category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
-    head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
-    head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0)
+flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
+flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0)
+
+head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
+head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0)
 
 # --- Search Button ---
 if st.button("🔍 Search"):
@@ -58,12 +56,19 @@ if st.button("🔍 Search"):
     st.subheader("✅ Matching Pumps")
 
     if not filtered_pumps.empty:
-        # Remove Product Link column before display
-        if "Product Link" in filtered_pumps.columns:
-            filtered_pumps = filtered_pumps.drop(columns=["Product Link"])
+        results = filtered_pumps.copy()
 
-        # Show full table
-        st.dataframe(filtered_pumps.reset_index(drop=True))
+        # Make Model No. clickable using Product Link
+        def make_clickable_model(row):
+            return f'<a href="{row["Product Link"]}" target="_blank">{row["Model No."]}</a>'
 
+        results["Model No."] = results.apply(make_clickable_model, axis=1)
+
+        # Remove Product Link column
+        if "Product Link" in results.columns:
+            results.drop(columns=["Product Link"], inplace=True)
+
+        # Show table with clickable Model No.
+        st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
