@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Pump Selector", layout="wide")
 st.title("🛠️ Pump Selection Tool")
@@ -69,26 +68,6 @@ if st.button("🔍 Search"):
 
         # Show full table with clickable model numbers
         st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
-
-        # --- Draw Pump Curve-style Graph ---
-        st.subheader("📈 Pump Curve Comparison")
-        fig, ax = plt.subplots()
-
-        for _, row in filtered_pumps.iterrows():
-            model = row["Model No."]
-            flow = row["Max Flow (LPM)"]
-            head = row["Max Head (M)"]
-            ax.plot([0, flow], [head, 0], label=model, linewidth=1.5)
-
-        ax.scatter([flow_lpm], [head_m], color='red', marker='x', s=100, label='User Requirement')
-
-        ax.set_xlabel("Flow (LPM)")
-        ax.set_ylabel("Head (m)")
-        ax.set_title("Pump Performance Curves")
-        ax.grid(True)
-        ax.legend(fontsize="small", loc="upper right")
-
-        st.pyplot(fig)
 
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
