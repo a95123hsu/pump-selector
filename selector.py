@@ -58,17 +58,13 @@ if st.button("🔍 Search"):
     if not filtered_pumps.empty:
         results = filtered_pumps.copy()
 
-        # Make Model No. clickable using Product Link
-        def make_clickable_model(row):
-            return f'<a href="{row["Product Link"]}" target="_blank">{row["Model No."]}</a>'
+        # Make Product Link clickable
+        def make_clickable_link(url):
+            return f'<a href="{url}" target="_blank">🔗 View Product</a>'
 
-        results["Model No."] = results.apply(make_clickable_model, axis=1)
+        results["Product Link"] = results["Product Link"].apply(make_clickable_link)
 
-        # Remove Product Link column
-        if "Product Link" in results.columns:
-            results.drop(columns=["Product Link"], inplace=True)
-
-        # Show table with clickable Model No.
+        # Show table with clickable Product Link and plain Model No.
         st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
