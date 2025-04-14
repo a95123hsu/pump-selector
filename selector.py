@@ -5,11 +5,15 @@ import pandas as pd
 st.set_page_config(page_title="Pump Selector", layout="wide")
 
 # -- Custom Header with Logo and Title --
-col_logo, col_title = st.columns([1, 5])
+col_logo, col_title = st.columns([1, 8])
 with col_logo:
-    st.image("https://www.hungpump.com/images/340357", width=80)
+    st.image("https://www.hungpump.com/images/340357", width=120)
 with col_title:
-    st.markdown("<h1 style='color: #0057B8; padding-top: 20px;'>Hung Pump</h1>", unsafe_allow_html=True)
+    st.markdown("""
+        <div style='display: flex; align-items: center; height: 100%; padding-left: 10px;'>
+            <h1 style='color: #0057B8; margin: 0;'>Hung Pump</h1>
+        </div>
+    """, unsafe_allow_html=True)
 
 st.title("Pump Selection Tool")
 
@@ -61,6 +65,7 @@ if st.button("🔍 Search"):
 
         results["Product Link"] = results["Product Link"].apply(make_clickable_link)
 
+        # Display table with clickable Product Link
         st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
