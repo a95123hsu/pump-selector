@@ -33,7 +33,27 @@ head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
 head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0)
 
 # -- Search Logic --
-if st.button("🔍 Search"):
+with st.form("search_form"):
+    submitted = st.form_submit_button(
+        label="🔍 Search"
+    )
+    st.markdown("""
+        <style>
+            div.stButton > button:first-child {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                font-weight: bold;
+                transition: 0.2s;
+            }
+            div.stButton > button:first-child:hover {
+                background-color: #218838;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
     filtered_pumps = pumps.copy()
     filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
 
