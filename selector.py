@@ -1,15 +1,13 @@
 import streamlit as st
 import pandas as pd
-from PIL import Image
 
 # App config
 st.set_page_config(page_title="Pump Selector", layout="wide")
 
 # -- Custom Header with Logo and Title --
-logo = Image.open("https://www.hungpump.com/images/340357")
 col_logo, col_title = st.columns([1, 5])
 with col_logo:
-    st.image(logo, width=80)
+    st.image("https://www.hungpump.com/images/340357", width=80)
 with col_title:
     st.markdown("<h1 style='color: #0057B8; padding-top: 20px;'>Hung Pump</h1>", unsafe_allow_html=True)
 
