@@ -5,7 +5,7 @@ st.title("🛠️ Pump Selection Tool")
 
 # ✅ Load the local CSV file
 try:
-    pumps = pd.read_csv("Pump Selection Data.csv")
+    pumps = pd.read_csv("Pump Selection Data - 工作表1.csv")
 except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
@@ -58,15 +58,18 @@ if st.button("🔍 Search"):
     st.subheader("✅ Matching Pumps")
 
     if not filtered_pumps.empty:
-        # Make product link clickable
-        def make_clickable(url):
-            return f'<a href="{url}" target="_blank">🔗 View Product</a>'
-
+        # Make Model No. clickable using Product Link
         results = filtered_pumps.copy()
-        if "Product Link" in results.columns:
-            results["Product Link"] = results["Product Link"].apply(make_clickable)
 
-        # Show all columns
+        def make_clickable_model(row):
+            return f'<a href="{row["Product Link"]}" target="_blank">{row["Model No."]}</a>'
+
+        results["Model No."] = results.apply(make_clickable_model, axis=1)
+
+        # Optional: Remove original Product Link column if not needed
+        # results.drop(columns=["Product Link"], inplace=True)
+
+        # Show full table
         st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
