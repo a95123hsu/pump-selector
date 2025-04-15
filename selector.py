@@ -24,44 +24,39 @@ except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
 
-# -- Two-Way Sync Mode --
-sync_mode = st.radio("🧮 Select Input Mode", ["Auto-fill TDH/Flow from Floors/Faucets", "Auto-fill Floors/Faucets from TDH/Flow"], horizontal=True)
+# --- Manual Flow & TDH Input First ---
+st.markdown("### 🎛️ Manual Input")
+flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
+flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0)
+head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
+head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0)
 
-# -- Application Input --
+# --- Auto-calculate floors and faucets if values are typed manually ---
+auto_faucets = round(flow_value / 15) if flow_value > 0 else 0
+auto_floors = round(head_value / 3.5) if head_value > 0 else 0
+
+# --- Application Input (Editable) ---
 st.markdown("### 🏢 Application Input")
-st.caption("Each floor = 3.5 m TDH | Each faucet = 15 LPM")
+st.caption("💡 Each floor = 3.5 m TDH, each faucet = 15 LPM")
 
 col_app1, col_app2 = st.columns(2)
 with col_app1:
-    num_floors = st.number_input("Number of Floors", min_value=0, step=1, key="floors")
+    num_floors = st.number_input("Number of Floors", min_value=0, step=1, value=auto_floors)
 with col_app2:
-    num_faucets = st.number_input("Number of Faucets", min_value=0, step=1, key="faucets")
+    num_faucets = st.number_input("Number of Faucets", min_value=0, step=1, value=auto_faucets)
 
-# Calculate from app input
-auto_tdh = num_floors * 3.5
-auto_flow = num_faucets * 15
+# --- If application values are entered/edited, override flow and tdh ---
+if num_floors > 0:
+    head_value = num_floors * 3.5
 
-# -- Manual Input --
-st.markdown("### 🎛️ Manual Input")
+if num_faucets > 0:
+    flow_value = num_faucets * 15
+
+# -- Frequency & Category Filters --
 frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
 category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
-flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
 
-# Determine which values to fill based on selected sync mode
-if sync_mode == "Auto-fill TDH/Flow from Floors/Faucets":
-    flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0, value=float(auto_flow), key="flow")
-    head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0, value=float(auto_tdh), key="tdh")
-else:
-    flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0, key="flow")
-    head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0, key="tdh")
-    
-    # Auto-fill application values from manual input
-    num_faucets = round(flow_value / 15)
-    num_floors = round(head_value / 3.5)
-
-    st.markdown(f"🧠 Estimated: {num_faucets} Faucets | {num_floors} Floors")
-
-# -- Search Logic --
+# --- Search Logic ---
 if st.button("🔍 Search"):
     filtered_pumps = pumps.copy()
     filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
@@ -79,7 +74,7 @@ if st.button("🔍 Search"):
     # Convert head to meters
     head_m = head_value if head_unit == "m" else head_value * 0.3048
 
-    # Filter
+    # Apply flow/head filters
     if flow_value > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Flow (LPM)"] >= flow_lpm]
     if head_value > 0:
@@ -92,8 +87,9 @@ if st.button("🔍 Search"):
 
         def make_clickable_link(url):
             return f'<a href="{url}" target="_blank">🔗 View Product</a>'
-        
+
         results["Product Link"] = results["Product Link"].apply(make_clickable_link)
+
         st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
