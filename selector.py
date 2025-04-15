@@ -45,13 +45,7 @@ if pond_volume > 0:
     st.caption(f"📏 Pond Volume: {round(pond_volume)} L")
 if pond_lpm > 0:
     st.success(f"💧 Required Flow to drain pond: {round(pond_lpm)} LPM")
-
-# Underground TDH
-st.markdown("### ⛏️ Underground Depth")
 underground_depth = st.number_input("Pump Depth Below Ground (m)", min_value=0.0, step=0.1)
-
-# Particle Size Filter
-st.markdown("### 🪨 Particle Size Filter")
 particle_size = st.number_input("Max Particle Size (mm)", min_value=0.0, step=1.0)
 
 # Final auto-calculated flow & tdh
