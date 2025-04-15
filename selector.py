@@ -24,23 +24,34 @@ except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
 
+# --- Session state for clearing inputs ---
+def clear_fields(keys):
+    for k in keys:
+        st.session_state[k] = 0 if 'value' not in k else 0.0
+
 # --- 🏢 Application Section ---
 st.markdown("### 🏢 Application Input")
 st.caption("💡 Each floor = 3.5 m TDH | Each faucet = 15 LPM")
 
-# Floors and Faucets
+if st.button("🧹 Clear Application Input"):
+    clear_fields(["floors", "faucets"])
+
 num_floors = st.number_input("Number of Floors", min_value=0, step=1, key="floors")
 num_faucets = st.number_input("Number of Faucets", min_value=0, step=1, key="faucets")
 
-# Pond Drainage
+# --- 🌊 Pond Drainage ---
 st.markdown("### 🌊 Pond Drainage")
+
+if st.button("🧹 Clear Pond Input"):
+    clear_fields(["length", "width", "height", "drain_time_hr"])
+    st.session_state["drain_time_hr"] = 0.01
+
 length = st.number_input("Pond Length (m)", min_value=0.0, step=0.1, key="length")
 width = st.number_input("Pond Width (m)", min_value=0.0, step=0.1, key="width")
 height = st.number_input("Pond Height (m)", min_value=0.0, step=0.1, key="height")
 drain_time_hr = st.number_input("Drain Time (hours)", min_value=0.01, step=0.1, key="drain_time_hr")
 
-# Volume and flow calculation
-pond_volume = length * width * height * 1000  # in liters
+pond_volume = length * width * height * 1000  # liters
 drain_time_min = drain_time_hr * 60
 pond_lpm = pond_volume / drain_time_min if drain_time_min > 0 else 0
 
@@ -49,16 +60,19 @@ if pond_volume > 0:
 if pond_lpm > 0:
     st.success(f"💧 Required Flow to drain pond: {round(pond_lpm)} LPM")
 
-# Underground depth and particle size
+# --- Underground depth and particle size ---
 underground_depth = st.number_input("Pump Depth Below Ground (m)", min_value=0.0, step=0.1)
-particle_size = st.number_input("Max Particle Size (mm)", min_value=0.0, step=1.0)
+particle_size = st.number_input("Max Particle Size (mm)", min_value=0.0, step=1.0, key="particle_size")
 
-# Final auto-calculated flow & TDH
+# --- Calculated Values ---
 auto_flow = max(num_faucets * 15, pond_lpm)
 auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5, height)
 
 # --- 🎛️ Manual Input Section ---
 st.markdown("### Manual Input")
+
+if st.button("🧹 Clear Manual Input"):
+    clear_fields(["flow_value", "head_value", "particle_size", "floors", "faucets"])
 
 category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
 frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
@@ -69,22 +83,22 @@ flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0, value=float
 head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
 head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0, value=float(auto_tdh) if auto_tdh > 0 else 0.0, key="head_value")
 
-# --- 🔢 Estimated Floors/Faucets (From Manual Input) ---
+# --- Estimated from manual input ---
 estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
 estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
 
-st.markdown("### 💡Estimated Application (based on Manual Input)")
+st.markdown("### 🔑 Estimated Application (based on Manual Input)")
 st.caption("These are the estimated values if you're only using flow & head:")
 
 col1, col2 = st.columns(2)
 col1.metric("Estimated Floors", estimated_floors)
 col2.metric("Estimated Faucets", estimated_faucets)
 
-# --- 📊 Result Percentage Slider ---
-st.markdown("### 📉 Result Display Control")
+# --- Result limit ---
+st.markdown("### 📊 Result Display Control")
 result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=5)
 
-# --- 🔍 Search Logic ---
+# --- Search Logic ---
 if st.button("🔍 Search"):
     filtered_pumps = pumps.copy()
     filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
@@ -119,7 +133,6 @@ if st.button("🔍 Search"):
             return f'<a href="{url}" target="_blank">🔗 View Product</a>'
 
         results["Product Link"] = results["Product Link"].apply(make_clickable_link)
-
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         st.write(results.head(max_to_show).to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
