@@ -24,18 +24,18 @@ except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
 
-# --- 🏢 Application Section (Stacked Layout) ---
+# --- 🏢 Application Section ---
 st.markdown("### 🏢 Application Input")
 st.caption("💡 Each floor = 3.5 m TDH | Each faucet = 15 LPM")
 
 num_floors = st.number_input("Number of Floors", min_value=0, step=1, key="floors")
 num_faucets = st.number_input("Number of Faucets", min_value=0, step=1, key="faucets")
 
-# Calculate auto values
+# Auto-calculated values from app input
 auto_tdh = num_floors * 3.5
 auto_flow = num_faucets * 15
 
-# --- 🎛️ Manual Section (Stacked, with specified order) ---
+# --- 🎛️ Manual Input Section ---
 st.markdown("### 🎛️ Manual Input")
 
 category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
@@ -46,6 +46,17 @@ flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0, value=float
 
 head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
 head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0, value=float(auto_tdh) if auto_tdh > 0 else 0.0, key="head_value")
+
+# --- 🔢 Estimated Floors/Faucets (From Manual Input) ---
+estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
+estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
+
+st.markdown("### 🧠 Estimated Application (based on Manual Input)")
+st.caption("These are the estimated values if you're only using flow & head:")
+
+col1, col2 = st.columns(2)
+col1.metric("Estimated Floors", estimated_floors)
+col2.metric("Estimated Faucets", estimated_faucets)
 
 # --- 🔍 Search Logic ---
 if st.button("🔍 Search"):
