@@ -34,7 +34,7 @@ auto_tdh = num_floors * 3.5  # m
 auto_flow = num_faucets * 15  # LPM
 
 # --- UI Inputs (Vertical Layout) ---
-st.markdown("### 🎛️ Manual Input (Override or Use Auto Fill)")
+st.markdown("### Manual Input")
 frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
 category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
 flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
@@ -45,23 +45,6 @@ head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0
 # -- Search Form with Custom Green Button --
 with st.form("search_form"):
     submitted = st.form_submit_button("🔍 Search")
-    st.markdown("""
-        <style>
-            div.stButton > button:first-child {
-                background-color: #28a745;
-                color: white;
-                border: none;
-                padding: 0.5rem 1.2rem;
-                border-radius: 6px;
-                font-weight: bold;
-                transition: 0.2s;
-                font-size: 1rem;
-            }
-            div.stButton > button:first-child:hover {
-                background-color: #218838;
-            }
-        </style>
-    """, unsafe_allow_html=True)
 
 # -- Run Search Logic --
 if submitted:
