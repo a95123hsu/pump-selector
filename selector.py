@@ -51,7 +51,7 @@ head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0
 estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
 estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
 
-st.markdown("### 🧠 Estimated Application (based on Manual Input)")
+st.markdown("### Estimated Application (based on Manual Input)")
 st.caption("These are the estimated values if you're only using flow & head:")
 
 col1, col2 = st.columns(2)
