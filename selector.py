@@ -24,6 +24,10 @@ except Exception as e:
     st.error(f"❌ Failed to load local CSV file: {e}")
     st.stop()
 
+# --- Auto-calculate floors and faucets if values are typed manually ---
+auto_faucets = round(flow_value / 15) if flow_value > 0 else 0
+auto_floors = round(head_value / 3.5) if head_value > 0 else 0
+
 # --- Application Input (Editable) ---
 st.markdown("### 🏢 Application Input")
 st.caption("💡 Each floor = 3.5 m TDH, each faucet = 15 LPM")
@@ -47,10 +51,6 @@ flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gp
 flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0)
 head_unit = st.radio("Head Unit", ["m", "ft"], horizontal=True)
 head_value = st.number_input("Total Dynamic Head (TDH)", min_value=0.0, step=1.0)
-
-# --- Auto-calculate floors and faucets if values are typed manually ---
-auto_faucets = round(flow_value / 15) if flow_value > 0 else 0
-auto_floors = round(head_value / 3.5) if head_value > 0 else 0
 
 # -- Frequency & Category Filters --
 frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
