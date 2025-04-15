@@ -28,12 +28,35 @@ except Exception as e:
 st.markdown("### 🏢 Application Input")
 st.caption("💡 Each floor = 3.5 m TDH | Each faucet = 15 LPM")
 
+# Floors and Faucets
 num_floors = st.number_input("Number of Floors", min_value=0, step=1, key="floors")
 num_faucets = st.number_input("Number of Faucets", min_value=0, step=1, key="faucets")
 
-# Auto-calculated values from app input
-auto_tdh = num_floors * 3.5
-auto_flow = num_faucets * 15
+# Pond Drainage
+st.markdown("### 🌊 Pond Drainage")
+length = st.number_input("Pond Length (m)", min_value=0.0, step=0.1, key="length")
+width = st.number_input("Pond Width (m)", min_value=0.0, step=0.1, key="width")
+height = st.number_input("Pond Height (m)", min_value=0.0, step=0.1, key="height")
+drain_time = st.number_input("Drain Time (minutes)", min_value=0.1, step=1.0, key="drain_time")
+
+pond_volume = length * width * height * 1000
+pond_lpm = pond_volume / drain_time if drain_time > 0 else 0
+if pond_volume > 0:
+    st.caption(f"📏 Pond Volume: {round(pond_volume)} L")
+if pond_lpm > 0:
+    st.success(f"💧 Required Flow to drain pond: {round(pond_lpm)} LPM")
+
+# Underground TDH
+st.markdown("### ⛏️ Underground Depth")
+underground_depth = st.number_input("Pump Depth Below Ground (m)", min_value=0.0, step=0.1)
+
+# Particle Size Filter
+st.markdown("### 🪨 Particle Size Filter")
+particle_size = st.number_input("Max Particle Size (mm)", min_value=0.0, step=1.0)
+
+# Final auto-calculated flow & tdh
+auto_flow = max(num_faucets * 15, pond_lpm)
+auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5, height)
 
 # --- 🎛️ Manual Input Section ---
 st.markdown("### Manual Input")
@@ -77,10 +100,12 @@ if st.button("🔍 Search"):
     head_m = head_value if head_unit == "m" else head_value * 0.3048
 
     # Apply filters
-    if flow_value > 0:
+    if flow_lpm > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Flow (LPM)"] >= flow_lpm]
-    if head_value > 0:
+    if head_m > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Head (M)"] >= head_m]
+    if particle_size > 0 and "Pass Solid (mm)" in filtered_pumps.columns:
+        filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid (mm)"] >= particle_size]
 
     st.subheader("✅ Matching Pumps")
 
