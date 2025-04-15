@@ -37,18 +37,23 @@ st.markdown("### 🌊 Pond Drainage")
 length = st.number_input("Pond Length (m)", min_value=0.0, step=0.1, key="length")
 width = st.number_input("Pond Width (m)", min_value=0.0, step=0.1, key="width")
 height = st.number_input("Pond Height (m)", min_value=0.0, step=0.1, key="height")
-drain_time = st.number_input("Drain Time (minutes)", min_value=0.1, step=1.0, key="drain_time")
+drain_time_hr = st.number_input("Drain Time (hours)", min_value=0.01, step=0.1, key="drain_time_hr")
 
-pond_volume = length * width * height * 1000
-pond_lpm = pond_volume / drain_time if drain_time > 0 else 0
+# Volume and flow calculation
+pond_volume = length * width * height * 1000  # in liters
+drain_time_min = drain_time_hr * 60
+pond_lpm = pond_volume / drain_time_min if drain_time_min > 0 else 0
+
 if pond_volume > 0:
     st.caption(f"📏 Pond Volume: {round(pond_volume)} L")
 if pond_lpm > 0:
-    st.success(f"💧 Required Flow to drain pond: {pond_lpm} LPM")
+    st.success(f"💧 Required Flow to drain pond: {round(pond_lpm)} LPM")
+
+# Underground depth and particle size
 underground_depth = st.number_input("Pump Depth Below Ground (m)", min_value=0.0, step=0.1)
 particle_size = st.number_input("Max Particle Size (mm)", min_value=0.0, step=1.0)
 
-# Final auto-calculated flow & tdh
+# Final auto-calculated flow & TDH
 auto_flow = max(num_faucets * 15, pond_lpm)
 auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5, height)
 
