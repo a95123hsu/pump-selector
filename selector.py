@@ -80,10 +80,6 @@ col1, col2 = st.columns(2)
 col1.metric("Estimated Floors", estimated_floors)
 col2.metric("Estimated Faucets", estimated_faucets)
 
-# --- 📊 Result Percentage Slider ---
-st.markdown("### 📉 Result Display Control")
-result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=5)
-
 # --- 🔍 Search Logic ---
 if st.button("🔍 Search"):
     filtered_pumps = pumps.copy()
@@ -119,8 +115,6 @@ if st.button("🔍 Search"):
             return f'<a href="{url}" target="_blank">🔗 View Product</a>'
 
         results["Product Link"] = results["Product Link"].apply(make_clickable_link)
-
-        max_to_show = max(1, int(len(results) * (result_percent / 100)))
-        st.write(results.head(max_to_show).to_html(escape=False, index=False), unsafe_allow_html=True)
+        st.write(results.to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
