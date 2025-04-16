@@ -120,7 +120,7 @@ col2.metric("Estimated Faucets", estimated_faucets)
 
 # --- Result Display Limit ---
 st.markdown("### 📊 Result Display Control")
-result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=5)
+result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=1)
 
 # --- Search Logic ---
 if st.button("🔍 Search"):
