@@ -37,7 +37,24 @@ with col_title:
         </div>
     """, unsafe_allow_html=True)
 
+# --- Title and Reset Button ---
 st.title("Pump Selection Tool")
+
+# 🔴 Reset All Inputs Button (directly under title)
+reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary")
+if reset_clicked:
+    for key, val in default_values.items():
+        st.session_state[key] = val
+
+# Apply red styling to the reset button
+st.markdown("""
+<style>
+button[data-testid="baseButton"][aria-label="🔄 Reset All Inputs"] {
+    background-color: #e63946;
+    color: white;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # --- Step 1: Initial Selection ---
 st.markdown("### 🔧 Step 1: Select Basic Criteria")
@@ -152,11 +169,3 @@ if st.button("🔍 Search"):
         st.write(results.head(max_to_show).to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
-
-# --- Styled Reset Button (Below Search) ---
-st.markdown("---")
-center = st.columns([1, 4, 1])[1]
-with center:
-    if st.button("🔄 Reset All Inputs", key="reset_button"):
-        for key, val in default_values.items():
-            st.session_state[key] = val
