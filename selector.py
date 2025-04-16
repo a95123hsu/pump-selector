@@ -19,7 +19,7 @@ st.title("Pump Selection Tool")
 
 # -- Load CSV --
 try:
-    pumps = pd.read_csv("Pump Selection Data.csv")
+    pumps = pd.read_csv("/mnt/data/Pump Selection Data.csv")
 except Exception as e:
     st.error(f"❌ Failed to load CSV file: {e}")
     st.stop()
@@ -109,6 +109,9 @@ if st.button("🔍 Search"):
 
     # Filter by Phase
     filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
+
+    # Ensure the "Max Flow (LPM)" column is numeric, converting non-numeric values to NaN
+    filtered_pumps["Max Flow (LPM)"] = pd.to_numeric(filtered_pumps["Max Flow (LPM)"], errors="coerce")
 
     # Convert flow to LPM
     flow_lpm = flow_value
