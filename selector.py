@@ -64,32 +64,12 @@ if pond_lpm > 0:
 underground_depth = st.number_input("**Pump Depth Below Ground (m):**", min_value=0.0, step=0.1)
 particle_size = st.number_input("**Max Particle Size (mm):**", min_value=0.0, step=1.0, key="particle_size")
 
-# --- Auto-calculated values and syncing ---
-auto_flow = max(num_faucets * 15, pond_lpm)
-auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5, height)
-
-if "flow_value" not in st.session_state:
-    st.session_state.flow_value = auto_flow
-    st.session_state._flow_auto = True
-if "head_value" not in st.session_state:
-    st.session_state.head_value = auto_tdh
-    st.session_state._head_auto = True
-
-if st.session_state._flow_auto and st.session_state.flow_value != auto_flow:
-    st.session_state.flow_value = auto_flow
-if st.session_state._head_auto and st.session_state.head_value != auto_tdh:
-    st.session_state.head_value = auto_tdh
-
 # --- 🎛️ Manual Input Section ---
 st.markdown("### 🎛️ Manual Input")
 st.caption("📌 Fill in the parameters below to get pump recommendations.")
 
 if st.button("🧹 Clear Manual Input"):
     clear_fields(["flow_value", "head_value", "particle_size", "floors", "faucets"])
-
-if st.button("🔁 Reset Flow & Head to Auto"):
-    st.session_state._flow_auto = True
-    st.session_state._head_auto = True
 
 category = st.selectbox("**Category:**", ["All Categories"] + sorted(pumps["Category"].dropna().unique()), index=0)
 frequency = st.selectbox("**Frequency (Hz):**", sorted(pumps["Frequency (Hz)"].dropna().unique()))
