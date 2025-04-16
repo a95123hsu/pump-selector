@@ -26,13 +26,6 @@ for key, val in default_values.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- Safe clear helper with rerun ---
-def clear_fields(keys):
-    for k in keys:
-        if k in st.session_state:
-            st.session_state[k] = default_values.get(k, 0)
-    st.experimental_rerun()
-
 # --- Header ---
 col_logo, col_title = st.columns([1, 8])
 with col_logo:
@@ -62,17 +55,11 @@ if frequency == "Select..." or phase == "Select...":
 st.markdown("### 🏢 Application Input")
 st.caption("💡 Each floor = 3.5 m TDH | Each faucet = 15 LPM")
 
-if st.button("🧹 Clear Application Input"):
-    clear_fields(["floors", "faucets"])
-
 num_floors = st.number_input("Number of Floors", min_value=0, step=1, key="floors")
 num_faucets = st.number_input("Number of Faucets", min_value=0, step=1, key="faucets")
 
 # --- 🌊 Pond Drainage ---
 st.markdown("### 🌊 Pond Drainage")
-
-if st.button("🧹 Clear Pond Input"):
-    clear_fields(["length", "width", "height", "drain_time_hr"])
 
 length = st.number_input("Pond Length (m)", min_value=0.0, step=0.1, key="length")
 width = st.number_input("Pond Width (m)", min_value=0.0, step=0.1, key="width")
@@ -98,9 +85,6 @@ auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5,
 
 # --- 🎛️ Manual Input Section ---
 st.markdown("### Manual Input")
-
-if st.button("🧹 Clear Manual Input"):
-    clear_fields(["flow_value", "head_value", "particle_size", "floors", "faucets"])
 
 flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
 flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0, value=float(auto_flow), key="flow_value")
