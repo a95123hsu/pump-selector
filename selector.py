@@ -29,6 +29,23 @@ def clear_fields(keys):
     for k in keys:
         st.session_state[k] = 0 if 'value' not in k else 0.0
 
+# --- 🎛️ Manual Input Section (Moved to the top) ---
+st.markdown("### 🎛️ Manual Input")
+st.caption("📌 Fill in the parameters below to get pump recommendations.")
+
+if st.button("🧹 Clear Manual Input"):
+    clear_fields(["flow_value", "head_value", "particle_size", "floors", "faucets"])
+
+category = st.selectbox("**Category:**", ["All Categories"] + sorted(pumps["Category"].dropna().unique()), index=0)
+frequency = st.selectbox("**Frequency (Hz):**", sorted(pumps["Frequency (Hz)"].dropna().unique()))
+phase = st.selectbox("**Phase (1 or 3):**", [1, 3])  # Single-phase or Three-phase
+
+flow_unit = st.radio("**Flow Unit:**", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
+flow_value = st.number_input("**Flow Value (L/min):**", min_value=0.0, step=10.0, value=0.0, key="flow_value")
+
+head_unit = st.radio("**Head Unit:**", ["m", "ft"], horizontal=True)
+head_value = st.number_input("**Total Dynamic Head (TDH):**", min_value=0.0, step=1.0, value=0.0, key="head_value")
+
 # --- 🏢 Application Section ---
 st.markdown("### 🏢 Application Input")
 st.caption("💡 Each floor = 3.5 m TDH | Each faucet = 15 LPM")
@@ -64,29 +81,16 @@ if pond_lpm > 0:
 underground_depth = st.number_input("**Pump Depth Below Ground (m):**", min_value=0.0, step=0.1)
 particle_size = st.number_input("**Max Particle Size (mm):**", min_value=0.0, step=1.0, key="particle_size")
 
-# --- 🎛️ Manual Input Section ---
-st.markdown("### 🎛️ Manual Input")
-st.caption("📌 Fill in the parameters below to get pump recommendations.")
-
-if st.button("🧹 Clear Manual Input"):
-    clear_fields(["flow_value", "head_value", "particle_size", "floors", "faucets"])
-
-category = st.selectbox("**Category:**", ["All Categories"] + sorted(pumps["Category"].dropna().unique()), index=0)
-frequency = st.selectbox("**Frequency (Hz):**", sorted(pumps["Frequency (Hz)"].dropna().unique()))
-phase = st.selectbox("**Phase (1 or 3):**", [1, 3])
-
-flow_unit = st.radio("**Flow Unit:**", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
-st.number_input("**Flow Value (L/min):**", min_value=0.0, step=10.0, key="flow_value")
-
-head_unit = st.radio("**Head Unit:**", ["m", "ft"], horizontal=True)
-st.number_input("**Total Dynamic Head (TDH):**", min_value=0.0, step=1.0, key="head_value")
+# --- Calculated Values ---
+auto_flow = max(num_faucets * 15, pond_lpm)
+auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5, height)
 
 # --- 💡 Estimated Application (based on Manual Input) ---
 st.markdown("### 💡 Estimated Application (based on Manual Input)")
 st.caption("These are the estimated values if you're only using flow & head:")
 
-estimated_floors = round(st.session_state.head_value / 3.5) if st.session_state.head_value > 0 else 0
-estimated_faucets = round(st.session_state.flow_value / 15) if st.session_state.flow_value > 0 else 0
+estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
+estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
 
 col1, col2 = st.columns(2)
 col1.metric("Estimated Floors", estimated_floors)
@@ -94,15 +98,7 @@ col2.metric("Estimated Faucets", estimated_faucets)
 
 # --- Result limit ---
 st.markdown("### 📊 Result Display Control")
-result_percent = st.slider(
-    "**Show Top Percentage of Results:**", 
-    min_value=5, 
-    max_value=100, 
-    value=100, 
-    step=5, 
-    format="%.0f%%",  # Add percentage sign
-    key="result_percent"
-)
+result_percent = st.slider("**Show Top Percentage of Results:**", min_value=5, max_value=100, value=100, step=5)
 
 # --- Search Logic ---
 if st.button("🔍 Search"):
@@ -112,17 +108,23 @@ if st.button("🔍 Search"):
     if category != "All Categories":
         filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
 
+    # Filter by Phase
     filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
+
+    # Ensure the "Max Flow (LPM)" column is numeric, converting non-numeric values to NaN
     filtered_pumps["Max Flow (LPM)"] = pd.to_numeric(filtered_pumps["Max Flow (LPM)"], errors="coerce")
 
-    flow_lpm = st.session_state.flow_value
+    # Convert flow to LPM
+    flow_lpm = flow_value
     if flow_unit == "L/sec": flow_lpm *= 60
-    elif flow_unit == "m³/hr": flow_lpm = flow_lpm * 1000 / 60
+    elif flow_unit == "m³/hr": flow_lpm = flow_value * 1000 / 60
     elif flow_unit == "m³/min": flow_lpm *= 1000
     elif flow_unit == "US gpm": flow_lpm *= 3.785
 
-    head_m = st.session_state.head_value if head_unit == "m" else st.session_state.head_value * 0.3048
+    # Convert head to meters
+    head_m = head_value if head_unit == "m" else head_value * 0.3048
 
+    # Apply filters
     if flow_lpm > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Flow (LPM)"] >= flow_lpm]
     if head_m > 0:
