@@ -26,15 +26,10 @@ for key, val in default_values.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- Reset inputs flag ---
-if 'reset_triggered' not in st.session_state:
-    st.session_state.reset_triggered = False
-
-# --- If Reset button was clicked, set session_state back to defaults ---
-if st.session_state.reset_triggered:
+# --- 🔄 Reset All Inputs ---
+if st.button("🔄 Reset All Inputs"):
     for key, val in default_values.items():
         st.session_state[key] = val
-    st.session_state.reset_triggered = False  # Reset the flag after applying
 
 # --- Header ---
 col_logo, col_title = st.columns([1, 8])
@@ -110,10 +105,6 @@ st.markdown("### 💡 Estimated Application (based on Manual Input)")
 col1, col2 = st.columns(2)
 col1.metric("Estimated Floors", estimated_floors)
 col2.metric("Estimated Faucets", estimated_faucets)
-
-# --- 🔄 Reset Button ---
-if st.button("🔄 Reset All Inputs"):
-    st.session_state.reset_triggered = True
 
 # --- Result Display Limit ---
 st.markdown("### 📊 Result Display Control")
