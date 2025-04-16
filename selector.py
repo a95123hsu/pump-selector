@@ -26,11 +26,12 @@ for key, val in default_values.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- Safe clear helper ---
+# --- Safe clear helper with rerun ---
 def clear_fields(keys):
     for k in keys:
         if k in st.session_state:
             st.session_state[k] = default_values.get(k, 0)
+    st.experimental_rerun()
 
 # --- Header ---
 col_logo, col_title = st.columns([1, 8])
