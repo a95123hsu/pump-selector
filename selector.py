@@ -101,6 +101,18 @@ col1, col2 = st.columns(2)
 col1.metric("Estimated Floors", estimated_floors)
 col2.metric("Estimated Faucets", estimated_faucets)
 
+# --- 🔄 Reset Button ---
+if st.button("🔄 Reset All Inputs"):
+    changed = False
+    for key, val in default_values.items():
+        if st.session_state.get(key) != val:
+            st.session_state[key] = val
+            changed = True
+    if changed:
+        st.experimental_rerun()
+    else:
+        st.info("Inputs are already at default values.")
+
 # --- Result Display Limit ---
 st.markdown("### 📊 Result Display Control")
 result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=5)
