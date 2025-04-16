@@ -26,10 +26,11 @@ for key, val in default_values.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- Clear helper ---
+# --- Safe clear helper ---
 def clear_fields(keys):
     for k in keys:
-        st.session_state[k] = default_values.get(k, 0)
+        if k in st.session_state:
+            st.session_state[k] = default_values.get(k, 0)
 
 # --- Header ---
 col_logo, col_title = st.columns([1, 8])
@@ -47,12 +48,13 @@ st.title("Pump Selection Tool")
 # --- Step 1: Initial Selection ---
 st.markdown("### 🔧 Step 1: Select Basic Criteria")
 
-category = st.selectbox("* Category:", ["Select..."] + sorted(pumps["Category"].dropna().unique()))
+category_options = ["All Categories"] + sorted(pumps["Category"].dropna().unique())
+category = st.selectbox("* Category:", category_options)
 frequency = st.selectbox("* Frequency (Hz):", ["Select..."] + sorted(pumps["Frequency (Hz)"].dropna().unique()))
 phase = st.selectbox("* Phase:", ["Select...", 1, 3])
 
-if category == "Select..." or frequency == "Select..." or phase == "Select...":
-    st.warning("Please select Category, Frequency, and Phase to proceed.")
+if frequency == "Select..." or phase == "Select...":
+    st.warning("Please select Frequency and Phase to proceed.")
     st.stop()
 
 # --- 🏢 Application Section ---
@@ -122,10 +124,12 @@ result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_va
 if st.button("🔍 Search"):
     filtered_pumps = pumps.copy()
     filtered_pumps = filtered_pumps[
-        (filtered_pumps["Category"] == category) &
         (filtered_pumps["Frequency (Hz)"] == frequency) &
         (filtered_pumps["Phase"] == int(phase))
     ]
+
+    if category != "All Categories":
+        filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
 
     # Convert flow to LPM
     flow_lpm = flow_value
