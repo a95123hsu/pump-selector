@@ -19,7 +19,7 @@ st.title("Pump Selection Tool")
 
 # -- Load CSV --
 try:
-    pumps = pd.read_csv("/mnt/data/Pump Selection Data.csv")
+    pumps = pd.read_csv("Pump Selection Data.csv")
 except Exception as e:
     st.error(f"\u274c Failed to load CSV file: {e}")
     st.stop()
