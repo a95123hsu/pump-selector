@@ -19,9 +19,9 @@ st.title("Pump Selection Tool")
 
 # -- Load CSV --
 try:
-    pumps = pd.read_csv("Pump Selection Data.csv")
+    pumps = pd.read_csv("/mnt/data/Pump Selection Data.csv")
 except Exception as e:
-    st.error(f"❌ Failed to load local CSV file: {e}")
+    st.error(f"❌ Failed to load CSV file: {e}")
     st.stop()
 
 # --- Session state for clearing inputs ---
@@ -76,6 +76,7 @@ if st.button("🧹 Clear Manual Input"):
 
 category = st.selectbox("* Category:", ["All Categories"] + sorted(pumps["Category"].dropna().unique()))
 frequency = st.selectbox("* Frequency:", sorted(pumps["Frequency (Hz)"].dropna().unique()))
+phase = st.selectbox("* Phase:", [1, 3])  # Single-phase or Three-phase
 
 flow_unit = st.radio("Flow Unit", ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"], horizontal=True)
 flow_value = st.number_input("Flow Value", min_value=0.0, step=10.0, value=float(auto_flow) if auto_flow > 0 else 0.0, key="flow_value")
@@ -106,6 +107,9 @@ if st.button("🔍 Search"):
     if category != "All Categories":
         filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
 
+    # Filter by Phase
+    filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
+
     # Convert flow to LPM
     flow_lpm = flow_value
     if flow_unit == "L/sec": flow_lpm *= 60
@@ -121,8 +125,8 @@ if st.button("🔍 Search"):
         filtered_pumps = filtered_pumps[filtered_pumps["Max Flow (LPM)"] >= flow_lpm]
     if head_m > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Head (M)"] >= head_m]
-    if particle_size > 0 and "Pass Solid (mm)" in filtered_pumps.columns:
-        filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid (mm)"] >= particle_size]
+    if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
+        filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
 
     st.subheader("✅ Matching Pumps")
 
