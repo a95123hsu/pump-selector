@@ -26,11 +26,6 @@ for key, val in default_values.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 🔄 Reset All Inputs ---
-if st.button("🔄 Reset All Inputs"):
-    for key, val in default_values.items():
-        st.session_state[key] = val
-
 # --- Header ---
 col_logo, col_title = st.columns([1, 8])
 with col_logo:
@@ -157,3 +152,11 @@ if st.button("🔍 Search"):
         st.write(results.head(max_to_show).to_html(escape=False, index=False), unsafe_allow_html=True)
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
+
+# --- Styled Reset Button (Below Search) ---
+st.markdown("---")
+center = st.columns([1, 4, 1])[1]
+with center:
+    if st.button("🔄 Reset All Inputs", key="reset_button"):
+        for key, val in default_values.items():
+            st.session_state[key] = val
