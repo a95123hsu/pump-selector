@@ -30,7 +30,7 @@ def clear_fields(keys):
         st.session_state[k] = 0 if 'value' not in k else 0.0
 
 # --- 🎛️ Manual Input Section (Moved to the top) ---
-st.markdown("### 🎛️ Manual Input")
+st.markdown("### Manual Input")
 st.caption("📌 Fill in the parameters below to get pump recommendations.")
 
 if st.button("🧹 Clear Manual Input"):
@@ -98,7 +98,15 @@ col2.metric("Estimated Faucets", estimated_faucets)
 
 # --- Result limit ---
 st.markdown("### 📊 Result Display Control")
-result_percent = st.slider("**Show Top Percentage of Results:**", min_value=5, max_value=100, value=100, step=5)
+result_percent = st.slider(
+    "**Show Top Percentage of Results:**", 
+    min_value=5, 
+    max_value=100, 
+    value=100, 
+    step=5, 
+    format="%.0f%%",  # Add percentage sign
+    key="result_percent"
+)
 
 # --- Search Logic ---
 if st.button("🔍 Search"):
