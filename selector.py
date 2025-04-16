@@ -69,7 +69,7 @@ auto_flow = max(num_faucets * 15, pond_lpm)
 auto_tdh = underground_depth if underground_depth > 0 else max(num_floors * 3.5, height)
 
 # --- 🎛️ Manual Input Section ---
-st.markdown("### Manual Input")
+st.markdown("### Result Filter")
 
 if st.button("🧹 Clear Manual Input"):
     clear_fields(["flow_value", "head_value", "particle_size", "floors", "faucets"])
@@ -97,7 +97,7 @@ col2.metric("Estimated Faucets", estimated_faucets)
 
 # --- Result limit ---
 st.markdown("### 📊 Result Display Control")
-result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=5)
+result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=1)
 
 # --- Search Logic ---
 if st.button("🔍 Search"):
