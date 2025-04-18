@@ -1,0 +1,1466 @@
+Model No.,Frequency (Hz),Phase,HP,Power(KW),Outlet (mm),Outlet (inch),Pass Solid Dia(mm),Max Flow (LPM),Max Head (M),Max Head (ft),Category,Product Link
+100ADL57.5,50,3,10,7.5kW,100,"4""",80,3050,22,72,Dirty Water,https://www.hungpump.com/adl
+50ADVS5.75,50,1,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS5.75,50,3,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS5.75,50,3,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS5.75A,50,1,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS51.5,50,1,2,1.5kW,50,"2""",31,420,22,72,Dirty Water,https://www.hungpump.com/advs
+50ADVS51.5,50,3,2,1.5kW,50,"2""",31,420,22,72,Dirty Water,https://www.hungpump.com/advs
+65ADL51.5,50,1,2,1.5kW,65,"2-1/2""",40,850,15,49,Dirty Water,https://www.hungpump.com/adl
+65ADL51.5,50,3,2,1.5kW,65,"2-1/2""",40,850,15,49,Dirty Water,https://www.hungpump.com/adl
+65ADVS51.5,50,1,2,1.5kW,65,"2-1/2""",45,700,17,56,Dirty Water,https://www.hungpump.com/advs
+65ADVS51.5,50,3,2,1.5kW,65,"2-1/2""",45,700,17,56,Dirty Water,https://www.hungpump.com/advs
+80ADL51.5,50,1,2,1.5kW,80,"3""",50,1000,13,43,Dirty Water,https://www.hungpump.com/adl
+80ADL51.5,50,3,2,1.5kW,80,"3""",50,1000,13,43,Dirty Water,https://www.hungpump.com/adl
+80ADL52.2,50,3,3,2.2kW,80,"3""",50,1200,15,49,Dirty Water,https://www.hungpump.com/adl
+80ADL53.7,50,3,5,3.7kW,80,"3""",48,1680,20,66,Dirty Water,https://www.hungpump.com/adl
+80ADVS52.2,50,3,3,2.2kW,80,"3""",50,1100,19,62,Dirty Water,https://www.hungpump.com/advs
+80ADVS53.7,50,3,5,3.7kW,80,"3""",55,1200,23,75,Dirty Water,https://www.hungpump.com/advs
+BAH-400,50,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/bah
+BAH-750,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-750,50,3,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-750-1,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-750-3,50,3,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAS-100,50,1,1/6,100W,25,"1""",7,90,6,20,Dirty Water,https://www.hungpump.com/bas
+BAS-200,50,1,1/4,200W,32,"1-1/4""",7,140,7,23,Dirty Water,https://www.hungpump.com/bas
+BAS-200A,50,1,1/4,200W,32,"1-1/4""",7,140,7,23,Dirty Water,https://www.hungpump.com/bas
+BAS-300,50,1,1/3,300W,40,"1-1/2""",9,200,8,26,Dirty Water,https://www.hungpump.com/bas
+BAS-300A,50,1,1/3,250W,40,"1-1/2""",9,200,8,26,Dirty Water,https://www.hungpump.com/bas
+BAS-400,50,1,1/2,400W,50,"2""",12,270,10,33,Dirty Water,https://www.hungpump.com/bas
+BAS-400A,50,1,1/2,400W,50,"2""",12,270,10,33,Dirty Water,https://www.hungpump.com/bas
+BAS-600,50,1,3/4,600W,50,"2""",15,300,11,36,Dirty Water,https://www.hungpump.com/bas
+BAS-600A,50,1,3/4,600W,50,"2""",15,300,11,36,Dirty Water,https://www.hungpump.com/bas
+BAV-150,50,1,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-150S,50,1,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-150SV,50,1,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-150,50,3,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-1500,50,1,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/bav
+BAV-1500,50,3,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/bav
+BAV-1500-1,50,1,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/bav
+BAV-1500A,50,1,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/bav
+BAV-150A,50,1,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-250,50,1,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-250A,50,1,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-250T,50,3,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-400,50,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400,50,3,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400,50,3,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400A,50,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400S,50,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400S,50,3,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400SJ,50,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400ST,50,3,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-550,50,1,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-550A,50,1,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-550,50,3,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-550T,50,3,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-550S,50,3,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-750,50,3,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/bav
+BAV-750-1,50,1,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/bav
+BAV-750-3,50,3,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/bav
+BAV-750A,50,1,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/bav
+BAV-750J,50,1,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/bav
+BCV-1500-35,50,1,2,1.5kW,80,"3""",35,680,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-35,50,3,2,1.5kW,80,"3""",35,680,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-50,50,1,2,1.5kW,80,"3""",50,720,15,49,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-50,50,3,2,1.5kW,80,"3""",50,720,15,49,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-65,50,1,2,1.5kW,80,"3""",65,900,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-65,50,3,2,1.5kW,80,"3""",65,900,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-35,50,3,3,2.2kW,80,"3""",35,800,20,66,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-50,50,3,3,2.2kW,80,"3""",50,900,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-65,50,3,3,2.2kW,80,"3""",65,1200,11,36,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-80,50,3,3,2.2kW,80,"3""",80,1300,8.5,28,Dirty Water,https://www.hungpump.com/bcv
+BCV-3700-50,50,3,5,3.7kW,100,"4""",50,1100,21,69,Dirty Water,https://www.hungpump.com/bcv
+BCV-3700-80,50,3,5,3.7kW,100,"4""",80,1400,10,33,Dirty Water,https://www.hungpump.com/bcv
+BCV-400-30,50,1,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-400-50,50,1,1/2,400W,50,"2""",50,380,7,23,Dirty Water,https://www.hungpump.com/bcv
+BCV-5500-50,50,3,7.5,5.5kW,100,"4""",50,1200,24,79,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-30,50,1,1,750W,50,"2""",30,370,12,39,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-50,50,1,1,750W,50,"2""",50,500,10,33,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-50,50,3,1,750W,50,"2""",50,500,10,33,Dirty Water,https://www.hungpump.com/bcv
+BCV-750A,50,1,1,750W,50,"2""",50,500,10,33,Dirty Water,https://www.hungpump.com/bcv
+BDC-400,50,1,1/2,400W,50,"2""",N/A,185,6,20,,https://www.hungpump.com/bdc
+BPH-300,50,1,1/3,300W,40,"1-1/2""",3,95,18,59,,https://www.hungpump.com/bph
+BPO-100-110V,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100-220V,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100EA,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-300,50,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300A,50,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300EA,50,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPS-100,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPO-100,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100A,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPS-100,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100A,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100-110V,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100A,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100B,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100B-110V,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100BV,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100BV-110V,50,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-120,50,1,1/6,100W,25,"1""",5,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-120A,50,1,1/6,100W,25,"1""",5,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-180D,50,1,1/6,100W,25,"1""",5,120,5.5,18,Clean Water,https://www.hungpump.com/bps
+BPS-180DM,50,1,1/6,100W,25,"1""",5,120,5.5,18,Clean Water,https://www.hungpump.com/bps
+BPS-130M,50,1,1/6,100W,32,"1-1/4""",5,120,5.5,18,Clean Water,https://www.hungpump.com/bps
+BPS-180M,50,1,1/6,100W,25,"1""",5,120,5.5,18,Clean Water,https://www.hungpump.com/bps
+BPS-200,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/bps
+BPS-200A,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/bps
+BPO-200-110V,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/bpo
+BPS-200D,50,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200DA,50,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200DM,50,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200M,50,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200S,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/bps
+BPS-300,50,1,1/3,300W,40,"1-1/2""",5,180,8,26,Clean Water,https://www.hungpump.com/bps
+BPS-300H,50,1,1/3,300W,40,"1-1/2""",3,95,18,59,Clean Water,https://www.hungpump.com/bps
+BPS-400,50,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400A,50,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400S,50,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-80,50,1,1/10,80W,20,"3/4""",3,40,4,13,Clean Water,https://www.hungpump.com/bps
+DC-1812,50,1,96W,96W,25,"1""",5,115,4.6,15,Speciality Pump,https://www.hungpump.com/dc
+DC-1824,50,1,120W,120W,25,"1""",5,115,4.6,15,Speciality Pump,https://www.hungpump.com/dc
+DC-2312,50,1,132W,132W,25,"1""",5,145,5.2,17,Speciality Pump,https://www.hungpump.com/dc
+DC-2324,50,1,132W,132W,25,"1""",5,145,5.2,17,Speciality Pump,https://www.hungpump.com/dc
+DC-3024,50,1,168W,168W,32,"1-1/4""",5,190,5.5,18,Speciality Pump,https://www.hungpump.com/dc
+DS-05,50,1,1/2,400W,50,"2""",15,270,10,33,,https://www.hungpump.com/ds
+DS-05,50,3,1/2,400W,50,"2""",15,270,10,33,,https://www.hungpump.com/ds
+DS-05A,50,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/ds
+DS-10,50,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10,50,3,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-100,50,3,10,7.5kW,100,"4""",27,1500,27,89,,https://www.hungpump.com/ds
+DS-20,50,1,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20,50,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20,50,1,2,1.5kW,80,"3""",15,700,17,56,,https://www.hungpump.com/ds
+DS-20GA,50,1,2,1.5kW,80,"3""",15,700,17,56,,https://www.hungpump.com/ds
+DS-20,50,3,2,1.5kW,80,"3""",15,700,17,56,,https://www.hungpump.com/ds
+DS-20G,50,1,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20G,50,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-30,50,3,3,2.2kW,80,"3""",35,1200,20,66,,https://www.hungpump.com/ds
+DS-30,50,3,3,2.2kW,80,"3""",15,860,20,66,,https://www.hungpump.com/ds
+DS-30G,50,3,3,2.2kW,80,"3""",35,1200,20,66,,https://www.hungpump.com/ds
+DS-50G,50,3,5,3.7kW,80,"3""",35,1400,26,85,,https://www.hungpump.com/ds
+DS-50,50,3,5,3.7kW,80,"3""",35,1400,26,85,,https://www.hungpump.com/ds
+DS-50,50,3,5,3.7kW,100,"4""",15,1300,22,72,,https://www.hungpump.com/ds
+DS-75,50,3,7.5,5.5kW,100,"4""",20,1400,24,79,,https://www.hungpump.com/ds
+DSK-05,50,1,1/2,400W,50,"2""",15,270,10,33,Dirty Water,https://www.hungpump.com/dsk
+DSK-05A,50,1,1/2,400W,50,"2""",15,270,10,33,Dirty Water,https://www.hungpump.com/dsk
+DSK-05,50,3,1/2,400W,50,"2""",15,270,10,33,Dirty Water,https://www.hungpump.com/dsk
+DSK-10,50,1,1,750W,50,"2""",15,420,14,46,Dirty Water,https://www.hungpump.com/dsk
+DSK-10A,50,1,1,750W,50,"2""",15,420,14,46,Dirty Water,https://www.hungpump.com/dsk
+DSK-10GA,50,1,1,750W,50,"2""",15,420,14,46,Dirty Water,https://www.hungpump.com/dsk
+DSK-10,50,3,1,750W,50,"2""",15,420,14,46,Dirty Water,https://www.hungpump.com/dsk
+DSK-10G-3,50,3,1,750W,50,"2""",15,420,14,46,Dirty Water,https://www.hungpump.com/dsk
+DSK-100,50,3,10,7.5kW,100,"4""",27,1500,27,89,Dirty Water,https://www.hungpump.com/dsk
+DSK-20,50,1,2,1.5kW,80,"3""",15,700,17,56,Dirty Water,https://www.hungpump.com/dsk
+DSK-20,50,3,2,1.5kW,80,"3""",15,700,17,56,Dirty Water,https://www.hungpump.com/dsk
+DSK-20,50,3,2,1.5kW,80,"3""",15,700,17,56,Dirty Water,https://www.hungpump.com/dsk
+DSK-20G-3,50,3,2,1.5kW,80,"3""",15,700,17,56,Dirty Water,https://www.hungpump.com/dsk
+DSK-30,50,3,3,2.2kW,80,"3""",15,860,20,66,Dirty Water,https://www.hungpump.com/dsk
+DSK-30G-3,50,3,3,2.2kW,80,"3""",15,860,20,66,Dirty Water,https://www.hungpump.com/dsk
+DSK-50,50,3,5,3.7kW,100,"4""",15,1300,22,72,Dirty Water,https://www.hungpump.com/dsk
+DSK-50G-3,50,3,5,3.7kW,100,"4""",15,1300,22,72,Dirty Water,https://www.hungpump.com/dsk
+DSK-75,50,3,7.5,5.5kW,100,"4""",20,1400,24,79,Dirty Water,https://www.hungpump.com/dsk
+DSK-75-3,50,3,7.5,5.5kW,100,"4""",20,1400,24,79,Dirty Water,https://www.hungpump.com/dsk
+DSP-10,50,1,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-10,50,3,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-20,50,1,2,1.5kW,80,"3""",40,880,18,59,Dirty Water,https://www.hungpump.com/dsp
+DSP-20,50,3,2,1.5kW,80,"3""",40,880,18,59,Dirty Water,https://www.hungpump.com/dsp
+DSP-20T,50,3,2,1.5kW,80,"3""",40,880,18,59,Dirty Water,https://www.hungpump.com/dsp
+DSP-30,50,3,3,2.2kW,80,"3""",40,1200,20,66,Dirty Water,https://www.hungpump.com/dsp
+DSP-30T,50,3,3,2.2kW,80,"3""",40,1200,20,66,Dirty Water,https://www.hungpump.com/dsp
+DSP-30-3,50,3,3,2.2kW,80,"3""",40,1200,20,66,Dirty Water,https://www.hungpump.com/dsp
+DSP-50,50,3,5,3.7kW,100,"4""",45,1300,22,72,Dirty Water,https://www.hungpump.com/dsp
+DSP-50T,50,3,5,3.7kW,100,"4""",45,1300,22,72,Dirty Water,https://www.hungpump.com/dsp
+DSP-75,50,3,7.5,5.5kW,100,"4""",50,2100,24,79,Dirty Water,https://www.hungpump.com/dsp
+DSP-75T,50,3,7.5,5.5kW,100,"4""",50,2100,24,79,Dirty Water,https://www.hungpump.com/dsp
+DSP-100,50,3,10,7.5kW,150,"6""",65,2500,28,92,Dirty Water,https://www.hungpump.com/dsp
+DSP-100T,50,3,10,7.5kW,150,"6""",65,2500,28,92,Dirty Water,https://www.hungpump.com/dsp
+DSP-100-3,50,3,10,7.5kW,150,"6""",65,2500,28,92,Dirty Water,https://www.hungpump.com/dsp
+DSP-150,50,3,15,11kW,150,"6""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSP-150T,50,3,15,11kW,150,"6""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSP-150,50,3,15,11kW,100,"4""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSP-150-3,50,3,15,11kW,100,"4""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSPK-10,50,1,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-10,50,3,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-100,50,3,10,7.5kW,150,"6""",65,2500,28,92,,https://www.hungpump.com/dspk
+DSPK-150,50,3,15,11kW,150,"6""",65,3200,32,105,,https://www.hungpump.com/dspk
+DSPK-20,50,1,2,1.5kW,80,"3""",40,880,18,59,,https://www.hungpump.com/dspk
+DSPK-20,50,3,2,1.5kW,80,"3""",40,880,18,59,,https://www.hungpump.com/dspk
+DSPK-30,50,3,3,2.2kW,80,"3""",40,1200,20,66,,https://www.hungpump.com/dspk
+DSPK-50,50,3,5,3.7kW,100,"4""",45,1300,22,72,,https://www.hungpump.com/dspk
+DSPK-75,50,3,7.5,5.5kW,100,"4""",50,2100,24,79,,https://www.hungpump.com/dspk
+FAS-150,50,1,1/5,150W,40,"1-1/2""",19,230,6,20,,https://www.hungpump.com/fas
+FAS-150,50,1,1/5,150W,50,"2""",19,230,6,20,,https://www.hungpump.com/fas
+FAS-150A,50,1,1/5,150W,50,"2""",19,230,6,20,,https://www.hungpump.com/fas
+FAS-250,50,1,1/3,250W,40,"1-1/2""",19,270,7,23,,https://www.hungpump.com/fas
+FAS-250,50,1,1/3,250W,50,"2""",19,270,7,23,,https://www.hungpump.com/fas
+FAS-250A,50,1,1/3,250W,50,"2""",19,270,7,23,,https://www.hungpump.com/fas
+FAS-400,50,1,1/2,400W,50,"2""",19,320,9,30,,https://www.hungpump.com/fas
+FAS-750,50,1,1,750W,50,"2""",19,380,12,39,,https://www.hungpump.com/fas
+FVS-400L,50,1,1/2,400W,50,"2""",19,330,8.5,28,,https://www.hungpump.com/fvs
+GC-07,50,1,3/4,550W,32,"1-1/4""",N/A,145,10,33,Grinder,https://www.hungpump.com/gc
+GC-07,50,3,3/4,550W,32,"1-1/4""",N/A,145,10,33,Grinder,https://www.hungpump.com/gc
+GCB-07,50,1,3/4,550W,32,"1-1/4""",N/A,130,13,42,Grinder,https://www.hungpump.com/gcb
+GCB-07,50,1,3/4,550W,32,"1-1/4""",N/A,130,13,42,Grinder,https://www.hungpump.com/gcb
+GC-10,50,1,1,750W,32,"1-1/4""",N/A,160,15,49,Grinder,https://www.hungpump.com/gc
+GC-10A,50,1,1,750W,32,"1-1/4""",N/A,160,15,49,Grinder,https://www.hungpump.com/gc
+GC-10,50,3,1,750W,32,"1-1/4""",N/A,160,15,49,Grinder,https://www.hungpump.com/gc
+GCB-10,50,1,1,750W,32,"1-1/4""",N/A,200,17,55,Grinder,https://www.hungpump.com/gcb
+GCB-10,50,1,1,750W,32,"1-1/4""",N/A,200,17,55,Grinder,https://www.hungpump.com/gcb
+GC-20,50,1,2,1.5kW,32,"1-1/4""",N/A,180,25,82,Grinder,https://www.hungpump.com/gc
+GC-20,50,3,2,1.5kW,32,"1-1/4""",N/A,180,25,82,Grinder,https://www.hungpump.com/gc
+GC-30,50,3,3,2.2kW,50,"2""",N/A,180,35,115,Grinder,https://www.hungpump.com/gc
+GC-3053,50,3,3,2.2kW,50,"2""",N/A,180,35,115,Grinder,https://www.hungpump.com/gc
+GC-30-3,50,3,3,2.2kW,50,"2""",N/A,180,35,115,Grinder,https://www.hungpump.com/gc
+GC-30,50,3,3,2.2kW,50,"2""",N/A,180,35,115,Grinder,https://www.hungpump.com/gc
+GC-50,50,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,Grinder,https://www.hungpump.com/gc
+GC-5053,50,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,Grinder,https://www.hungpump.com/gc
+GC-50-3,50,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,Grinder,https://www.hungpump.com/gc
+GC-75,50,3,7.5,5.5kW,65,"2-1/2""",N/A,320,50,164,Grinder,https://www.hungpump.com/gc
+GD-15,50,1,1.5,1.1kW,32,"1-1/4""",N/A,230,20,66,Grinder,https://www.hungpump.com/gd
+GD-15,50,3,1.5,1.1kW,32,"1-1/4""",N/A,230,20,66,Grinder,https://www.hungpump.com/gd
+GD-20,50,1,2,1.5kW,32,"1-1/4""",N/A,235,23,75,Grinder,https://www.hungpump.com/gd
+GD-20,50,3,2,1.5kW,32,"1-1/4""",N/A,235,23,75,Grinder,https://www.hungpump.com/gd
+GD-30,50,3,3,2.2kW,32,"1-1/4""",N/A,235,28,92,Grinder,https://www.hungpump.com/gd
+GDH-15,50,1,1.5,1.1kW,32,"1-1/4""",N/A,110,29,95,Grinder,https://www.hungpump.com/gdh
+GDH-15,50,3,1.5,1.1kW,32,"1-1/4""",N/A,110,29,95,Grinder,https://www.hungpump.com/gdh
+GDH-20,50,1,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20,50,3,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20-3,50,3,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20C,50,1,2,1.5kW,50,"2""",N/A,400,7,23,Grinder,https://www.hungpump.com/gdh
+GP-411,50,1,15,11kW,100,"4""",30,3200,19,62,Construction,https://www.hungpump.com/gp
+GS-15,50,1,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+GS-15A,50,1,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+GS-15,50,3,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+GS-15TA,50,3,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+HD-10,50,1,1,750W,80,"3""",10,600,9.5,31,,https://www.hungpump.com/hd
+HD-10,50,3,1,750W,80,"3""",10,600,9.5,31,,https://www.hungpump.com/hd
+HD-15,50,1,1.5,1.1kW,80,"3""",10,820,10,33,,https://www.hungpump.com/hd
+HD-15,50,3,1.5,1.1kW,80,"3""",10,820,10,33,,https://www.hungpump.com/hd
+HD-20,50,1,2,1.5kW,80,"3""",10,1050,11.5,38,,https://www.hungpump.com/hd
+HD-20,50,3,2,1.5kW,80,"3""",10,1050,11.5,38,,https://www.hungpump.com/hd
+HF-10,50,1,1.5,1.1kW,80,"3""",19,850,8,26,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-10,50,3,1.5,1.1kW,80,"3""",19,850,8,26,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-20,50,1,2,1.5kW,80,"3""",19,1200,12,39,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-20,50,3,2,1.5kW,80,"3""",19,1200,12,39,Sewage and Wastewater,https://www.hungpump.com/hf
+JA-20,50,1,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/ja
+JA-20,50,3,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/ja
+JA-20,50,3,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/ja
+JA-30,50,1,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/ja
+JA-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/ja
+JA-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/ja
+JA-50,50,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/ja
+JA-50,50,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/ja
+JK-05,50,1,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/jk
+JK-05,50,3,1/2,400W,50,2',30,320,9,30,Dirty Water,https://www.hungpump.com/jk
+JK-10,50,1,1,750W,50,"2""",30,400,12,39,Dirty Water,https://www.hungpump.com/jk
+JK-10,50,3,1,750W,50,"2""",30,400,11,39,Dirty Water,https://www.hungpump.com/jk
+JK-10T,50,3,1,750W,50,"2""",30,400,11,39,Dirty Water,https://www.hungpump.com/jk
+JK-20,50,1,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-20,50,3,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-20T,50,3,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30,50,1,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30T,50,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-50,50,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/jk
+JK-50T,50,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/jk
+JK-50,50,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/jk
+JK-50,50,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/jk
+JK-75,50,3,7.5,5.5kW,100,"4""",50,1200,24,79,Dirty Water,https://www.hungpump.com/jk
+JKCH-20,50,1,1/2,400W,32,"1-1/4""",1.2,100,20,66,,https://www.hungpump.com/jkch
+JKCH-30,50,1,3/4,550W,32,"1-1/4""",1.2,100,30,98,,https://www.hungpump.com/jkch
+JKCH-40,50,1,1.1,800W,32,"1-1/4""",1.2,100,40,131,,https://www.hungpump.com/jkch
+JKCH-50,50,1,1.5,1.1kW,32,"1-1/4""",1.2,100,50,164,,https://www.hungpump.com/jkch
+JKCH-60,50,1,1.8,1.35kW,32,"1-1/4""",1.2,100,60,197,,https://www.hungpump.com/jkch
+JKCH-60A,50,1,1.8,1.35kW,32,"1-1/4""",1.2,100,60,197,,https://www.hungpump.com/jkch
+KA-2.4,50,1,1/2,400W,50,"2""",7,240,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4A,50,1,1/2,400W,50,"2""",7,240,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4D,50,1,1/2,400W,50,"2""",7,255,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4DA,50,1,1/2,400W,50,"2""",7,255,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4R,50,1,1/2,400W,50,"2""",2.8,150,12.5,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.75D,50,1,1,750W,50,"2""",7,240,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-2.75D,50,1,1,750W,50,"2""",7,240,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-2.75DA,50,1,1,750W,50,"2""",7,240,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-3.75D,50,1,1,750W,80,"3""",7,270,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-3.75DA,50,1,1,750W,80,"3""",7,270,19,62,Dirty Water,https://www.hungpump.com/ka
+KHL-100,50,3,10,7.5kW,100,"4""",15,1700,35,115,Dirty Water,https://www.hungpump.com/khl
+KHL-20,50,1,2,1.5kW,50,"2""",12,415,25,82,Dirty Water,https://www.hungpump.com/khl
+KHL-20,50,3,2,1.5kW,50,"2""",12,415,25,82,Dirty Water,https://www.hungpump.com/khl
+KHL-20T,50,3,2,1.5kW,50,"2""",12,415,25,82,Dirty Water,https://www.hungpump.com/khl
+KHL-30,50,3,3,2.2kW,50,"2""",12,620,28,92,Dirty Water,https://www.hungpump.com/khl
+KHL-30T,50,3,3,2.2kW,50,"2""",12,620,28,92,Dirty Water,https://www.hungpump.com/khl
+KHL-50,50,3,5,3.7kW,50,"2""",15,770,32,105,Dirty Water,https://www.hungpump.com/khl
+KHL-50T,50,3,5,3.7kW,80,"3""",15,770,32,105,Dirty Water,https://www.hungpump.com/khl
+KHL-75,50,3,7.5,5.5kW,80,"3""",15,1450,33,108,Dirty Water,https://www.hungpump.com/khl
+KS-05,50,1,1/2,400W,50,"2""",5,260,10,33,Dirty Water,https://www.hungpump.com/ks
+KS-10,50,1,1,750W,50,"2""",6,420,14,46,Dirty Water,https://www.hungpump.com/ks
+KS-10,50,3,1,750W,50,"2""",6,420,14,46,Dirty Water,https://www.hungpump.com/ks
+KS-100G,50,3,10,7.5kW,100,"4""",11,2400,28,92,Dirty Water,https://www.hungpump.com/ks
+KS-20,50,1,2,1.5kW,80,"3""",9,700,17,56,Dirty Water,https://www.hungpump.com/ks
+KS-20,50,3,2,1.5kW,80,"3""",9,700,17,56,Dirty Water,https://www.hungpump.com/ks
+KS-20,50,3,2,1.5kW,80,"3""",12,960,15.5,51,Dirty Water,https://www.hungpump.com/ks
+KS-30,50,3,3,2.2kW,80,"3""",11,900,18,59,Dirty Water,https://www.hungpump.com/ks
+KS-30GT,50,3,3,2.2kW,80,"3""",11,900,18,59,Dirty Water,https://www.hungpump.com/ks
+KS-30,50,3,3,2.2kW,80,"3""",11,900,18,59,Dirty Water,https://www.hungpump.com/ks
+KS-30,50,3,3,2.2kW,80,"3""",11,900,18,59,Dirty Water,https://www.hungpump.com/ks
+KS-30,50,3,3,2.2kW,80,"3""",12,1200,20,66,Dirty Water,https://www.hungpump.com/ks
+KS-50,50,3,5,3.7kW,80,"3""",12,1400,26,85,Dirty Water,https://www.hungpump.com/ks
+KS-50G,50,3,5,3.7kW,100,"4""",11,1200,22,72,Dirty Water,https://www.hungpump.com/ks
+KS-50G,50,3,5,3.7kW,100,"4""",11,1200,22,72,Dirty Water,https://www.hungpump.com/ks
+KS-50G,50,3,5,3.7kW,100,"4""",11,1200,22,72,Dirty Water,https://www.hungpump.com/ks
+KS-75G,50,3,7.5,5.5kW,100,"4""",11,1900,24,79,Dirty Water,https://www.hungpump.com/ks
+KSH-05,50,1,1/2,0.4kW,40,"1-1/2""",2,130,18,59,,https://www.hungpump.com/ksh
+KSH-10,50,1,1,750W,40,"1-1/2""",2.5,200,21,69,,https://www.hungpump.com/ksh
+KSL-10,50,3,1,750W,80,"3""",9,560,13,43,Dirty Water,https://www.hungpump.com/ksl
+KSP-10,50,1,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-10,50,3,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-100,50,3,10,7.5kW,150,"6""",11,2400,28,92,,https://www.hungpump.com/ksp
+KSP-20,50,1,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ksp
+KSP-20,50,3,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ksp
+KSP-30,50,3,3,2.2kW,80,"3""",11,900,18,59,,https://www.hungpump.com/ksp
+KSP-50,50,3,5,3.7kW,100,"4""",11,1200,22,72,,https://www.hungpump.com/ksp
+KSP-75,50,3,7.5,5.5kW,100,"4""",11,1900,24,79,,https://www.hungpump.com/ksp
+KSV-150,50,1,1/5,150W,40,"1-1/2""",5,200,6,20,,https://www.hungpump.com/ksv
+KSV-1500,50,1,2,1.5kW,80,"3""",20,800,17,56,,https://www.hungpump.com/ksv
+KSV-1500,50,3,2,1.5kW,80,"3""",20,800,17,56,,https://www.hungpump.com/ksv
+KSV-250,50,1,1/3,250W,40,"1-1/2""",5,240,7,23,,https://www.hungpump.com/ksv
+KSV-400,50,1,1/2,400W,50,"2""",10,300,9,30,,https://www.hungpump.com/ksv
+KSV-550,50,1,3/4,550W,50,"2""",15,330,10,33,,https://www.hungpump.com/ksv
+KSV-750,50,1,1,750W,80,"3""",15,430,11,36,,https://www.hungpump.com/ksv
+KSV-750,50,3,3,750W,80,"3""",15,430,11,36,,https://www.hungpump.com/ksv
+KT-215,50,1,2,1.5kW,50,"2""",N/A,505,22,72,Construction,https://www.hungpump.com/kt
+KT-215,50,3,2,1.5kW,50,"2""",N/A,505,22,72,Construction,https://www.hungpump.com/kt
+KT-222,50,3,3,2.2kW,50,"2""",N/A,670,26,85,Construction,https://www.hungpump.com/kt
+KT-237,50,3,5,3.7kW,50,"2""",N/A,550,37,121,Construction,https://www.hungpump.com/kt
+KT-315,50,1,2,1.5kW,80,"3""",N/A,550,15,49,Construction,https://www.hungpump.com/kt
+KT-315,50,3,2,1.5kW,80,"3""",N/A,550,15,49,Construction,https://www.hungpump.com/kt
+KT-322,50,3,3,2.2kW,80,"3""",N/A,800,22,72,Construction,https://www.hungpump.com/kt
+KT-337,50,3,5,3.7kW,80,"3""",N/A,760,32,105,Construction,https://www.hungpump.com/kt
+KT-355,50,3,7.5,5.5kW,80,"3""",N/A,1360,36,118,Construction,https://www.hungpump.com/kt
+KT-4110,50,3,15,11kW,100,"4""",N/A,1450,45,148,Construction,https://www.hungpump.com/kt
+KT-4150,50,3,20,15kW,100,"4""",N/A,1930,52,171,Construction,https://www.hungpump.com/kt
+KT-437,50,3,5,3.7kW,100,"4""",N/A,1430,19,62,Construction,https://www.hungpump.com/kt
+KT-455,50,3,7.5,5.5kW,100,"4""",N/A,1940,22,72,Construction,https://www.hungpump.com/kt
+KT-475,50,3,10,7.5kW,100,"4""",N/A,1550,39,128,Construction,https://www.hungpump.com/kt
+KT-6110,50,3,15,11kW,150,"6""",N/A,2480,34,112,Construction,https://www.hungpump.com/kt
+KT-6150,50,3,20,15kW,150,"6""",N/A,2950,45,148,Construction,https://www.hungpump.com/kt
+KT-675,50,3,10,7.5kW,150,"6""",N/A,2050,28,92,Construction,https://www.hungpump.com/kt
+MAS-150,50,1,1/5,150W,40,"1-1/2""",19,240,6.5,21,Clean Water,https://www.hungpump.com/mas
+MAS-250,50,1,1/3,250W,40,"1-1/2""",19,270,7.5,25,Clean Water,https://www.hungpump.com/mas
+MAS-250HJ,50,1,1/3,250W,50,"2""",19,320,11,36,Clean Water,https://www.hungpump.com/mas
+MAS-400,50,1,1/2,400W,50,"2""",19,320,9,30,Clean Water,https://www.hungpump.com/mas
+MAS-750,50,1,1,750W,50,"2""",19,370,12,39,Clean Water,https://www.hungpump.com/mas
+MAS-750A,50,1,1,750W,50,"2""",19,370,12,39,Clean Water,https://www.hungpump.com/mas
+MAV-400,50,1,1/2,400W,50,"2""",20,320,9,30,,https://www.hungpump.com/mav
+MH-150,50,1,1/5,150W,50,"2""",6,240,6.5,21,Clean Water,https://www.hungpump.com/mh
+MH-150FR,50,1,1/5,150W,50,"2""",6,240,6.5,21,Clean Water,https://www.hungpump.com/mh
+MH-250,50,1,1/3,250W,50,"2""",6,280,7,23,Clean Water,https://www.hungpump.com/mh
+MH-250-FR,50,1,1/3,250W,50,"2""",6,280,7,23,Clean Water,https://www.hungpump.com/mh
+MH-400,50,1,1/2,400W,50,"2""",6,320,8.5,28,Clean Water,https://www.hungpump.com/mh
+MH-400-FR,50,1,1/2,400W,50,"2""",6,320,8.5,28,Clean Water,https://www.hungpump.com/mh
+MH-750,50,1,1,750W,50,"2""",6,380,10,33,Clean Water,https://www.hungpump.com/mh
+MH-750-FR,50,1,1,750W,50,"2""",6,380,10,33,Clean Water,https://www.hungpump.com/mh
+MH-752,50,1,1,750W,50,"2""",6,380,10,33,Clean Water,https://www.hungpump.com/mh
+MVH-10,50,1,3/4,550W,25,"1""",3,100,32,105,High Pressure,https://www.hungpump.com/mvh
+MVH-10A,50,1,3/4,550W,25,"1""",3,100,32,105,High Pressure,https://www.hungpump.com/mvh
+MVH-10E,50,1,3/4,550W,25,"1""",3,95,30,98,High Pressure,https://www.hungpump.com/mvh
+PA-18H,50,1,30,30,200,"8""",35,6000,26,85,,https://www.hungpump.com/pa
+RAS-250,50,1,1/3,250W,50,"2""",12,210,7.5,25,,https://www.hungpump.com/ras
+RS-25E,50,1,1/6,100W,25,"1""",3,70,6,20,,https://www.hungpump.com/rs
+RS-25EA,50,1,1/6,100W,25,"1""",3,70,6,20,,https://www.hungpump.com/rs
+RS-25S,50,1,1/6,100W,25,"1""",3,70,6,20,,https://www.hungpump.com/rs
+RS-32,50,1,1/4,200W,32,"1-1/4""",3,130,7,23,,https://www.hungpump.com/rs
+RS-32E,50,1,1/4,200W,32,"1-1/4""",3,130,7,23,,https://www.hungpump.com/rs
+RS-32EA,50,1,1/4,200W,32,"1-1/4""",3,130,7,23,,https://www.hungpump.com/rs
+RS-32S,50,1,1/4,200W,32,"1-1/4""",3,130,7,23,,https://www.hungpump.com/rs
+RV-32,50,1,1/4,200W,32,"1-1/4""",18,130,6.5,21,,https://www.hungpump.com/rv
+RV-40,50,1,1/3,250W,32,"1-1/4""",18,160,8,26,,https://www.hungpump.com/rv
+SB-05,50,1,1/2,400W,50,"2""",30,320,9,30,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-05,50,3,1/2,400W,50,"2""",30,320,9,30,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-10,50,1,1,750W,50,"2""",30,400,12,39,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-10,50,3,1,750W,50,"2""",30,400,12,39,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-10A,50,1,1,750W,50,"2""",30,410,11,36,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-20,50,1,2,1.5kW,80,"3""",35,630,16,52,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-20,50,3,2,1.5kW,80,"3""",35,630,16,52,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-20T,50,3,2,1.5kW,80,"3""",35,630,16,52,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-30,50,3,3,2.2kW,80,"3""",35,780,18,59,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-30T,50,3,3,2.2kW,80,"3""",35,780,18,59,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-50,50,3,5,3.7kW,100,"4""",45,1100,22,72,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-50T,50,3,5,3.7kW,100,"4""",45,1100,22,72,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-75,50,3,7.5,5.5kW,100,"4""",50,1200,24,79,Sewage and Wastewater,https://www.hungpump.com/sb
+SB-75T,50,3,7.5,5.5kW,100,"4""",50,1200,24,79,Sewage and Wastewater,https://www.hungpump.com/sb
+SD-250,50,1,1/3,250W,50,"2""",7,220,9,30,,https://www.hungpump.com/sd
+SD-400,50,1,1/2,400W,50,"2""",7,240,11,36,,https://www.hungpump.com/sd
+SD-750,50,1,1,750W,50,"2""",7,300,15,49,,https://www.hungpump.com/sd
+SD-750,50,3,1,750W,50,"2""",7,300,15,49,,https://www.hungpump.com/sd
+SDP-250,50,1,1/3,250W,50,"2""",7,200,9,30,Clean Water,https://www.hungpump.com/sdp
+SDP-400,50,1,1/2,400W,50,"2""",7,220,12,39,Clean Water,https://www.hungpump.com/sdp
+SDP-400A,50,1,1/2,400W,50,"2""",7,220,12,39,Clean Water,https://www.hungpump.com/sdp
+SDP-750,50,1,1,750W,50,"2""",7,280,15,49,Clean Water,https://www.hungpump.com/sdp
+SDP-750,50,3,1,750W,50,"2""",7,280,15,49,Clean Water,https://www.hungpump.com/sdp
+SG-400,50,1,1/2,400W,50,"2""",35,360,8,26,,https://www.hungpump.com/sg
+SG-402,50,1,1/2,400W,50,"2""",35,360,8,26,,https://www.hungpump.com/sg
+SG-402A,50,1,1/2,400W,50,"2""",35,360,8,26,,https://www.hungpump.com/sg
+SG-750,50,1,1,750W,50,"2""",35,430,11,36,,https://www.hungpump.com/sg
+SG-750A,50,1,1,750W,50,"2""",35,430,11,36,,https://www.hungpump.com/sg
+SG-750T,50,3,1,750W,50,"2""",35,430,11,36,,https://www.hungpump.com/sg
+SH-400,50,1,1/2,400W,40,"1-1/2""",20,250,6,20,,https://www.hungpump.com/sh
+SM-100,50,1,1/6,100W,25,"1""",3,70,6,20,,https://www.hungpump.com/sm
+SM-200,50,1,1/4,200W,32,"1-1/4""",3,140,7,23,,https://www.hungpump.com/sm
+SM-300,50,1,1/3,300W,40,"1-1/2""",3,180,8,26,,https://www.hungpump.com/sm
+SM-400,50,1,1/2,400W,50,"2""",3,220,10,33,,https://www.hungpump.com/sm
+SR-400,50,1,1/2,400W,25,"1""",7,170,11,36,,https://www.hungpump.com/sr
+SR-400,50,1,1/2,400W,50,"2""",7,200,10,33,,https://www.hungpump.com/sr
+SS-250,50,1,1/3,250W,50,"2""",7,220,9,30,Clean Water,https://www.hungpump.com/ss
+SS-400,50,1,1/2,400W,50,"2""",7,240,11,36,Clean Water,https://www.hungpump.com/ss
+SS-750,50,1,1,750W,50,"2""",7,300,15,49,Clean Water,https://www.hungpump.com/ss
+SS-750,50,3,1,750W,50,"2""",7,300,15,49,Clean Water,https://www.hungpump.com/ss
+SSB-05,50,1,1/2,400W,50,"2""",30,320,9,30,,https://www.hungpump.com/ssb
+SV-150,50,1,1/5,150W,40,"1-1/2""",27,170,6,20,Dirty Water,https://www.hungpump.com/sv
+SV-1500,50,1,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/sv
+SV-1500A,50,1,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/sv
+SV-1500,50,3,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/sv
+SV-1500T,50,3,2,1.5kW,80,"3""",40,700,16,52,Dirty Water,https://www.hungpump.com/sv
+SV-250,50,1,1/3,250W,40,"1-1/2""",27,220,7.5,25,Dirty Water,https://www.hungpump.com/sv
+SV-250A,50,1,1/3,250W,40,"1-1/2""",27,220,7.5,25,Dirty Water,https://www.hungpump.com/sv
+SV-400,50,1,1/2,400W,50,"2""",35,350,8.5,28,Dirty Water,https://www.hungpump.com/sv
+SV-400,50,1,1/2,400W,50,"2""",35,350,8.5,28,Dirty Water,https://www.hungpump.com/sv
+SV-550,50,1,3/4,550W,50,"2""",35,370,9,30,Dirty Water,https://www.hungpump.com/sv
+SV-750,50,1,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/sv
+SV-750,50,3,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/sv
+SV-750A,50,1,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/sv
+SV-750T,50,3,1,750W,80,"3""",37,415,11,36,Dirty Water,https://www.hungpump.com/sv
+TAS-250,50,1,1/3,250W,40,"1-1/2""",14,270,7.5,25,Clean Water,https://www.hungpump.com/tas
+TAS-250J,50,1,1/3,250W,40,"1-1/2""",14,270,7.5,25,Clean Water,https://www.hungpump.com/tas
+TAS-400,50,1,1/2,400W,50,"2""",14,320,10,33,Clean Water,https://www.hungpump.com/tas
+TAS-400J,50,1,1/2,400W,50,"2""",14,320,10,33,Clean Water,https://www.hungpump.com/tas
+TAS-750,50,1,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TAS-750,50,3,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TAS-750,50,3,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TAS-750-1,50,1,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TAS-750-3,50,3,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TAS-750A,50,1,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TAS-750J,50,1,1,750W,50,"2""",14,340,11,36,Clean Water,https://www.hungpump.com/tas
+TPS-200,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/tps
+TPS-200M,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/tps
+TPS-200A,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/tps
+TPS-200S,50,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/tps
+TPS-50,50,1,1/10,80W,20,"3/4""",5,40,4,13,Clean Water,https://www.hungpump.com/tps
+TPS-50A,50,1,1/10,80W,20,"3/4""",5,40,4,13,Clean Water,https://www.hungpump.com/tps
+TPS-50S,50,1,1/10,80W,20,"3/4""",5,40,4,13,Clean Water,https://www.hungpump.com/tps
+TPV-200,50,1,1/4,200W,32,"1-1/4""",19,140,7,23,,https://www.hungpump.com/tpv
+TPV-200V,50,1,1/4,200W,32,"1-1/4""",19,140,7,23,,https://www.hungpump.com/tpv
+TPV-600,50,1,3/4,600W,32,"1-1/4""",32,240,6.5,21,,https://www.hungpump.com/tpv
+TS-20,50,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ts
+U72R,50,1,1/2,400W,40,"1-1/2""",20,240,6.5,,,https://www.hungpump.com/u
+WS-33R,50,1,1/3,250W,32,"1-1/4""",7,200,7,23,,https://www.hungpump.com/ws
+LKT-100EA,50,1,1/6,100W,25,"1""",3,90,6,20,,https://www.hungpump.com/lkt
+BAH-400A,50,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/bah
+BAH-750A,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-400V,50,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/bah
+BAH-750V,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+KHL-05,50,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/khl
+KHL-10,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/khl
+KHL-10,50,3,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/khl
+KHL-05A,50,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/khl
+KHL-10A,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/khl
+KHL-05V,50,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/khl
+KHL-10V,50,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/khl
+100ADL65.5,60,3,7.5,5.5kW,100,"4""",80,"2,850",18,59,Dirty Water,https://www.hungpump.com/adl
+100ADL65.5,60,3,7.5,5.5kW,100,"4""",80,"2,850",18,59,Dirty Water,https://www.hungpump.com/adl
+100ADL65.5,60,3,7.5,5.5kW,100,"4""",80,"2,850",18,59,Dirty Water,https://www.hungpump.com/adl
+100ADL67.5,60,3,10,7.5kW,100,"4""",80,"3,050",22,72,Dirty Water,https://www.hungpump.com/adl
+100ADL67.5,60,3,10,7.5kW,100,"4""",80,"3,050",22,72,Dirty Water,https://www.hungpump.com/adl
+100ADL67.5,60,3,10,7.5kW,100,"4""",80,"3,050",22,72,Dirty Water,https://www.hungpump.com/adl
+50ADVS5.75,60,1,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS5.75,60,1,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS5.75,60,3,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS5.75,60,3,1,750W,50,"2""",33,320,14,46,Dirty Water,https://www.hungpump.com/advs
+50ADVS51.5,60,1,2,1.5kW,50,"2""",31,420,22,72,Dirty Water,https://www.hungpump.com/advs
+50ADVS51.5,60,3,2,1.5kW,50,"2""",31,420,22,72,Dirty Water,https://www.hungpump.com/advs
+50ADVS51.5,60,3,2,1.5kW,50,"2""",31,420,22,72,Dirty Water,https://www.hungpump.com/advs
+50ADVS61.5,60,3,2,1.5kW,50,"2""",31,420,22,72,Dirty Water,https://www.hungpump.com/advs
+65ADL61.5,60,1,2,1.5kW,65,"2-1/2""",40,850,15,49,Dirty Water,https://www.hungpump.com/adl
+65ADL61.5,60,3,2,1.5kW,65,"2-1/2""",40,850,15,49,Dirty Water,https://www.hungpump.com/adl
+65ADL61.5,60,3,2,1.5kW,65,"2-1/2""",40,850,15,49,Dirty Water,https://www.hungpump.com/adl
+65ADVS61.5,60,1,2,1.5kW,65,"2-1/2""",45,700,17,56,Dirty Water,https://www.hungpump.com/advs
+65ADVS61.5,60,3,2,1.5kW,65,"2-1/2""",45,700,17,56,Dirty Water,https://www.hungpump.com/advs
+65ADVS61.5,60,3,2,1.5kW,65,"2-1/2""",45,700,17,56,Dirty Water,https://www.hungpump.com/advs
+80ADL61.5,60,1,2,1.5kW,80,"3""",50,"1,000",13,43,Dirty Water,https://www.hungpump.com/adl
+80ADL61.5,60,3,2,1.5kW,80,"3""",50,1000,13,43,Dirty Water,https://www.hungpump.com/adl
+80ADL61.5,60,3,2,1.5kW,80,"3""",50,1000,13,43,Dirty Water,https://www.hungpump.com/adl
+80ADL62.2,60,3,3,2.2kW,80,"3""",50,1200,15,49,Dirty Water,https://www.hungpump.com/adl
+80ADL62.2,60,3,3,2.2kW,80,"3""",50,1200,15,49,Dirty Water,https://www.hungpump.com/adl
+80ADL62.2,60,3,3,2.2kW,80,"3""",50,1200,15,49,Dirty Water,https://www.hungpump.com/adl
+80ADL63.7,60,3,5,3.7kW,80,"3""",48,1680,20,66,Dirty Water,https://www.hungpump.com/adl
+80ADL63.7,60,3,5,3.7kW,80,"3""",48,1680,20,66,Dirty Water,https://www.hungpump.com/adl
+80ADL63.7,60,3,5,3.7kW,80,"3""",48,1680,20,66,Dirty Water,https://www.hungpump.com/adl
+80ADVS52.2,60,3,3,2.2kW,80,"3""",50,1100,19,62,Dirty Water,https://www.hungpump.com/advs
+80ADVS52.2,60,3,3,2.2kW,80,"3""",50,1100,19,62,Dirty Water,https://www.hungpump.com/advs
+80ADVS62.2,60,3,3,2.2kW,80,"3""",50,1100,19,62,Dirty Water,https://www.hungpump.com/advs
+80ADVS53.7,60,3,5,3.7kW,80,"3""",55,1200,23,75,Dirty Water,https://www.hungpump.com/advs
+80ADVS53.7,60,3,5,3.7kW,80,"3""",55,1200,23,75,Dirty Water,https://www.hungpump.com/advs
+BAH-400,60,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/bah
+BAH-400J,60,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/bah
+BAH-400,60,1,1/2,400W,32,"1-1/4""",8,180,20,66,Dirty Water,https://www.hungpump.com/bah
+BAH-750,60,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-750,60,1,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-750,60,3,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAH-750,60,3,1,750W,50,"2""",8,220,25,82,Dirty Water,https://www.hungpump.com/bah
+BAS-100,60,1,1/6,100W,25,"1""",6,90,6,20,Dirty Water,https://www.hungpump.com/bas
+BAS-100,60,1,1/6,100W,25,"1""",6,90,6,20,Dirty Water,https://www.hungpump.com/bas
+BAS-200,60,1,1/4,200W,32,"1-1/4""",7,140,7,23,Dirty Water,https://www.hungpump.com/bas
+BAS-200,60,1,1/4,200W,32,"1-1/4""",7,140,7,23,Dirty Water,https://www.hungpump.com/bas
+BAS-300,60,1,1/3,300W,40,"1-1/2""",9,200,8,26,Dirty Water,https://www.hungpump.com/bas
+BAS-300,60,1,1/3,300W,40,"1-1/2""",9,200,8,26,Dirty Water,https://www.hungpump.com/bas
+BAS-400,60,1,1/2,400W,50,"2""",12,270,10,33,Dirty Water,https://www.hungpump.com/bas
+BAS-400,60,1,1/2,400W,50,"2""",12,270,10,33,Dirty Water,https://www.hungpump.com/bas
+BAS-600,60,1,3/4,600W,50,"2""",15,300,11,36,Dirty Water,https://www.hungpump.com/bas
+BAS-600,60,1,3/4,600W,50,"2""",15,300,11,36,Dirty Water,https://www.hungpump.com/bas
+BAV-150,60,1,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-150,60,1,1/5,150W,32,"1-1/4""",10,160,6,20,Dirty Water,https://www.hungpump.com/bav
+BAV-250,60,1,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-250S,60,1,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+LB-25,60,1,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/lb
+BAV-250,60,1,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-250,60,3,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-250,60,3,1/3,250W,40,"1-1/2""",25,200,8,26,Dirty Water,https://www.hungpump.com/bav
+BAV-400,60,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400,60,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400,60,3,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400,60,3,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-400A,60,1,1/2,400W,50,"2""",30,300,10,33,Dirty Water,https://www.hungpump.com/bav
+BAV-550,60,1,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+LB-75,60,1,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/lb
+BAV-550,60,1,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-550,60,3,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BAV-550,60,3,3/4,550W,50,"2""",35,340,12,39,Dirty Water,https://www.hungpump.com/bav
+BCV-1500-35,60,1,2,1.5kW,80,"3""",35,680,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-35,60,3,2,1.5kW,80,"3""",35,680,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-35,60,3,2,1.5kW,80,"3""",35,680,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-50,60,1,2,1.5kW,80,"3""",50,720,16,52,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-50,60,3,2,1.5kW,80,"3""",50,720,16,52,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-50,60,3,2,1.5kW,80,"3""",50,720,16,52,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-65,60,1,2,1.5kW,80,"3""",65,900,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-65,60,3,2,1.5kW,80,"3""",65,900,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-1500-65,60,3,2,1.5kW,80,"3""",65,900,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-35,60,3,3,2.2kW,80,"3""",35,800,20,66,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-35,60,3,3,2.2kW,80,"3""",35,800,20,66,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-50,60,3,3,2.2kW,80,"3""",50,900,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-50,60,3,3,2.2kW,80,"3""",50,900,18,59,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-65,60,3,3,2.2kW,80,"3""",65,1200,11,36,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-65,60,3,3,2.2kW,80,"3""",65,1200,11,36,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-80,60,3,3,2.2kW,80,"3""",80,1300,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-2200-80,60,3,3,2.2kW,80,"3""",80,1300,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-3700-50,60,3,5,3.7kW,100,"4""",50,1100,21,69,Dirty Water,https://www.hungpump.com/bcv
+BCV-3700-50,60,3,5,3.7kW,100,"4""",50,1100,21,69,Dirty Water,https://www.hungpump.com/bcv
+BCV-3700-80,60,3,5,3.7kW,100,"4""",80,1500,11,36,Dirty Water,https://www.hungpump.com/bcv
+BCV-3700-80,60,3,5,3.7kW,100,"4""",80,1500,11,36,Dirty Water,https://www.hungpump.com/bcv
+BCV-400-30,60,1,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-400-30,60,1,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/bcv
+BCV-400-50,60,1,1/2,400W,50,"2""",50,380,7,23,Dirty Water,https://www.hungpump.com/bcv
+BCV-400-50,60,1,1/2,400W,50,"2""",50,380,7,23,Dirty Water,https://www.hungpump.com/bcv
+BCV-5500-50,60,3,5,3.7kW,100,"4""",50,1200,28,92,Dirty Water,https://www.hungpump.com/bcv
+BCV-5500-50,60,3,5,3.7kW,100,"4""",50,1200,28,92,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-30,60,1,1,750W,50,"2""",30,380,12,39,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-30,60,1,1,750W,50,"2""",30,380,12,39,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-50,60,1,1,750W,50,"2""",50,500,10,33,Dirty Water,https://www.hungpump.com/bcv
+BCV-750-50,60,1,1,750W,50,"2""",50,500,10,33,Dirty Water,https://www.hungpump.com/bcv
+BDC-400,50,1,1/2,400W,50,"2""",12,185,6,20,,https://www.hungpump.com/bdc
+BDC-400,60,1,1/2,400W,50,"2""",12,185,6,20,,https://www.hungpump.com/bdc
+BPH-300,60,1,1/3,300W,40,"1-1/2""",3,75,21,69,,https://www.hungpump.com/bph
+BPH-300,60,1,1/3,300W,40,"1-1/2""",3,75,21,69,,https://www.hungpump.com/bph
+BPO-100,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100,60,1,1/6,100W,25,"1""",3,70,6,20,Clean Water,https://www.hungpump.com/bpo
+BPO-100EA,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100EA,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bpo
+BPO-100EA,60,1,1/6,100W,25,"1""",3,70,6,20,Clean Water,https://www.hungpump.com/bpo
+BPO-200,60,1,1/4,200W,32,"1-1/4""",3,130,7,23,Clean Water,https://www.hungpump.com/bpo
+BPO-200,60,1,1/4,200W,32,"1-1/4""",3,115,7,23,Clean Water,https://www.hungpump.com/bpo
+BPO-200EA,60,1,1/4,200W,32,"1-1/4""",3,130,7,23,Clean Water,https://www.hungpump.com/bpo
+BPO-200EA,60,1,1/4,200W,32,"1-1/4""",3,115,7,23,Clean Water,https://www.hungpump.com/bpo
+BPO-300,60,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300,60,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300A,60,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300A,60,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300EA,60,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPO-300EA,60,1,1/3,300W,40,"1-1/2""",6,200,8.5,28,Clean Water,https://www.hungpump.com/bpo
+BPS-100,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100G,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100G,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100GA,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-100GA,60,1,1/6,100W,25,"1""",3,70,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-180M,60,1,1/6,100W,25,"1""",5,120,5.5,18,Clean Water,https://www.hungpump.com/bps
+BPS-180M,60,1,1/6,100W,25,"1""",5,120,5.5,18,Clean Water,https://www.hungpump.com/bps
+BPS-200,60,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/bps
+M-68,60,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/m
+M-68A,60,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/m
+BPS-200,60,1,1/4,200W,32,"1-1/4""",5,140,7,23,Clean Water,https://www.hungpump.com/bps
+BPS-200D,60,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200D,60,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200M,60,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-200M,60,1,1/4,200W,32,"1-1/4""",5,180,6.5,21,Clean Water,https://www.hungpump.com/bps
+BPS-300,60,1,1/3,300W,40,"1-1/2""",5,180,8,26,Clean Water,https://www.hungpump.com/bps
+BPS-300,60,1,1/3,300W,40,"1-1/2""",5,180,8,26,Clean Water,https://www.hungpump.com/bps
+BPS-300A,60,1,1/3,300W,40,"1-1/2""",5,180,8,26,Clean Water,https://www.hungpump.com/bps
+BPS-300A,60,1,1/3,300W,40,"1-1/2""",5,180,8,26,Clean Water,https://www.hungpump.com/bps
+BPS-400,60,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400,60,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400A,60,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400A,60,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400V,60,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-400V,60,1,1/2,400W,50,"2""",5,220,9,30,Clean Water,https://www.hungpump.com/bps
+BPS-80,60,1,1/10,80W,20,"3/4""",3,40,4,13,Clean Water,https://www.hungpump.com/bps
+BPS-80,60,1,1/10,80W,20,"3/4""",3,40,4,13,Clean Water,https://www.hungpump.com/bps
+BPS-80A,60,1,1/10,80W,20,"3/4""",3,40,4,13,Clean Water,https://www.hungpump.com/bps
+BPS-80A,60,1,1/10,80W,20,"3/4""",3,40,4,13,Clean Water,https://www.hungpump.com/bps
+DC-1812,60,1,1/8,96W,25,"1""",3,115,0.75,2,Speciality Pump,https://www.hungpump.com/dc
+DC-1812,50,1,1/8,96W,25,"1""",3,115,0.75,2,Speciality Pump,https://www.hungpump.com/dc
+DC-1824,60,1,1/6,120W,25,"1""",3,115,0.75,2,Speciality Pump,https://www.hungpump.com/dc
+DC-1824,50,1,1/6,120W,25,"1""",3,115,0.75,2,Speciality Pump,https://www.hungpump.com/dc
+DC-2312,60,1,1/4,132W,25,"1""",3,145,2.3,8,Speciality Pump,https://www.hungpump.com/dc
+DC-2312,50,1,1/4,132W,25,"1""",3,145,2.3,8,Speciality Pump,https://www.hungpump.com/dc
+DC-2324,60,1,1/4,132W,25,"1""",3,145,2.3,8,Speciality Pump,https://www.hungpump.com/dc
+DC-2324,50,1,1/4,132W,25,"1""",3,145,2.3,8,Speciality Pump,https://www.hungpump.com/dc
+DC-3024,60,1,1/4,168W,32,"1-1/4""",5,190,5.5,18,Speciality Pump,https://www.hungpump.com/dc
+DC-3024,50,1,1/4,168W,32,"1-1/4""",5,190,5.5,18,Speciality Pump,https://www.hungpump.com/dc
+DS-05,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/ds
+DS-05,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/ds
+DS-05,60,3,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/ds
+DS-05,60,3,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/ds
+DS-10,60,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10,60,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10A,60,1,1,750W,80,"3""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10,60,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10,60,1,1,750W,80,"3""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10,60,3,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-10,60,3,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/ds
+DS-100,60,3,10,7.5kW,100,"4""",27,1530,28,92,,https://www.hungpump.com/ds
+DS-100,60,3,10,7.5kW,100,"4""",27,1530,28,92,,https://www.hungpump.com/ds
+DS-20,60,1,2,1.5kW,80,"3""",15,660,18,59,,https://www.hungpump.com/ds
+DS-20,60,3,2,1.5kW,80,"3""",15,660,18,59,,https://www.hungpump.com/ds
+DS-20,60,3,2,1.5kW,80,"3""",15,660,18,59,,https://www.hungpump.com/ds
+DS-20,60,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20,60,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20G,60,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20F,60,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-20F,60,3,2,1.5kW,80,"3""",35,960,15.5,51,,https://www.hungpump.com/ds
+DS-30,60,3,3,2.2kW,80,"3""",15,820,19,62,,https://www.hungpump.com/ds
+DS-30,60,3,3,2.2kW,80,"3""",15,820,19,62,,https://www.hungpump.com/ds
+DS-30,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-30,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-30,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-30G,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-30G,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-30F,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-30F,60,3,3,2.2kW,80,"3""",35,"1,200",20,66,,https://www.hungpump.com/ds
+DS-50,60,3,5,3.7kW,100,"4""",15,1180,21,69,,https://www.hungpump.com/ds
+DS-50,60,3,5,3.7kW,100,"4""",15,1180,21,69,,https://www.hungpump.com/ds
+DS-50,60,3,5,3.7kW,80,"3""",35,"1,400",26,85,,https://www.hungpump.com/ds
+DS-50,60,3,5,3.7kW,80,"3""",35,"1,400",26,85,,https://www.hungpump.com/ds
+DS-50G,60,3,5,3.7kW,80,"3""",35,"1,400",26,85,,https://www.hungpump.com/ds
+DS-50F,60,3,5,3.7kW,80,"3""",35,"1,400",26,85,,https://www.hungpump.com/ds
+DS-50F,60,3,5,3.7kW,80,"3""",35,"1,400",26,85,,https://www.hungpump.com/ds
+DS-75,60,3,7.5,5.5kW,100,"4""",20,1320,24,79,,https://www.hungpump.com/ds
+DS-75,60,3,7.5,5.5kW,100,"4""",20,1320,24,79,,https://www.hungpump.com/ds
+DSK-05,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-05,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-05,60,3,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-05,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-05,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-05A,60,1,1/2,400W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-10,60,1,1,750W,50,"2""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-10,60,3,1,750W,80,"3""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-10,60,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/dsk
+DSK-10,60,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/dsk
+DSK-10,60,3,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/dsk
+DSK-10,60,3,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/dsk
+DSK-100,60,3,10,7.5kW,100,"4""",27,1530,28,92,,https://www.hungpump.com/dsk
+DSK-100,60,3,10,7.5kW,100,"4""",27,1530,28,92,,https://www.hungpump.com/dsk
+DSK-10A,60,1,1,750W,50,"2""",15,420,14,46,,https://www.hungpump.com/dsk
+DSK-20,60,1,2,1.5kW,80,"3""",15,300,10,33,,https://www.hungpump.com/dsk
+DSK-20,60,1,2,1.5kW,80,"3""",15,660,18,59,,https://www.hungpump.com/dsk
+DSK-20,60,3,2,1.5kW,80,"3""",15,660,18,59,,https://www.hungpump.com/dsk
+DSK-20,60,3,2,1.5kW,80,"3""",15,660,18,59,,https://www.hungpump.com/dsk
+DSK-30,60,3,3,2.2kW,80,"3""",15,820,19,62,,https://www.hungpump.com/dsk
+DSK-30,60,3,3,2.2kW,80,"3""",15,820,19,62,,https://www.hungpump.com/dsk
+DSK-50,60,3,5,3.7kW,100,"4""",15,1180,21,69,,https://www.hungpump.com/dsk
+DSK-50,60,3,5,3.7kW,100,"4""",15,1180,21,69,,https://www.hungpump.com/dsk
+DSK-75,60,3,7.5,5.5kW,100,"4""",20,1320,24,79,,https://www.hungpump.com/dsk
+DSK-75,60,3,7.5,5.5kW,100,"4""",20,1320,24,79,,https://www.hungpump.com/dsk
+DSP-10,60,1,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-10,60,1,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-10,60,3,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-10,60,3,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-10,60,3,1,750W,50,"2""",30,400,14,46,Dirty Water,https://www.hungpump.com/dsp
+DSP-100,60,3,10,7.5kW,150,"6""",65,2500,28,92,Dirty Water,https://www.hungpump.com/dsp
+DSP-100,60,3,10,7.5kW,150,"6""",65,2500,28,92,Dirty Water,https://www.hungpump.com/dsp
+DSP-100,60,3,10,7.5kW,150,"6""",65,2500,28,92,Dirty Water,https://www.hungpump.com/dsp
+DSP-150,60,3,15,11kW,150,"6""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSP-150,60,3,15,11kW,150,"6""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSP-150,60,3,15,11kW,150,"6""",65,3200,32,105,Dirty Water,https://www.hungpump.com/dsp
+DSP-20,60,1,2,1.5kW,80,"3""",40,880,18,59,Dirty Water,https://www.hungpump.com/dsp
+DSP-20,60,3,2,1.5kW,80,"3""",40,880,18,59,Dirty Water,https://www.hungpump.com/dsp
+DSP-20,60,3,2,1.5kW,80,"3""",40,880,18,59,Dirty Water,https://www.hungpump.com/dsp
+DSP-30,60,1,3,2.2kW,80,"3""",40,1200,20,66,Dirty Water,https://www.hungpump.com/dsp
+DSP-30,60,3,3,2.2kW,80,"3""",40,1200,20,66,Dirty Water,https://www.hungpump.com/dsp
+DSP-30,60,3,3,2.2kW,80,"3""",40,1200,20,66,Dirty Water,https://www.hungpump.com/dsp
+DSP-50,60,3,5,3.7kW,100,"4""",45,1300,22,72,Dirty Water,https://www.hungpump.com/dsp
+DSP-50,60,3,5,3.7kW,100,"4""",45,1300,22,72,Dirty Water,https://www.hungpump.com/dsp
+DSP-50,60,3,5,3.7kW,100,"4""",45,1300,22,72,Dirty Water,https://www.hungpump.com/dsp
+DSP-75,60,3,7.5,5.5kW,100,"4""",50,2100,34,112,Dirty Water,https://www.hungpump.com/dsp
+DSP-75,60,3,7.5,5.5kW,100,"4""",50,2100,34,112,Dirty Water,https://www.hungpump.com/dsp
+DSPK-10,60,1,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-10,60,1,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-10A,60,1,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-10,60,3,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-10,60,3,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-10,60,3,1,750W,50,"2""",30,400,14,46,,https://www.hungpump.com/dspk
+DSPK-100,60,3,10,7.5kW,150,"6""",65,2500,28,92,,https://www.hungpump.com/dspk
+DSPK-100,60,3,10,7.5kW,150,"6""",65,2500,28,92,,https://www.hungpump.com/dspk
+DSPK-100G,60,3,10,7.5kW,100,"4""",65,2500,28,92,,https://www.hungpump.com/dspk
+DSPK-100,60,3,10,7.5kW,150,"6""",65,2500,28,92,,https://www.hungpump.com/dspk
+DSPK-150,60,3,15,11kW,150,"6""",65,3200,32,105,,https://www.hungpump.com/dspk
+DSPK-150,60,3,15,11kW,150,"6""",65,3200,32,105,,https://www.hungpump.com/dspk
+DSPK-150G,60,3,15,11kW,150,"6""",65,3200,32,105,,https://www.hungpump.com/dspk
+DSPK-150,60,3,15,11kW,150,"6""",65,3200,32,105,,https://www.hungpump.com/dspk
+DSPK-20,60,1,2,1.5kW,80,"3""",40,880,18,59,,https://www.hungpump.com/dspk
+DSPK-20,60,3,2,1.5kW,80,"3""",40,880,18,59,,https://www.hungpump.com/dspk
+DSPK-20,60,3,2,1.5kW,80,"3""",40,880,18,59,,https://www.hungpump.com/dspk
+DSPK-30,60,1,3,2.2kW,80,"3""",40,1200,20,66,,https://www.hungpump.com/dspk
+DSPK-30,60,3,3,2.2kW,80,"3""",40,1200,20,66,,https://www.hungpump.com/dspk
+DSPK-30,60,3,3,2.2kW,80,"3""",40,1200,20,66,,https://www.hungpump.com/dspk
+DSPK-4100,60,3,10,7.5W,100,"4""",65,660,93,305,,https://www.hungpump.com/dspk
+DSPK-4100,60,3,10,7.5W,100,"4""",65,660,93,305,,https://www.hungpump.com/dspk
+DSPK-4100,60,3,10,7.5W,100,"4""",65,660,93,305,,https://www.hungpump.com/dspk
+DSPK-50,60,3,5,3.7kW,100,"4""",45,1300,22,72,,https://www.hungpump.com/dspk
+DSPK-50,60,3,5,3.7kW,100,"4""",45,1300,22,72,,https://www.hungpump.com/dspk
+DSPK-50G,60,3,5,3.7kW,80,"3""",45,1300,22,72,,https://www.hungpump.com/dspk
+DSPK-50G,60,3,5,3.7kW,100,"4""",45,1300,22,72,,https://www.hungpump.com/dspk
+DSPK-50,60,3,5,3.7kW,100,"4""",45,1300,22,72,,https://www.hungpump.com/dspk
+DSPK-75,60,3,7.5,5.5kW,100,"4""",50,2100,34,112,,https://www.hungpump.com/dspk
+DSPK-75,60,3,7.5,5.5kW,100,"4""",50,2100,34,112,,https://www.hungpump.com/dspk
+DSPK-75G,60,3,7.5,5.5kW,100,"4""",50,2100,34,112,,https://www.hungpump.com/dspk
+FAS-150,60,1,1/5,150W,50,"2""",19,230,6,20,,https://www.hungpump.com/fas
+FAS-150,60,1,1/5,150W,50,"2""",19,230,6,20,,https://www.hungpump.com/fas
+FAS-250,60,1,1/3,250W,50,"2""",19,260,7,23,,https://www.hungpump.com/fas
+FVS-250LV,60,1,1/3,250W,40,"1-1/2""",19,290,9,30,,https://www.hungpump.com/fvs
+FAS-250,60,1,1/3,250W,50,"2""",19,260,7,23,,https://www.hungpump.com/fas
+FAS-400,60,1,1/2,400W,50,"2""",19,320,9,30,,https://www.hungpump.com/fas
+FVS-400LV,60,1,1/2,400W,50,"2""",19,320,10,33,,https://www.hungpump.com/fvs
+FAS-400,60,1,1/2,400W,50,"2""",19,320,9,30,,https://www.hungpump.com/fas
+FAS-750,60,1,1,750W,50,"2""",19,360,12,39,,https://www.hungpump.com/fas
+FAS-750,60,1,1,750W,50,"2""",19,360,12,39,,https://www.hungpump.com/fas
+FAS-750A,60,1,1,750W,50,"2""",19,360,12,39,,https://www.hungpump.com/fas
+FVP-400,60,1,1/2,400W,50,"2""",8,320,9.5,31,,https://www.hungpump.com/fvp
+FVP-400,60,1,1/2,400W,50,"2""",8,320,9.5,31,,https://www.hungpump.com/fvp
+FVP-750,60,1,1,750W,50,"2""",8,365,12,40,,https://www.hungpump.com/fvp
+GC-07,60,1,3/4,550W,32,"1-1/4""",N/A,140,11,36,Grinder,https://www.hungpump.com/gc
+GC-0761,60,1,3/4,550W,32,"1-1/4""",N/A,140,11,36,Grinder,https://www.hungpump.com/gc
+GC-07,60,1,3/4,550W,32,"1-1/4""",N/A,140,11,36,Grinder,https://www.hungpump.com/gc
+GC-07,60,3,3/4,550W,32,"1-1/4""",N/A,140,11,36,Grinder,https://www.hungpump.com/gc
+GC-07,60,3,3/4,550W,32,"1-1/4""",N/A,140,11,36,Grinder,https://www.hungpump.com/gc
+GC-10,60,1,1,750W,32,"1-1/4""",N/A,160,16,52,Grinder,https://www.hungpump.com/gc
+GC-1061,60,1,1,750W,32,"1-1/4""",N/A,160,16,52,Grinder,https://www.hungpump.com/gc
+GC-10,60,1,1,750W,32,"1-1/4""",N/A,160,16,52,Grinder,https://www.hungpump.com/gc
+GC-10,60,3,1,750W,32,"1-1/4""",N/A,160,16,52,Grinder,https://www.hungpump.com/gc
+GC-10,60,3,1,750W,32,"1-1/4""",N/A,160,16,52,Grinder,https://www.hungpump.com/gc
+GC-20,60,1,2,1.5kW,32,"1-1/4""",N/A,180,26,85,Grinder,https://www.hungpump.com/gc
+GC-20,60,3,2,1.5kW,32,"1-1/4""",N/A,180,26,85,Grinder,https://www.hungpump.com/gc
+GC-20,60,3,2,1.5kW,32,"1-1/4""",N/A,180,26,85,Grinder,https://www.hungpump.com/gc
+GC-30,60,3,3,2.2kW,50,"2""",N/A,180,36,118,Grinder,https://www.hungpump.com/gc
+GC-30,60,3,3,2.2kW,50,"2""",N/A,180,36,118,Grinder,https://www.hungpump.com/gc
+GC-3063,60,3,3,2.2kW,50,"2""",N/A,180,36,118,Grinder,https://www.hungpump.com/gc
+GC-50,60,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,Grinder,https://www.hungpump.com/gc
+GC-50,60,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,Grinder,https://www.hungpump.com/gc
+GC-5063,60,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,Grinder,https://www.hungpump.com/gc
+GC-75,60,3,7.5,5.5kW,65,"2-1/2""",N/A,320,55,180,Grinder,https://www.hungpump.com/gc
+GC-75,60,3,7.5,5.5kW,65,"2-1/2""",N/A,320,55,180,Grinder,https://www.hungpump.com/gc
+GC-7563,60,3,7.5,5.5kW,65,"2-1/2""",N/A,320,55,180,Grinder,https://www.hungpump.com/gc
+GD-15,60,1,1.5,1.1kW,32,"1-1/4""",N/A,230,20,66,Grinder,https://www.hungpump.com/gd
+GD-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,230,20,66,Grinder,https://www.hungpump.com/gd
+GD-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,230,20,66,Grinder,https://www.hungpump.com/gd
+GD-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,230,20,66,Grinder,https://www.hungpump.com/gd
+GD-20,60,1,2,1.5kW,32,"1-1/4""",N/A,235,23,75,Grinder,https://www.hungpump.com/gd
+GD-20,60,3,2,1.5kW,32,"1-1/4""",N/A,235,23,75,Grinder,https://www.hungpump.com/gd
+GD-20,60,3,2,1.5kW,32,"1-1/4""",N/A,235,23,75,Grinder,https://www.hungpump.com/gd
+GD-20,60,3,2,1.5kW,32,"1-1/4""",N/A,235,23,75,Grinder,https://www.hungpump.com/gd
+GD-30,60,3,3,2.2kW,32,"1-1/4""",N/A,235,28,92,Grinder,https://www.hungpump.com/gd
+GD-30,60,3,3,2.2kW,32,"1-1/4""",N/A,235,28,92,Grinder,https://www.hungpump.com/gd
+GDH-15,60,1,1.5,1.1kW,32,"1-1/4""",N/A,110,29,95,Grinder,https://www.hungpump.com/gdh
+GDH-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,110,29,95,Grinder,https://www.hungpump.com/gdh
+GDH-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,110,29,95,Grinder,https://www.hungpump.com/gdh
+GDH-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,110,29,95,Grinder,https://www.hungpump.com/gdh
+GDH-20,60,1,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20G,60,1,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20,60,3,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20,60,3,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20,60,3,2,1.5kW,32,"1-1/4""",N/A,175,30,98,Grinder,https://www.hungpump.com/gdh
+GDH-20C,60,1,2,1.5kW,50,"2""",N/A,490,10,33,Grinder,https://www.hungpump.com/gdh
+GS-15,60,1,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+GS-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+GS-15,60,3,1.5,1.1kW,32,"1-1/4""",N/A,50,85,280,Grinder,https://www.hungpump.com/gs
+HD-10,60,1,1,750W,80,"3""",10,600,9.5,31,,https://www.hungpump.com/hd
+HD-10,60,1,1,750W,80,"3""",10,600,9.5,31,,https://www.hungpump.com/hd
+HD-10,60,3,1,750W,80,"3""",10,600,9.5,31,,https://www.hungpump.com/hd
+HD-10,60,3,1,750W,80,"3""",10,600,9.5,31,,https://www.hungpump.com/hd
+HD-15,60,1,1.5,1.1kW,80,"3""",10,820,10,33,,https://www.hungpump.com/hd
+HD-15,60,1,1.5,1.1kW,80,"3""",10,820,10,33,,https://www.hungpump.com/hd
+HD-15,60,3,1.5,1.1kW,80,"3""",10,820,10,33,,https://www.hungpump.com/hd
+HD-15,60,3,1.5,1.1kW,80,"3""",10,820,10,33,,https://www.hungpump.com/hd
+HD-20,60,1,2,1.5kW,80,"3""",10,1050,11.5,38,,https://www.hungpump.com/hd
+HD-20,60,3,2,1.5kW,80,"3""",10,1050,11.5,38,,https://www.hungpump.com/hd
+HD-20,60,3,2,1.5kW,80,"3""",10,1050,11.5,38,,https://www.hungpump.com/hd
+HEF A100D,60,1,1,750W,50,"2""",7,220,20,66,,https://www.hungpump.com/hef
+HEF A50,60,1,1/2,400W,50,"2""",7,250,12,39,,https://www.hungpump.com/hef
+HEF S300,60,3,3,2.2kW,50,"2""",12,620,28,92,,https://www.hungpump.com/hef
+HF-10,60,1,1,750W,100,"4""",19,850,8,26,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-10,60,3,1,750W,100,"4""",19,850,8,26,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-10,60,3,1,750W,100,"4""",19,850,8,26,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-20,60,1,2,1.5kW,100,"4""",19,1200,12,39,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-20,60,3,2,1.5kW,100,"4""",19,1200,12,39,Sewage and Wastewater,https://www.hungpump.com/hf
+HF-20,60,3,2,1.5kW,100,"4""",19,1200,12,39,Sewage and Wastewater,https://www.hungpump.com/hf
+HFP S25,60,1,1/4,200W,32,"1-1/4""",5,140,7,23,,https://www.hungpump.com/hfp
+HFP S75A,60,1,3/4,600W,32,"1-1/4""",32,240,6.5,21,,https://www.hungpump.com/hfp
+HFS H20,60,1,1/5,150W,50,"2""",6,210,6,20,,https://www.hungpump.com/hfs
+HFS H50,60,1,1/2,400W,50,"2""",6,320,10,33,,https://www.hungpump.com/hfs
+HFS S50,60,1,1/2,400W,50,"2""",7,200,9,30,,https://www.hungpump.com/hfs
+HFS V33,60,1,1/3,250W,50,"2""",19,260,7,23,,https://www.hungpump.com/hfs
+HFS V50A,60,1,1/2,400W,50,"2""",19,320,9,30,,https://www.hungpump.com/hfs
+HHP C100A,60,1,1,750W,50,"2""",8,220,25,82,,https://www.hungpump.com/hhp
+HHP C50A,60,1,1/2,400W,32,"1-1/4""",8,180,20,66,,https://www.hungpump.com/hhp
+HSE L100A,60,1,1,750W,50,"2""",50,500,10,33,,https://www.hungpump.com/hse
+HSE L200A,60,1,2,1.5kW,80,"3""",65,900,9,30,,https://www.hungpump.com/hse
+HSE L50A,60,1,1/2,400W,50,"2""",50,380,7,23,,https://www.hungpump.com/hse
+HSE W300,60,3,3,2.2kW,80,"3""",40,1200,20,66,,https://www.hungpump.com/hse
+HSE W500,60,3,5,3.7kW,100,"4""",45,1300,22,72,,https://www.hungpump.com/hse
+HSG C200,60,1,2,1.5kW,32,"1-1/4""",N/A,180,26,85,,https://www.hungpump.com/hsg
+HSG C500,60,3,5,3.7kW,65,"2-1/2""",N/A,320,42,138,,https://www.hungpump.com/hsg
+HSG C75,60,1,3/4,550W,32,"1-1/4""",N/A,140,11,36,,https://www.hungpump.com/hsg
+HSG X150A,60,1,1.5,1.1kW,32,"1-1/4""",N/A,50,50,165,,https://www.hungpump.com/hsg
+JK-05,60,1,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/jk
+JK-05,60,1,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/jk
+JK-05,60,3,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/jk
+JK-05,60,3,1/2,400W,50,"2""",30,320,9,30,Dirty Water,https://www.hungpump.com/jk
+JK-10,60,1,1,750W,50,"2""",30,400,12,39,Dirty Water,https://www.hungpump.com/jk
+LBV-75,60,1,1,750W,50,"2""",30,400,12,39,,https://www.hungpump.com/lbv
+JK-10,60,1,1,750W,50,"2""",30,400,12,39,Dirty Water,https://www.hungpump.com/jk
+JK-10,60,3,1,750W,50,"2""",30,400,12,39,Dirty Water,https://www.hungpump.com/jk
+JK-10,60,3,1,750W,50,"2""",30,400,12,39,Dirty Water,https://www.hungpump.com/jk
+JK-20,60,1,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-20,60,3,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-20,60,3,2,1.5kW,80,"3""",35,620,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30,60,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-30,60,3,3,2.2kW,80,"3""",35,780,18,59,Dirty Water,https://www.hungpump.com/jk
+JK-50,60,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/jk
+JK-50,60,3,5,3.7kW,100,"4""",45,1100,22,72,Dirty Water,https://www.hungpump.com/jk
+JK-75,60,3,7.5,5.5kW,100,"4""",50,1200,24,79,Dirty Water,https://www.hungpump.com/jk
+JK-75,60,3,7.5,5.5kW,100,"4""",50,1200,24,79,Dirty Water,https://www.hungpump.com/jk
+JKCH-20,60,1,1/2,400W,32,"1-1/4""",1,100,20,66,,https://www.hungpump.com/jkch
+JKCH-20,60,1,1/2,400W,32,"1-1/4""",1,100,20,66,,https://www.hungpump.com/jkch
+JKCH-20,60,3,1/2,400W,32,"1-1/4""",1,100,20,66,,https://www.hungpump.com/jkch
+JKCH-20,60,3,1/2,400W,32,"1-1/4""",1,100,20,66,,https://www.hungpump.com/jkch
+JKCH-30,60,1,3/4,550W,32,"1-1/4""",1,100,30,98,,https://www.hungpump.com/jkch
+JKCH-30,60,1,3/4,550W,32,"1-1/4""",1,100,30,98,,https://www.hungpump.com/jkch
+JKCH-30,60,3,3/4,550W,32,"1-1/4""",1,100,30,98,,https://www.hungpump.com/jkch
+JKCH-30,60,3,3/4,550W,32,"1-1/4""",1,100,30,98,,https://www.hungpump.com/jkch
+JKCH-40,60,1,1.1,800W,32,"1-1/4""",1,100,40,131,,https://www.hungpump.com/jkch
+JKCH-40,60,1,1.1,800W,32,"1-1/4""",1,100,40,131,,https://www.hungpump.com/jkch
+JKCH-40,60,3,1.1,800W,32,"1-1/4""",1,100,40,131,,https://www.hungpump.com/jkch
+JKCH-40,60,3,1.1,800W,32,"1-1/4""",1,100,40,131,,https://www.hungpump.com/jkch
+JKCH-50,60,1,1.5,1.1kW,32,"1-1/4""",1,100,50,164,,https://www.hungpump.com/jkch
+JKCH-50,60,1,1.5,1.1kW,32,"1-1/4""",1,100,50,164,,https://www.hungpump.com/jkch
+JKCH-50,60,3,1.5,1.1kW,32,"1-1/4""",1,100,50,164,,https://www.hungpump.com/jkch
+JKCH-50,60,3,1.5,1.1kW,32,"1-1/4""",1,100,50,164,,https://www.hungpump.com/jkch
+JKCH-60,60,1,1.8,1.35kW,32,"1-1/4""",1,100,60,197,,https://www.hungpump.com/jkch
+JKCH-60,60,1,1.8,1.35kW,32,"1-1/4""",1,100,60,197,,https://www.hungpump.com/jkch
+JKCH-60,60,3,1.8,1.35kW,32,"1-1/4""",1,100,60,197,,https://www.hungpump.com/jkch
+JKCH-60,60,3,1.8,1.35kW,32,"1-1/4""",1,100,60,197,,https://www.hungpump.com/jkch
+KA-2.4,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4A,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4A,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4D,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4D,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4DA,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4DA,60,1,1/2,400W,50,"2""",7,250,12,39,Dirty Water,https://www.hungpump.com/ka
+KA-2.4R,60,1,1/2,400W,50,"2""",2.8,160,15.5,51,Dirty Water,https://www.hungpump.com/ka
+KA-2.4R,60,1,1/2,400W,50,"2""",2.8,160,14,46,Dirty Water,https://www.hungpump.com/ka
+KA-2.75D,60,1,1,750W,50,"2""",7,220,20,66,Dirty Water,https://www.hungpump.com/ka
+KA-2.75D,60,1,1,750W,50,"2""",7,220,20,66,Dirty Water,https://www.hungpump.com/ka
+KA-2.75DA,60,1,1,750W,50,"2""",7,220,20,66,Dirty Water,https://www.hungpump.com/ka
+KA-2.75DA,60,1,1,750W,50,"2""",7,220,20,66,Dirty Water,https://www.hungpump.com/ka
+KA-3.75D,60,1,1,750W,80,"3""",7,250,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-3.75D,60,1,1,750W,80,"3""",7,250,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-3.75DA,60,1,1,750W,80,"3""",7,250,19,62,Dirty Water,https://www.hungpump.com/ka
+KA-3.75DA,60,1,1,750W,80,"3""",7,250,19,62,Dirty Water,https://www.hungpump.com/ka
+KHL-100,60,3,10,7.5kW,100,"4""",15,1680,38,125,,https://www.hungpump.com/khl
+KHL-100,60,3,10,7.5kW,100,"4""",15,1680,38,125,,https://www.hungpump.com/khl
+KHL-20,60,1,2,1.5kW,50,"2""",12,415,25,82,,https://www.hungpump.com/khl
+KHL-20,60,3,2,1.5kW,50,"2""",12,415,25,82,,https://www.hungpump.com/khl
+KHL-20,60,3,2,1.5kW,50,"2""",12,415,25,82,,https://www.hungpump.com/khl
+KHL-30,60,3,3,2.2kW,50,"2""",12,620,28,92,,https://www.hungpump.com/khl
+KHL-30,60,3,3,2.2kW,50,"2""",12,620,28,92,,https://www.hungpump.com/khl
+KHL-50,60,3,5,3.7kW,50,"2""",15,770,32,105,,https://www.hungpump.com/khl
+KHL-50,60,3,5,3.7kW,50,"2""",15,770,32,105,,https://www.hungpump.com/khl
+KHL-75,60,3,7.5,5.5kW,80,"3""",15,1380,31,102,,https://www.hungpump.com/khl
+KHL-75,60,3,7.5,5.5kW,80,"3""",15,1380,31,102,,https://www.hungpump.com/khl
+KS-05,60,1,1/2,400W,50,"2""",5,260,10,33,,https://www.hungpump.com/ks
+KS-05,60,1,1/2,400W,50,"2""",5,260,10,33,,https://www.hungpump.com/ks
+KS-10,60,1,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ks
+KS-10,60,1,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ks
+KS-10,60,3,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ks
+KS-10,60,3,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ks
+KS-100,60,3,10,7.5kW,100,"4""",11,2400,28,92,,https://www.hungpump.com/ks
+KS-100,60,3,10,7.5kW,100,"4""",11,2400,28,92,,https://www.hungpump.com/ks
+KS-20,60,1,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ks
+KS-20,60,3,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ks
+KS-20,60,3,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ks
+KS-20,60,3,2,1.5kW,80,"3""",12,960,15.5,51,,https://www.hungpump.com/ks
+KS-30,60,3,3,2.2kW,80,"3""",11,900,18,59,,https://www.hungpump.com/ks
+KS-30,60,3,3,2.2kW,80,"3""",11,900,18,59,,https://www.hungpump.com/ks
+KS-30,60,3,3,2.2kW,80,"3""",12,"1,200",20,66,,https://www.hungpump.com/ks
+KS-50,60,3,5,3.7kW,100,"4""",11,1200,22,72,,https://www.hungpump.com/ks
+KS-50,60,3,5,3.7kW,100,"4""",11,1200,22,72,,https://www.hungpump.com/ks
+KS-50,60,3,5,3.7kW,80,"3""",12,"1,400",26,85,,https://www.hungpump.com/ks
+KS-75,60,3,7.5,5.5kW,100,"4""",11,1900,24,79,,https://www.hungpump.com/ks
+KS-75,60,3,7.5,5.5kW,100,"4""",11,1900,24,79,,https://www.hungpump.com/ks
+KSL-10,60,1,1,750W,80,"3""",9,560,13,43,,https://www.hungpump.com/ksl
+KSL-10,60,3,1,750W,80,"3""",9,560,13,43,,https://www.hungpump.com/ksl
+KSP-10,60,1,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-10,60,1,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-10,60,1,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-10,60,3,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-10,60,3,1,750W,50,"2""",6,420,14,46,,https://www.hungpump.com/ksp
+KSP-100,60,3,10,7.5kW,150,"6""",11,2400,28,92,,https://www.hungpump.com/ksp
+KSP-100,60,3,10,7.5kW,150,"6""",11,2400,28,92,,https://www.hungpump.com/ksp
+KSP-100,60,3,10,7.5kW,150,"6""",11,2400,28,92,,https://www.hungpump.com/ksp
+KSP-20,60,1,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ksp
+KSP-20,60,3,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ksp
+KSP-20,60,3,2,1.5kW,80,"3""",9,700,17,56,,https://www.hungpump.com/ksp
+KSP-30,60,1,3,2.2kW,80,"3""",11,900,18,59,,https://www.hungpump.com/ksp
+KSP-30,60,3,3,2.2kW,80,"3""",11,900,18,59,,https://www.hungpump.com/ksp
+KSP-30,60,3,3,2.2kW,80,"3""",11,900,18,59,,https://www.hungpump.com/ksp
+KSP-50,60,3,5,3.7kW,100,"4""",11,1200,22,72,,https://www.hungpump.com/ksp
+KSP-50,60,3,5,3.7kW,100,"4""",11,1200,22,72,,https://www.hungpump.com/ksp
+KSP-50,60,3,5,3.7kW,100,"4""",11,1200,22,72,,https://www.hungpump.com/ksp
+KSP-75,60,3,7.5,5.5kW,100,"4""",11,1900,24,79,,https://www.hungpump.com/ksp
+KSP-75,60,3,7.5,5.5kW,100,"4""",11,1900,24,79,,https://www.hungpump.com/ksp
+KSV-150,60,1,1/5,150W,40,"1-1/2""",5,200,6,20,,https://www.hungpump.com/ksv
+KSV-150,60,1,1/5,150W,40,"1-1/2""",5,200,6,20,,https://www.hungpump.com/ksv
+KSV-1500,60,1,2,1.5kW,80,"3""",20,800,17,56,,https://www.hungpump.com/ksv
+KSV-1500,60,3,2,1.5kW,80,"3""",20,800,17,56,,https://www.hungpump.com/ksv
+KSV-1500,60,3,2,1.5kW,80,"3""",20,800,17,56,,https://www.hungpump.com/ksv
+KSV-250,60,1,1/3,250W,40,"1-1/2""",5,240,7,23,,https://www.hungpump.com/ksv
+KSV-250,60,1,1/3,250W,40,"1-1/2""",5,240,7,23,,https://www.hungpump.com/ksv
+KSV-400,60,1,1/2,400W,50,"2""",10,300,9,30,,https://www.hungpump.com/ksv
+KSV-400,60,1,1/2,400W,50,"2""",10,300,9,30,,https://www.hungpump.com/ksv
+KSV-550,60,1,3/4,550W,50,"2""",15,330,10,33,,https://www.hungpump.com/ksv
+KSV-550,60,1,3/4,550W,50,"2""",15,330,10,33,,https://www.hungpump.com/ksv
+KSV-750,60,1,1,750W,80,"3""",15,430,11,36,,https://www.hungpump.com/ksv
+KSV-750,60,1,1,750W,80,"3""",15,430,11,36,,https://www.hungpump.com/ksv
+KT-215,60,1,2,1.5kW,50,"2""",N/A,460,26,85,Construction,https://www.hungpump.com/kt
+KT-215,60,3,2,1.5kW,50,"2""",N/A,460,26,85,Construction,https://www.hungpump.com/kt
+KT-215,60,3,2,1.5kW,50,"2""",N/A,460,26,85,Construction,https://www.hungpump.com/kt
+KT-222,60,3,3,2.2kW,50,"2""",N/A,720,33,108,Construction,https://www.hungpump.com/kt
+KT-222,60,3,3,2.2kW,50,"2""",N/A,720,33,108,Construction,https://www.hungpump.com/kt
+KT-237,60,3,5,3.7kW,50,"2""",N/A,550,37,121,Construction,https://www.hungpump.com/kt
+KT-237,60,3,5,3.7kW,50,"2""",N/A,550,37,121,Construction,https://www.hungpump.com/kt
+KT-315,60,1,2,1.5kW,80,"3""",N/A,610,17,56,Construction,https://www.hungpump.com/kt
+KT-315,60,3,2,1.5kW,80,"3""",N/A,610,17,56,Construction,https://www.hungpump.com/kt
+KT-315,60,3,2,1.5kW,80,"3""",N/A,610,17,56,Construction,https://www.hungpump.com/kt
+KT-322,60,3,3,2.2kW,80,"3""",N/A,800,22,72,Construction,https://www.hungpump.com/kt
+KT-322,60,3,3,2.2kW,80,"3""",N/A,800,22,72,Construction,https://www.hungpump.com/kt
+KT-322,60,3,3,2.2kW,80,"3""",N/A,800,22,72,Construction,https://www.hungpump.com/kt
+KT-337,60,3,5,3.7kW,80,"3""",N/A,950,31,102,Construction,https://www.hungpump.com/kt
+KT-337,60,3,5,3.7kW,80,"3""",N/A,950,31,102,Construction,https://www.hungpump.com/kt
+KT-355,60,3,7.5,5.5kW,80,"3""",N/A,970,40,131,Construction,https://www.hungpump.com/kt
+KT-355,60,3,7.5,5.5kW,80,"3""",N/A,970,40,131,Construction,https://www.hungpump.com/kt
+KT-4110,60,3,15,11kW,100,"4""",N/A,1630,48,157,Construction,https://www.hungpump.com/kt
+KT-4110,60,3,15,11kW,100,"4""",N/A,1630,48,157,Construction,https://www.hungpump.com/kt
+KT-4150,60,3,20,15kW,100,"4""",N/A,1930,52,171,Construction,https://www.hungpump.com/kt
+KT-4150,60,3,20,15kW,100,"4""",N/A,1930,52,171,Construction,https://www.hungpump.com/kt
+KT-437,60,3,5,3.7kW,100,"4""",N/A,1560,18,59,Construction,https://www.hungpump.com/kt
+KT-437,60,3,5,3.7kW,100,"4""",N/A,1560,18,59,Construction,https://www.hungpump.com/kt
+KT-455,60,3,7.5,5.5kW,100,"4""",N/A,1520,28,92,Construction,https://www.hungpump.com/kt
+KT-455,60,3,7.5,5.5kW,100,"4""",N/A,1520,28,92,Construction,https://www.hungpump.com/kt
+KT-475,60,3,10,7.5kW,100,"4""",N/A,1590,38,125,Construction,https://www.hungpump.com/kt
+KT-475,60,3,10,7.5kW,100,"4""",N/A,1590,38,125,Construction,https://www.hungpump.com/kt
+KT-6110,60,3,15,11kW,150,"6""",N/A,2450,34,112,Construction,https://www.hungpump.com/kt
+KT-6110,60,3,15,11kW,150,"6""",N/A,2450,34,112,Construction,https://www.hungpump.com/kt
+KT-6150,60,3,20,15kW,100,"4""",N/A,2960,40,131,Construction,https://www.hungpump.com/kt
+KT-6150,60,3,20,15kW,100,"4""",N/A,2960,40,131,Construction,https://www.hungpump.com/kt
+KT-675,60,3,10,7.5kW,150,"6""",N/A,2060,28,92,Construction,https://www.hungpump.com/kt
+KT-675,60,3,10,7.5kW,150,"6""",N/A,2060,28,92,Construction,https://www.hungpump.com/kt
+MAS-150,60,1,1/5,150W,40,"1-1/2""",19,220,6.5,21,Clean Water,https://www.hungpump.com/mas
+MAS-150,60,1,1/5,150W,40,"1-1/2""",19,220,6.5,21,Clean Water,https://www.hungpump.com/mas
+MAS-250,60,1,1/3,250W,40,"1-1/2""",19,280,9,30,Clean Water,https://www.hungpump.com/mas
+MAS-250,60,1,1/3,250W,50,"2""",19,280,9,30,Clean Water,https://www.hungpump.com/mas
+MAS-250,60,1,1/3,250W,40,"1-1/2""",19,280,9,30,Clean Water,https://www.hungpump.com/mas
+MAS-250,60,1,1/3,250W,50,"2""",19,280,9,30,Clean Water,https://www.hungpump.com/mas
+MAS-400,60,1,1/2,400W,50,"2""",19,320,10.5,34,Clean Water,https://www.hungpump.com/mas
+MAS-400,60,1,1/2,400W,50,"2""",19,320,10.5,34,Clean Water,https://www.hungpump.com/mas
+MAS-750,60,1,1,750W,50,"2""",19,380,13,43,Clean Water,https://www.hungpump.com/mas
+MAS-750,60,1,1,750W,50,"2""",19,380,13,43,Clean Water,https://www.hungpump.com/mas
+MH-150,60,1,1/5,150W,50,"2""",6,210,6,20,Clean Water,https://www.hungpump.com/mh
+MH-150,60,1,1/5,150W,50,"2""",6,210,6,20,Clean Water,https://www.hungpump.com/mh
+MH-250,60,1,1/3,250W,50,"2""",6,230,7,23,Clean Water,https://www.hungpump.com/mh
+MH-250,60,1,1/3,250W,50,"2""",6,230,7,23,Clean Water,https://www.hungpump.com/mh
+MH-400,60,1,1/2,400W,50,"2""",6,320,10,33,Clean Water,https://www.hungpump.com/mh
+MH-400-FR,60,1,1/2,400W,50,"2""",6,320,10,33,Clean Water,https://www.hungpump.com/mh
+MH-400,60,1,1/2,400W,50,"2""",6,320,10,33,Clean Water,https://www.hungpump.com/mh
+MH-400-FR,60,1,1/2,400W,50,"2""",6,320,10,33,Clean Water,https://www.hungpump.com/mh
+MH-750,60,1,1,750W,50,"2""",6,390,12.5,41,Clean Water,https://www.hungpump.com/mh
+MH-750-FR,60,1,1,750W,50,"2""",6,390,12.5,41,Clean Water,https://www.hungpump.com/mh
+MH-750,60,1,1,750W,50,"2""",6,390,12.5,41,Clean Water,https://www.hungpump.com/mh
+MH-750-FR,60,1,1,750W,50,"2""",6,390,12.5,41,Clean Water,https://www.hungpump.com/mh
+MH-750,60,3,1,750W,50,"2""",6,390,12.5,41,Clean Water,https://www.hungpump.com/mh
+MH-750,60,3,1,750W,50,"2""",6,390,12.5,41,Clean Water,https://www.hungpump.com/mh
+MVH-10,60,1,3/4,550W,25,"1""",3,100,32,105,High Pressure,https://www.hungpump.com/mvh
+MVH-10,60,1,3/4,550W,25,"1""",3,100,32,105,High Pressure,https://www.hungpump.com/mvh
+BCP-20,50,1,1/8,95W,11,,N/A,300,5.8,19,,https://www.hungpump.com/bcp
+CBP-330,50,1,3,2.2kW,80,"3""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+CBP-330,50,3,3,2.2kW,80,"3""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+CBP-330T,50,3,3,2.2kW,100,"4""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+CBP-440,50,3,4,3kW,100,"4""",3,1300,13,43,Clean Water,https://www.hungpump.com/cbp
+CBP-440T,50,3,4,3kW,100,"4""",3,1300,13,43,Clean Water,https://www.hungpump.com/cbp
+CBP-540,50,3,5,3.7kW,100,"4""",3,1550,17.5,57,Clean Water,https://www.hungpump.com/cbp
+CBP-540T,50,3,5,3.7kW,100,"4""",3,1550,17.5,57,Clean Water,https://www.hungpump.com/cbp
+CBP-740,50,3,7.5,5.5kW,100,"4""",3,1700,23,75,Clean Water,https://www.hungpump.com/cbp
+CBP-740T,50,3,7.5,5.5kW,100,"4""",3,11700,23,75,Clean Water,https://www.hungpump.com/cbp
+GP-90,50,1,1/4,200W,25,"1""",N/A,40,32,106,Construction,https://www.hungpump.com/gp
+GP-90S,50,1,1/4,200W,25,"1""",N/A,40,32,106,Construction,https://www.hungpump.com/gp
+HC-40,50,1,4,3kW,50,"2""",1,250,60,197,,https://www.hungpump.com/hc
+HC-40,50,3,4,3kW,50,"2""",1,250,60,197,,https://www.hungpump.com/hc
+HI-128,50,1,1/4,200W,25,"1""",1,35,32,105,Booster,https://www.hungpump.com/hi
+HI-168,50,1,1/4,200W,25,"1""",N/A,34,24,92,Booster,https://www.hungpump.com/hi
+HI-200,50,1,1/4,200W,20,"3/4""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
+HI-200,50,1,1/4,200W,25,"1""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
+HI-200R,50,1,1/4,200W,25,"1""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
+HI-200F,50,1,1/4,200W,25,"1""",1,55,24,79,Booster,https://www.hungpump.com/hi
+HI-200S,50,1,1/4,200W,20,"3/4""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
+HI-200S,50,1,1/4,200W,25,"1""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
+HI-200V,50,3,1/4,200W,25,"1""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
+HI-400,50,1,1/2,400W,25,"1""",N/A,70,28,92,Booster,https://www.hungpump.com/hi
+HI-400S,50,1,1/2,400W,25,"1""",N/A,70,28,92,Booster,https://www.hungpump.com/hi
+HMD-06,50,1,1/10,65W,20,"3/4""",N/A,37,4.6,15,,https://www.hungpump.com/hmd
+HMD-09,50,1,1/8,90W,25,"1""",N/A,60,7,23,,https://www.hungpump.com/hmd
+HMD-150,50,3,2,1.5kW,40,"1-1/2""",N/A,390,23,75,,https://www.hungpump.com/hmd
+HMD-18,50,1,1/5,180W,25,"1""",N/A,73,7,23,,https://www.hungpump.com/hmd
+HMD-220,50,3,3,2.2kW,40,"1-1/2""",,465,23,75,,https://www.hungpump.com/hmd
+HMD-25,50,1,1/3,250W,25,"1""",N/A,91,8.6,28,,https://www.hungpump.com/hmd
+HMD-350,50,3,5,3.7kW,50,"2""",N/A,570,25,82,,https://www.hungpump.com/hmd
+HMD-37,50,1,1/2,400W,40,"1-1/2""",N/A,285,12,39,,https://www.hungpump.com/hmd
+HMD-75,50,1,1,750W,40,"1-1/2""",N/A,355,18,59,,https://www.hungpump.com/hmd
+HOME-05,50,1,1/2,400W,25,"1""",3,60,36,118,,https://www.hungpump.com/home
+HOME-10,50,1,1,750W,25,"1""",3,75,42,138,,https://www.hungpump.com/home
+HOME-200,50,1,1/4,200W,20,"3/4""",N/A,55,24,79,,https://www.hungpump.com/home
+HOME-200,50,1,1/4,200W,25,"1""",N/A,55,24,79,,https://www.hungpump.com/home
+HOME-400,50,1,1/2,400W,25,"1""",N/A,70,28,92,,https://www.hungpump.com/home
+HWCP ll-FS,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP ll-FT,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP lll-FS,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP lll-FT,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP lll-NS,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP lll-ST,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP ll-NS,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCP ll-ST,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ,50,1,3/4,550W,32,"1-1/4""",N/A,138,11,36,BLDC,https://www.hungpump.com/data-234533
+J-200,50,1,1/4,200W,25,"1""",N/A,70,13,43,,https://www.hungpump.com/j
+JA-80,50,1,1/10,80W,20,"3/4""",1,23,8.5,28,Booster,https://www.hungpump.com/ja
+JA-80S,50,1,1/10,80W,20,"3/4""",1,23,8.5,28,Booster,https://www.hungpump.com/ja
+LSJ-05,50,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05,50,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05,50,1,1/2,400W,25,"1""",3,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05D,50,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05D,50,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05D,50,1,1/2,400W,25,"1""",3,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05E,50,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05E,50,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-10,50,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10,50,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10,50,1,1,750W,25,"1""",3,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10E,50,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10ET,50,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+MT-105,50,1,3,2.2kW,50,"2""",2,320,50,164,Booster,https://www.hungpump.com/mt
+MT-105T,50,3,3,2.2kW,50,"2""",2,320,50,164,Booster,https://www.hungpump.com/mt
+MT-43,50,1,1,750W,25,"1""",2,130,37,121,Booster,https://www.hungpump.com/mt
+MT-43T,50,3,1,750W,25,"1""",2,130,37,121,Booster,https://www.hungpump.com/mt
+MT-44,50,1,1.5,1.1kW,25,"1""",2,130,50,164,Booster,https://www.hungpump.com/mt
+MT-44T,50,3,1.5,1.1kW,25,"1""",2,130,50,164,Booster,https://www.hungpump.com/mt
+MT-45,50,1,2,1.5kW,25,"1""",2,130,60,197,Booster,https://www.hungpump.com/mt
+MT-45T,50,3,2,1.5kW,25,"1""",2,130,60,197,Booster,https://www.hungpump.com/mt
+MT-46,50,1,2,1.5kW,25,"1""",2,130,75,246,Booster,https://www.hungpump.com/mt
+MT-46T,50,3,2,1.5kW,25,"1""",2,130,75,246,Booster,https://www.hungpump.com/mt
+MT-46T,50,3,2,1.5kW,25,"1""",2,130,75,246,Booster,https://www.hungpump.com/mt
+MT-83,50,1,1.5,1.1kW,32,"1-1/4""",2,320,31,102,Booster,https://www.hungpump.com/mt
+MT-83T,50,3,1.5,1.1kW,32,"1-1/4""",2,320,31,102,Booster,https://www.hungpump.com/mt
+MT-84,50,1,2,1.5kW,32,"1-1/4""",2,320,40,131,Booster,https://www.hungpump.com/mt
+MT-84T,50,3,2,1.5kW,32,"1-1/4""",2,320,40,131,Booster,https://www.hungpump.com/mt
+MT-84T,50,3,2,1.5kW,32,"1-1/4""",2,320,40,131,Booster,https://www.hungpump.com/mt
+MT-85,50,1,3,2.2kW,32,"1-1/4""",2,320,47,154,Booster,https://www.hungpump.com/mt
+MT-85T,50,3,3,2.2kW,32,"1-1/4""",2,320,47,154,Booster,https://www.hungpump.com/mt
+MT-85T,50,3,3,2.2kW,32,"1-1/4""",3,320,47,154,Booster,https://www.hungpump.com/mt
+MTS-162,50,1,2,1.5kW,50,"2""",N/A,540,28,92,,https://www.hungpump.com/mts
+MTS-162T,50,3,2,1.5kW,50,"2""",N/A,540,28,92,,https://www.hungpump.com/mts
+MTS-163T,50,3,3,2.2kW,50,"2""",N/A,540,40,131,,https://www.hungpump.com/mts
+MTS-163T,50,3,3,2.2kW,50,"2""",3,540,40,131,,https://www.hungpump.com/mts
+MTS-163T,50,3,3,2.2kW,50,"2""",3,540,40,131,,https://www.hungpump.com/mts
+MTS-163,50,1,3,2.2kW,50,"2""",N/A,540,40,131,,https://www.hungpump.com/mts
+MTS-164T,50,3,5,3.7kW,50,"2""",N/A,540,55,180,,https://www.hungpump.com/mts
+MTS-164T,50,3,5,3.7kW,50,"2""",3,540,55,180,,https://www.hungpump.com/mts
+MTS-164T,50,3,5,3.7kW,50,"2""",3,540,55,180,,https://www.hungpump.com/mts
+MTS-32,50,1,1/3,250W,25,"1""",N/A,85,20,66,,https://www.hungpump.com/mts
+MTS-32T,50,3,1/3,250W,25,"1""",N/A,85,20,66,,https://www.hungpump.com/mts
+MTS-33,50,1,1/2,400W,25,"1""",N/A,85,27,89,,https://www.hungpump.com/mts
+MTS-33T,50,3,1/2,400W,25,"1""",N/A,85,27,89,,https://www.hungpump.com/mts
+MTS-34,50,1,3/4,550W,25,"1""",N/A,85,36,118,,https://www.hungpump.com/mts
+MTS-34T,50,3,3/4,550W,25,"1""",N/A,85,36,118,,https://www.hungpump.com/mts
+MTS-35,50,1,1,750W,25,"1""",N/A,85,44,144,,https://www.hungpump.com/mts
+MTS-35T,50,3,1,750W,25,"1""",N/A,85,44,144,,https://www.hungpump.com/mts
+MTS-36,50,1,1.5,1.1kW,25,"1""",N/A,85,53,174,,https://www.hungpump.com/mts
+MTS-36T,50,3,1.5,1.1kW,25,"1""",N/A,85,53,174,,https://www.hungpump.com/mts
+MTS-52,50,1,1/2,400W,25,"1""",N/A,140,19,62,,https://www.hungpump.com/mts
+MTS-52T,50,3,1/2,400W,25,"1""",N/A,140,19,62,,https://www.hungpump.com/mts
+MTS-53,50,1,3/4,550W,25,"1""",N/A,140,29,95,,https://www.hungpump.com/mts
+MTS-53T,50,3,3/4,550W,25,"1""",N/A,140,29,95,,https://www.hungpump.com/mts
+MTS-54,50,1,1,750W,25,"1""",N/A,140,38,125,,https://www.hungpump.com/mts
+MTS-54,50,3,1,750W,25,"1""",N/A,140,38,125,,https://www.hungpump.com/mts
+MTS-54T,50,3,1,750W,25,"1""",N/A,140,38,125,,https://www.hungpump.com/mts
+MTS-55,50,1,1.5,1.1kW,25,"1""",N/A,140,47,154,,https://www.hungpump.com/mts
+MTS-55T,50,3,1.5,1.1kW,25,"1""",N/A,140,47,154,,https://www.hungpump.com/mts
+MTS-56,50,1,2,1.5kW,25,"1""",N/A,140,56,184,,https://www.hungpump.com/mts
+MTS-56T,50,3,2,1.5kW,25,"1""",N/A,140,56,184,,https://www.hungpump.com/mts
+MTS-83,50,1,1.5,1.1kW,40,"1-1/2""",N/A,310,33,108,,https://www.hungpump.com/mts
+MTS-83T,50,3,1.5,1.1kW,40,"1-1/2""",N/A,310,33,108,,https://www.hungpump.com/mts
+MTS-84,50,1,2,1.5kW,40,"1-1/2""",N/A,310,44,144,,https://www.hungpump.com/mts
+MTS-84T,50,3,2,1.5kW,40,"1-1/2""",N/A,310,44,144,,https://www.hungpump.com/mts
+MTS-85,50,1,3,2.2kW,40,"1-1/2""",N/A,310,55,180,,https://www.hungpump.com/mts
+MTS-85T,50,3,3,2.2kW,40,"1-1/2""",N/A,310,55,180,,https://www.hungpump.com/mts
+MTS-86T,50,3,5,3.7kW,40,"1-1/2""",N/A,310,66,216,,https://www.hungpump.com/mts
+MTV-127T,50,3,5,3.7kW,32,"1-1/4""",3,330,95,312,,https://www.hungpump.com/mtv
+MTV-48T,50,3,3,2.2kW,25,"1""",3,120,105,344,,https://www.hungpump.com/mtv
+MTVS-608T,50,3,4,3kW,32,"1-1/4""",3,180,118,387,,https://www.hungpump.com/mtvs
+PC-500E,50,1,1.5,1.1kW,25,"1""",N/A,30,90,295,,https://www.hungpump.com/pc
+SC-30,50,3,3,2.2kW,,,,,,-,,https://www.hungpump.com/sc
+SC-50,50,3,5,3.7kW,,,,,,-,,https://www.hungpump.com/sc
+SC-75,50,3,7.5,5.5kW,,,,,,-,,https://www.hungpump.com/sc
+SMC-05,50,1,1/2,0.37kW,,,,,,-,,https://www.hungpump.com/smc
+SMC-10,50,1,1,0.75kW,,,,,,-,,https://www.hungpump.com/smc
+SMC-20,50,1,2,1.5,,,,,,-,,https://www.hungpump.com/smc
+SMP-10,50,1,1,750W,40,"1-1/2""",N/A,310,14,46,Clean Water,https://www.hungpump.com/smp
+SMP-10,50,3,1,750W,40,"1-1/2""",N/A,310,14,46,Clean Water,https://www.hungpump.com/smp
+SMP-20,50,1,2,1.5kW,50,"2""",N/A,460,16,52,Clean Water,https://www.hungpump.com/smp
+SMP-20,50,3,2,1.5kW,50,"2""",N/A,460,16,52,Clean Water,https://www.hungpump.com/smp
+SMP-30,50,1,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SMP-30,50,3,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SMP-30,50,3,3,2.2kW,50,"2""",2,520,20,66,Clean Water,https://www.hungpump.com/smp
+SPA-07,50,1,3/4,550W,40,"1-1/2""",2,270,10,33,,https://www.hungpump.com/spa
+SPA-10,50,1,1,750W,40,"1-1/2""",N/A,320,13.5,44,,https://www.hungpump.com/spa
+SPA-150B,50,1,1,750W,40,"1-1/2""",N/A,350,15.5,51,,https://www.hungpump.com/spa
+SPA-20,50,1,2,1.5kW,50,"2""",2,620,14,46,,https://www.hungpump.com/spa
+SPA-20,50,3,2,1.5kW,50,"2""",2,620,14,46,,https://www.hungpump.com/spa
+SPA-30,50,1,3,2.2kW,50,"2""",2,730,18,59,,https://www.hungpump.com/spa
+SPA-30,50,3,3,2.2kW,50,"2""",2,730,18,59,,https://www.hungpump.com/spa
+SPA-30T,50,3,3,2.2kW,50,"2""",,730,18,59,,https://www.hungpump.com/spa
+SW-120,50,1,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120S,50,1,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120ST,50,3,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120T,50,3,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-220,50,1,2,1.5kW,50,"2""",N/A,630,24,79,,https://www.hungpump.com/sw
+SW-220T,50,3,2,1.5kW,50,"2""",N/A,630,24,79,,https://www.hungpump.com/sw
+SW-250,50,1,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-250,50,3,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-250S,50,1,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-250ST,50,3,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-320,50,1,3,2.2kW,50,"2""",N/A,650,29,95,,https://www.hungpump.com/sw
+SW-320T,50,3,3,2.2kW,50,"2""",N/A,650,29,95,,https://www.hungpump.com/sw
+SW-420,50,3,4,3kW,50,"2""",N/A,680,31,102,,https://www.hungpump.com/sw
+SW-420T,50,3,4,3kW,50,"2""",3,680,31,102,,https://www.hungpump.com/sw
+SW-60,50,1,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60S,50,1,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60ST,50,3,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60T,50,3,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SWO-220,50,1,2,1.5kW,50,"2""",8,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-220T,50,3,2,1.5kW,50,"2""",8,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-320,50,1,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-320T,50,3,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-420T,50,3,4,3kW,50,"2""",8,730,20,66,Booster,https://www.hungpump.com/swo
+SWO-60,50,1,1/2,400W,25,"1""",N/A,150,12,39,Booster,https://www.hungpump.com/swo
+SWO-60T,50,3,1/2,400W,25,"1""",N/A,150,12,39,Booster,https://www.hungpump.com/swo
+SWO-120,50,1,1-1/4,1kW,50,"2""",18,500,10,33,Booster,https://www.hungpump.com/swo
+SWO-120T,50,1,1-1/4,1kW,50,"2""",18,500,10,33,Booster,https://www.hungpump.com/swo
+SWP-10,50,1,1,0.75kW,50,"2""",N/A,350,12,39,,https://www.hungpump.com/swp
+SWP-20,50,1,2,1.5kW,50,"2""",N/A,500,19,62,,https://www.hungpump.com/swp
+SWP-30,50,1,3,2.2kW,50,"2""",N/A,600,21,69,,https://www.hungpump.com/swp
+SWP-30,50,3,3,2.2kW,50,"2""",N/A,600,21,69,,https://www.hungpump.com/swp
+SWP-40,50,3,4,3kW,50,"2""",2,650,22,72,,https://www.hungpump.com/swp
+SWP-40T,50,3,4,3kW,69,"2-3/4""",,650,25,82,,https://www.hungpump.com/swp
+TP-40,50,1,1/2,400W,20,"3/4""",N/A,40,4,13,,https://www.hungpump.com/tp
+UP-906A,50,1,1,750W,,,,,,-,,https://www.hungpump.com/up
+BCP-20,60,1,1/2,400W,,,,,,-,,https://www.hungpump.com/bcp
+CBP-330,60,1,3,2.2kW,80,"3""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+CBP-330,60,3,3,2.2kW,80,"3""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+CBP-330,60,3,3,2.2kW,80,"3""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+CBP-440,60,3,4,3kW,100,"4""",3,1300,13,43,Clean Water,https://www.hungpump.com/cbp
+CBP-440,60,3,4,3kW,100,"4""",3,1300,13,43,Clean Water,https://www.hungpump.com/cbp
+CBP-540,60,3,5,3.7kW,100,"4""",3,1550,17.5,57,Clean Water,https://www.hungpump.com/cbp
+CBP-540,60,3,5,3.7kW,100,"4""",3,1550,17.5,57,Clean Water,https://www.hungpump.com/cbp
+CBP-740,60,3,7.5,5.5kW,100,"4""",3,1700,23,75,Clean Water,https://www.hungpump.com/cbp
+CBP-740,60,3,7.5,5.5kW,100,"4""",3,1700,23,75,Clean Water,https://www.hungpump.com/cbp
+GP-90,60,1,1/4,200W,25,"1""",N/A,40,32,106,Construction,https://www.hungpump.com/gp
+GP-90S,60,1,1/4,200W,25,"1""",N/A,40,32,106,Construction,https://www.hungpump.com/gp
+HI-168,60,1,1/4,200W,20,"3/4""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,25,"1""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,20,"3/4""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,25,"1""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,20,"3/4""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,25,"1""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,20,"3/4""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-168,60,1,1/4,200W,25,"1""",N/A,35,28,92,Booster,https://www.hungpump.com/hi
+HI-200,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200,60,1,1/4,200W,25,"1""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200,60,1,1/4,200W,25,"1""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200,60,1,1/4,200W,25,"1""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200S,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200S,60,1,1/4,200W,25,"1""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200S,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200S,60,1,1/4,200W,25,"1""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200S,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-200S,60,1,1/4,200W,25,"1""",N/A,60,25,82,Booster,https://www.hungpump.com/hi
+HI-400,60,1,1/2,400W,25,"1""",N/A,70,28,92,Booster,https://www.hungpump.com/hi
+HI-400,60,1,1/2,400W,25,"1""",N/A,70,28,92,Booster,https://www.hungpump.com/hi
+HI-400,60,1,1/2,400W,25,"1""",N/A,70,28,92,Booster,https://www.hungpump.com/hi
+HMD-06,60,1,1/10,65W,20,"3/4""",N/A,45,6.5,21,,https://www.hungpump.com/hmd
+HMD-06,60,1,1/10,65W,20,"3/4""",N/A,45,6.5,21,,https://www.hungpump.com/hmd
+HMD-09,60,1,1/8,90W,25,"1""",N/A,70,9.5,31,,https://www.hungpump.com/hmd
+HMD-09,60,1,1/8,90W,25,"1""",N/A,70,9.5,31,,https://www.hungpump.com/hmd
+HMD-150,60,3,2,1.5kW,40,"1-1/2""",N/A,422,23,75,,https://www.hungpump.com/hmd
+HMD-150,60,3,2,1.5kW,40,"1-1/2""",N/A,422,23,75,,https://www.hungpump.com/hmd
+HMD-18,60,1,1/5,180W,25,"1""",N/A,87,9.7,32,,https://www.hungpump.com/hmd
+HMD-18,60,1,1/5,180W,25,"1""",N/A,87,9.7,32,,https://www.hungpump.com/hmd
+HMD-220,60,3,3,2.2kW,40,"1-1/2""",N/A,545,22,72,,https://www.hungpump.com/hmd
+HMD-220,60,3,3,2.2kW,40,"1-1/2""",N/A,545,22,72,,https://www.hungpump.com/hmd
+HMD-25,60,1,1/3,250W,25,"1""",N/A,110,12,39,,https://www.hungpump.com/hmd
+HMD-25,60,1,1/3,250W,25,"1""",N/A,110,12,39,,https://www.hungpump.com/hmd
+HMD-350,60,3,5,3.7kW,50,"2""",N/A,650,24,79,,https://www.hungpump.com/hmd
+HMD-350,60,3,5,3.7kW,50,"2""",N/A,650,24,79,,https://www.hungpump.com/hmd
+HMD-37,60,1,1/2,400W,40,"1-1/2""",N/A,280,11.5,38,,https://www.hungpump.com/hmd
+HMD-37,60,1,1/2,400W,40,"1-1/2""",N/A,280,11.5,38,,https://www.hungpump.com/hmd
+HMD-75,60,1,1,750W,40,"1-1/2""",N/A,360,19,62,,https://www.hungpump.com/hmd
+HMD-75,60,1,1,750W,40,"1-1/2""",N/A,360,19,62,,https://www.hungpump.com/hmd
+HOME-200,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,,https://www.hungpump.com/home
+HOME-200,60,1,1/4,200W,25,"1""",N/A,60,25,82,,https://www.hungpump.com/home
+HOME-200,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,,https://www.hungpump.com/home
+HOME-200,60,1,1/4,200W,25,"1""",N/A,60,25,82,,https://www.hungpump.com/home
+HOME-200,60,1,1/4,200W,20,"3/4""",N/A,60,25,82,,https://www.hungpump.com/home
+HOME-200,60,1,1/4,200W,25,"1""",N/A,60,25,82,,https://www.hungpump.com/home
+HOME-400,60,1,1/2,400W,25,"1""",N/A,70,28,92,,https://www.hungpump.com/home
+HOME-400,60,1,1/2,400W,25,"1""",N/A,70,28,92,,https://www.hungpump.com/home
+HOME-400,60,1,1/2,400W,25,"1""",N/A,70,28,92,,https://www.hungpump.com/home
+HTS75,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,,https://www.hungpump.com/hts
+HWCPⅡ,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ-FS,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ-FS,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ-FT,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ-FT,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ-ST,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+HWCPⅡ-ST,60,1,3/4,550W,32,"1-1/4""",N/A,165,11,36,BLDC,https://www.hungpump.com/data-234533
+J-200,60,1,1/4,200W,25,"1""",N/A,80,18,59,,https://www.hungpump.com/j
+J-200,60,1,1/4,200W,25,"1""",N/A,80,18,59,,https://www.hungpump.com/j
+JA-200,60,1,1/4,200W,25,"1""",N/A,80,18,59,Booster,https://www.hungpump.com/ja
+JA-200,60,1,1/4,200W,25,"1""",N/A,80,18,59,Booster,https://www.hungpump.com/ja
+JA-80,60,1,1/10,80W,20,"3/4""",1,26,10,33,Booster,https://www.hungpump.com/ja
+JA-80,60,1,1/10,80W,20,"3/4""",1,26,10,33,Booster,https://www.hungpump.com/ja
+JA-80S,60,1,1/10,80W,20,"3/4""",1,26,10,33,Booster,https://www.hungpump.com/ja
+JA-80S,60,1,1/10,80W,20,"3/4""",1,26,10,33,Booster,https://www.hungpump.com/ja
+LSJ-05,60,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05,60,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05,60,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05,60,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05D,60,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05E,60,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05E,60,1,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05E,60,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-05E,60,3,1/2,400W,25,"1""",N/A,60,36,118,Booster,https://www.hungpump.com/lsj
+LSJ-10,60,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10-24H,60,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10,60,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10,60,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10,60,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10,60,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10E,60,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10E,60,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10E,60,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+LSJ-10E,60,3,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/lsj
+MT-105,60,1,3,2.2kW,50,"2""",2,320,50,164,Booster,https://www.hungpump.com/mt
+MT-105,60,3,3,2.2kW,50,"2""",2,320,50,164,Booster,https://www.hungpump.com/mt
+MT-43,60,1,1,750W,25,"1""",2,130,37,121,Booster,https://www.hungpump.com/mt
+MT-43,60,3,1,750W,25,"1""",2,130,37,121,Booster,https://www.hungpump.com/mt
+MT-44,60,1,1.5,1.1kW,25,"1""",2,130,50,164,Booster,https://www.hungpump.com/mt
+MT-44,60,3,1.5,1.1kW,25,"1""",2,130,50,164,Booster,https://www.hungpump.com/mt
+MT-45,60,1,2,1.5kW,25,"1""",2,130,60,197,Booster,https://www.hungpump.com/mt
+MT-45,60,3,2,1.5kW,25,"1""",2,130,60,197,Booster,https://www.hungpump.com/mt
+MT-46,60,1,2,1.5kW,25,"1""",2,130,75,246,Booster,https://www.hungpump.com/mt
+MT-46,60,3,2,1.5kW,25,"1""",2,130,75,246,Booster,https://www.hungpump.com/mt
+MT-83,60,1,1.5,1.1kW,25,"1""",2,320,31,102,Booster,https://www.hungpump.com/mt
+MT-83,60,3,1.5,1.1kW,25,"1""",2,320,31,102,Booster,https://www.hungpump.com/mt
+MT-84,60,1,2,1.5kW,25,"1""",2,320,40,131,Booster,https://www.hungpump.com/mt
+MT-84,60,3,2,1.5kW,25,"1""",2,320,40,131,Booster,https://www.hungpump.com/mt
+MT-85,60,1,3,2.2kW,25,"1""",2,320,47,154,Booster,https://www.hungpump.com/mt
+MT-85,60,3,3,2.2kW,25,"1""",2,320,47,154,Booster,https://www.hungpump.com/mt
+MTS-161,60,1,3,2.2kW,50,"2""",N/A,550,18,59,,https://www.hungpump.com/mts
+MTS-161,60,3,3,2.2kW,50,"2""",N/A,550,18,59,,https://www.hungpump.com/mts
+MTS-161,60,3,3,2.2kW,50,"2""",N/A,550,18,59,,https://www.hungpump.com/mts
+MTS-162,60,3,4,3kW,50,"2""",N/A,550,37,121,,https://www.hungpump.com/mts
+MTS-162,60,3,4,3kW,50,"2""",N/A,550,37,121,,https://www.hungpump.com/mts
+MTS-162T,60,3,4,3kW,50,"2""",N/A,550,37,121,,https://www.hungpump.com/mts
+MTS-163,60,3,5,3.7kW,50,"2""",N/A,550,55,180,,https://www.hungpump.com/mts
+MTS-163,60,4,5,3.7kW,50,"2""",N/A,550,55,180,,https://www.hungpump.com/mts
+MTS-163T,60,3,5,3.7kW,50,"2""",N/A,550,55,180,,https://www.hungpump.com/mts
+MTS-32,60,1,1/2,400W,25,"1""",N/A,90,28,92,,https://www.hungpump.com/mts
+MTS-32,60,1,1/2,400W,25,"1""",N/A,90,28,92,,https://www.hungpump.com/mts
+MTS-32,60,3,1/2,400W,25,"1""",N/A,90,28,92,,https://www.hungpump.com/mts
+MTS-32,60,3,1/2,400W,25,"1""",N/A,90,28,92,,https://www.hungpump.com/mts
+MTS-32T,60,3,1/2,400W,25,"1""",N/A,90,28,92,,https://www.hungpump.com/mts
+MTS-32+S3,60,1,1/2,400W,25,"1""",N/A,90,28,92,,https://www.hungpump.com/mts
+MTS-33,60,1,3/4,550W,25,"1""",N/A,90,40,131,,https://www.hungpump.com/mts
+MTS-33,60,1,3/4,550W,25,"1""",N/A,90,40,131,,https://www.hungpump.com/mts
+MTS-33T,60,3,3/4,550W,25,"1""",N/A,90,40,131,,https://www.hungpump.com/mts
+MTS-33T,60,3,3/4,550W,25,"1""",N/A,90,40,131,,https://www.hungpump.com/mts
+MTS-33T,60,3,3/4,550W,25,"1""",N/A,90,40,131,,https://www.hungpump.com/mts
+MTS-34,60,1,1,750W,25,"1""",N/A,90,55,180,,https://www.hungpump.com/mts
+MTS-34,60,1,1,750W,25,"1""",N/A,90,55,180,,https://www.hungpump.com/mts
+MTS-34+S3,60,1,1,750W,25,"1""",N/A,90,55,180,,https://www.hungpump.com/mts
+MTS-34T,60,3,1,750W,25,"1""",N/A,90,55,180,,https://www.hungpump.com/mts
+MTS-34T,60,3,1,750W,25,"1""",N/A,90,55,180,,https://www.hungpump.com/mts
+MTS-34T,60,3,1,750W,25,"1""",N/A,90,55,180,,https://www.hungpump.com/mts
+MTS-35,60,1,1.5,1.1kW,25,"1""",N/A,90,68,223,,https://www.hungpump.com/mts
+MTS-35,60,1,1.5,1.1kW,25,"1""",N/A,90,68,223,,https://www.hungpump.com/mts
+MTS-35T,60,3,1.5,1.1kW,25,"1""",N/A,90,68,223,,https://www.hungpump.com/mts
+MTS-35T,60,3,1.5,1.1kW,25,"1""",N/A,90,68,223,,https://www.hungpump.com/mts
+MTS-36,60,1,2,1.5kW,25,"1""",N/A,90,82,269,,https://www.hungpump.com/mts
+MTS-36,60,3,2,1.5kW,25,"1""",N/A,90,82,269,,https://www.hungpump.com/mts
+MTS-36,60,3,2,1.5kW,25,"1""",N/A,90,82,269,,https://www.hungpump.com/mts
+MTS-52,60,1,3/4,550W,25,"1""",N/A,145,28,92,,https://www.hungpump.com/mts
+MTS-52,60,1,3/4,550W,25,"1""",N/A,145,28,92,,https://www.hungpump.com/mts
+MTS-52,60,3,3/4,550W,25,"1""",N/A,145,28,92,,https://www.hungpump.com/mts
+MTS-52,60,3,3/4,550W,25,"1""",N/A,145,28,92,,https://www.hungpump.com/mts
+MTS-53,60,1,1,750W,25,"1""",N/A,145,42,138,,https://www.hungpump.com/mts
+MTS-53,60,1,1,750W,25,"1""",N/A,145,42,138,,https://www.hungpump.com/mts
+MTS-53+S3,60,1,1,750W,25,"1""",N/A,145,42,138,,https://www.hungpump.com/mts
+MTS-53,60,3,1,750W,25,"1""",N/A,145,42,138,,https://www.hungpump.com/mts
+MTS-53,60,3,1,750W,25,"1""",N/A,145,42,138,,https://www.hungpump.com/mts
+MTS-53T,60,3,1,750W,25,"1""",N/A,145,42,138,,https://www.hungpump.com/mts
+MTS-54,60,1,1.5,1.1kW,25,"1""",N/A,145,55,180,,https://www.hungpump.com/mts
+MTS-54,60,1,1.5,1.1kW,25,"1""",N/A,145,55,180,,https://www.hungpump.com/mts
+MTS-54,60,3,1.5,1.1kW,25,"1""",N/A,145,55,180,,https://www.hungpump.com/mts
+MTS-54,60,3,1.5,1.1kW,25,"1""",N/A,145,55,180,,https://www.hungpump.com/mts
+MTS-54T,60,3,1.5,1.1kW,25,"1""",N/A,145,55,180,,https://www.hungpump.com/mts
+MTS-55,60,1,2,1.5kW,25,"1""",N/A,145,68,223,,https://www.hungpump.com/mts
+MTS-55,60,3,2,1.5kW,25,"1""",N/A,145,68,223,Booster,https://www.hungpump.com/mts
+MTS-55T,60,3,2,1.5kW,25,"1""",N/A,145,68,223,Booster,https://www.hungpump.com/mts
+MTS-82,60,1,2,1.5kW,40,"1-1/2""",N/A,330,30,98,Booster,https://www.hungpump.com/mts
+MTS-82+S3,60,1,2,1.5kW,40,"1-1/2""",N/A,330,30,98,Booster,https://www.hungpump.com/mts
+MTS-82,60,3,2,1.5kW,40,"1-1/2""",N/A,330,30,98,Booster,https://www.hungpump.com/mts
+MTS-82,60,3,2,1.5kW,40,"1-1/2""",N/A,330,30,98,Booster,https://www.hungpump.com/mts
+MTS-82T,60,3,2,1.5kW,40,"1-1/2""",N/A,330,30,98,Booster,https://www.hungpump.com/mts
+MTS-83,60,1,3,2.2kW,40,"1-1/2""",N/A,330,45,148,Booster,https://www.hungpump.com/mts
+MTS-83,60,3,3,2.2kW,40,"1-1/2""",N/A,330,45,148,Booster,https://www.hungpump.com/mts
+MTS-83,60,3,3,2.2kW,40,"1-1/2""",N/A,330,45,148,,https://www.hungpump.com/mts
+MTS-83T,60,3,3,2.2kW,40,"1-1/2""",N/A,330,45,148,,https://www.hungpump.com/mts
+MTS-84,60,3,4,3kW,40,"1-1/2""",N/A,330,60,197,,https://www.hungpump.com/mts
+MTS-84,60,3,4,3kW,40,"1-1/2""",N/A,330,60,197,,https://www.hungpump.com/mts
+MTS-84T,60,3,4,3kW,40,"1-1/2""",N/A,330,60,197,,https://www.hungpump.com/mts
+MTS-85,60,3,5,3.7kW,40,"1-1/2""",N/A,330,72,236,,https://www.hungpump.com/mts
+MTS-85,60,3,5,3.7kW,40,"1-1/2""",N/A,330,72,236,,https://www.hungpump.com/mts
+SC-30,60,3,3,2.2kW,,,,,,-,,https://www.hungpump.com/sc
+SC-30,60,3,3,2.2kW,,,,,,-,,https://www.hungpump.com/sc
+SC-50,60,3,5,3.7kW,,,,,,-,,https://www.hungpump.com/sc
+SC-50,60,3,5,3.7kW,,,,,,-,,https://www.hungpump.com/sc
+SC-75,60,3,7.5,5.5kW,,,,,,-,,https://www.hungpump.com/sc
+SC-75,60,3,7.5,5.5kW,,,,,,-,,https://www.hungpump.com/sc
+SMC-05,60,1,1/2,0.37W,,,,,,-,,https://www.hungpump.com/smc
+SMC-10,60,1,1/3,0.37W,,,,,,-,,https://www.hungpump.com/smc
+SMC-20,60,2,1/4,0.37W,,,,,,-,,https://www.hungpump.com/smc
+SMP-10,60,1,1,750W,40,"1-1/2""",N/A,310,14,46,Clean Water,https://www.hungpump.com/smp
+SMP-10,60,1,1,750W,40,"1-1/2""",N/A,310,14,46,Clean Water,https://www.hungpump.com/smp
+SMP-10,60,3,1,750W,40,"1-1/2""",N/A,310,14,46,Clean Water,https://www.hungpump.com/smp
+SMP-10,60,3,1,750W,40,"1-1/2""",N/A,310,14,46,Clean Water,https://www.hungpump.com/smp
+SMP-20,60,1,2,1.5kW,50,"2""",N/A,460,16,52,Clean Water,https://www.hungpump.com/smp
+SMP-20,60,3,2,1.5kW,50,"2""",N/A,460,16,52,Clean Water,https://www.hungpump.com/smp
+SMP-20,60,3,2,1.5kW,50,"2""",N/A,460,16,52,Clean Water,https://www.hungpump.com/smp
+SMP-20T,60,3,2,1.5kW,50,"2""",N/A,460,16,52,Clean Water,https://www.hungpump.com/smp
+SMP-30,60,1,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SMP-30,60,3,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SMP-30,60,3,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SMP-30T,60,3,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SMP-30T,60,3,3,2.2kW,50,"2""",N/A,520,20,66,Clean Water,https://www.hungpump.com/smp
+SPA-07,60,1,1,750W,40,"1-1/2""",N/A,,,-,,https://www.hungpump.com/spa
+SPA-10,60,1,1,750W,40,"1-1/2""",N/A,320,13.5,44,,https://www.hungpump.com/spa
+SPA-10,60,1,1,750W,40,"1-1/2""",N/A,320,13.5,44,,https://www.hungpump.com/spa
+SPA-150B,60,1,1.5,1100W,40,"1-1/2""",N/A,350,15.5,51,,https://www.hungpump.com/spa
+SPA-150B,60,1,1.5,1100W,40,"1-1/2""",N/A,350,15.5,51,,https://www.hungpump.com/spa
+SW-120,60,1,1-1/4,1kW,25,"1""",N/A,140,28,92,,https://www.hungpump.com/sw
+SW-120,60,1,1-1/4,1kW,25,"1""",N/A,140,28,92,,https://www.hungpump.com/sw
+SW-120,60,3,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120,60,3,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120S,60,1,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120S,60,1,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120S,60,3,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-120S,60,3,1-1/4,1kW,25,"1""",3,140,28,92,,https://www.hungpump.com/sw
+SW-220,60,1,2,1.5kW,50,"2""",3,630,24,79,,https://www.hungpump.com/sw
+SW-220,60,3,2,1.5kW,50,"2""",3,630,24,79,,https://www.hungpump.com/sw
+SW-220,60,3,2,1.5kW,50,"2""",N/A,630,24,79,,https://www.hungpump.com/sw
+SW-220T,60,3,2,1.5kW,50,"2""",N/A,630,24,79,,https://www.hungpump.com/sw
+SW-250,60,1,2.5,1.85kW,32,"1-1/4""",N/A,300,30,98,,https://www.hungpump.com/sw
+SW-250,60,3,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-250,60,3,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-250S,60,1,2.5,1.85kW,32,"1-1/4""",N/A,300,30,98,,https://www.hungpump.com/sw
+SW-250S,60,3,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-250S,60,3,2.5,1.85kW,32,"1-1/4""",3,300,30,98,,https://www.hungpump.com/sw
+SW-320,60,1,3,2.2kW,50,"2""",3,650,29,95,,https://www.hungpump.com/sw
+SW-320,60,3,3,2.2kW,50,"2""",3,650,29,95,,https://www.hungpump.com/sw
+SW-320,60,3,3,2.2kW,50,"2""",N/A,650,29,95,,https://www.hungpump.com/sw
+SW-320T,60,3,3,2.2kW,50,"2""",3,650,29,95,,https://www.hungpump.com/sw
+SW-420,60,3,4,3kW,50,"2""",N/A,680,31,102,,https://www.hungpump.com/sw
+SW-420,60,3,4,3kW,50,"2""",N/A,680,31,102,,https://www.hungpump.com/sw
+SW-420T,60,3,4,3kW,50,"2""",N/A,680,31,102,,https://www.hungpump.com/sw
+SW-60,60,1,1/2,400W,25,"1""",N/A,120,17,56,,https://www.hungpump.com/sw
+SW-60,60,1,1/2,400W,25,"1""",N/A,120,17,56,,https://www.hungpump.com/sw
+SW-60,60,3,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60,60,3,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60S,60,1,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60S,60,1,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60S,60,3,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SW-60S,60,3,1/2,400W,25,"1""",3,120,17,56,,https://www.hungpump.com/sw
+SWO-220,60,1,2,1.5kW,50,"2""",3,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-220,60,3,2,1.5kW,50,"2""",3,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-220,60,3,2,1.5kW,50,"2""",8,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-220T,60,3,2,1.5kW,50,"2""",8,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-220T,60,3,2,1.5kW,50,"2""",3,620,14,46,Booster,https://www.hungpump.com/swo
+SWO-320,60,1,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-320,60,3,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-320,60,3,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-320T,60,3,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-320T,60,3,3,2.2kW,50,"2""",8,660,16,52,Booster,https://www.hungpump.com/swo
+SWO-420,60,3,4,3kW,50,"2""",8,730,20,66,Booster,https://www.hungpump.com/swo
+SWO-420,60,3,4,3kW,50,"2""",8,730,20,66,Booster,https://www.hungpump.com/swo
+TP-40,60,1,1/2,400W,20,"3/4""",8,40,4,13,,https://www.hungpump.com/tp
+TP-40,60,1,1/2,400W,20,"3/4""",8,40,4,13,,https://www.hungpump.com/tp
+UP-906A,60,1,1,750W,,,N/A,,,-,,https://www.hungpump.com/up
+UP-906A,60,1,1,750W,,,N/A,,,-,,https://www.hungpump.com/up
+PC-2,60,1,1,750W,20,"3/4""",N/A,20,13,43,,https://www.hungpump.com/pc
+HI-800B,50,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/hi
+HI-800B,60,1,1,750W,25,"1""",N/A,75,42,138,Booster,https://www.hungpump.com/hi
+CBP-330,50,1,3,2.2kW,80,"3""",3,1200,11.5,38,Clean Water,https://www.hungpump.com/cbp
+HI-200,50,1,1/4,200W,25,"1""",N/A,55,24,79,Booster,https://www.hungpump.com/hi
