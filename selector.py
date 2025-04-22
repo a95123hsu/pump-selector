@@ -1,14 +1,53 @@
 import streamlit as st
 import pandas as pd
+from supabase import create_client
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # App config
 st.set_page_config(page_title="Pump Selector", layout="wide")
 
-# --- Load CSV ---
+# --- Supabase Configuration ---
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+
+# Initialize Supabase client
+@st.cache_resource
+def init_connection():
+    return create_client(supabase_url, supabase_key)
+
 try:
-    pumps = pd.read_csv("Pump Selection Data.csv")
+    supabase = init_connection()
 except Exception as e:
-    st.error(f"❌ Failed to load CSV file: {e}")
+    st.error(f"❌ Failed to connect to Supabase: {e}")
+    st.stop()
+
+# --- Load Pump Data ---
+@st.cache_data(ttl=600)  # Cache data for 10 minutes
+def load_pump_data():
+    try:
+        # Fetch pump data from Supabase table
+        response = supabase.table("pump_selection_data").select("*").execute()
+        # Convert to DataFrame
+        df = pd.DataFrame(response.data)
+        return df
+    except Exception as e:
+        st.error(f"❌ Failed to load data from Supabase: {e}")
+        # Fallback to CSV if Supabase fetch fails
+        try:
+            return pd.read_csv("Pump Selection Data.csv")
+        except Exception as csv_error:
+            st.error(f"❌ Failed to load CSV file: {csv_error}")
+            return pd.DataFrame()
+
+# Load the data
+pumps = load_pump_data()
+
+if pumps.empty:
+    st.error("❌ No pump data available. Please check your Supabase connection or CSV file.")
     st.stop()
 
 # --- Default values ---
