@@ -29,12 +29,27 @@ except Exception as e:
 @st.cache_data(ttl=600)  # Cache data for 10 minutes
 def load_pump_data():
     try:
-        # Fetch pump data from Supabase table with increased limit to 2000 rows
-        # This should handle your 1465 records
-        response = supabase.table("pump_selection_data").select("*").limit(2000).execute()
+        # Use pagination to fetch all records instead of a single query with limit
+        all_records = []
+        page_size = 1000
+        current_page = 0
+        
+        while True:
+            response = supabase.table("pump_selection_data").select("*") \
+                              .range(current_page * page_size, (current_page + 1) * page_size - 1) \
+                              .execute()
+            
+            if not response.data:
+                break
+                
+            all_records.extend(response.data)
+            current_page += 1
+            
+            if len(response.data) < page_size:
+                break
         
         # Convert to DataFrame
-        df = pd.DataFrame(response.data)
+        df = pd.DataFrame(all_records)
         st.sidebar.info(f"Loaded {len(df)} records from Supabase")
         return df
     except Exception as e:
@@ -115,12 +130,16 @@ category = st.selectbox("* Category:", category_options)
 
 # Use dropna() to handle missing values in frequency and phase
 if "Frequency (Hz)" in pumps.columns:
+    # Convert to numeric first to handle consistency
+    pumps["Frequency (Hz)"] = pd.to_numeric(pumps["Frequency (Hz)"], errors='coerce')
     freq_options = sorted(pumps["Frequency (Hz)"].dropna().unique())
     frequency = st.selectbox("* Frequency (Hz):", ["Select..."] + freq_options)
 else:
     frequency = st.selectbox("* Frequency (Hz):", ["Select..."])
 
 if "Phase" in pumps.columns:
+    # Convert to numeric first to handle consistency
+    pumps["Phase"] = pd.to_numeric(pumps["Phase"], errors='coerce')
     phase_options = sorted(pumps["Phase"].dropna().unique())
     phase = st.selectbox("* Phase:", ["Select..."] + [int(p) for p in phase_options if pd.notna(p)])
 else:
@@ -201,18 +220,19 @@ if category == "Booster":
 # --- Result Display Limit ---
 st.markdown("### 📊 Result Display Control")
 result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=1)
+items_per_page = st.number_input("Items Per Page", min_value=10, max_value=200, value=50, step=10)
 
 # --- Search Logic ---
 if st.button("🔍 Search"):
     filtered_pumps = pumps.copy()
     
-    # Ensure Frequency and Phase are treated properly
+    # Ensure Frequency and Phase are treated properly - improved error handling
     try:
-        # Convert types appropriately with error handling
+        # Convert types appropriately with error handling before filtering
         filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
         filtered_pumps["Phase"] = pd.to_numeric(filtered_pumps["Phase"], errors='coerce')
         
-        # Apply frequency filter - handle different data types
+        # Apply frequency filter with improved type handling
         if isinstance(frequency, str) and frequency != "Select...":
             try:
                 freq_value = float(frequency)
@@ -222,7 +242,7 @@ if st.button("🔍 Search"):
         elif frequency != "Select...":
             filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
             
-        # Apply phase filter - handle different data types  
+        # Apply phase filter with improved type handling
         if isinstance(phase, str) and phase != "Select...":
             try:
                 phase_value = int(phase)
@@ -249,9 +269,10 @@ if st.button("🔍 Search"):
     # Convert head to meters
     head_m = head_value if head_unit == "m" else head_value * 0.3048
 
-    # Ensure numeric conversion for flow and head with coercion to handle inconsistent data
-    filtered_pumps["Max Flow (LPM)"] = pd.to_numeric(filtered_pumps["Max Flow (LPM)"], errors="coerce")
-    filtered_pumps["Max Head (M)"] = pd.to_numeric(filtered_pumps["Max Head (M)"], errors="coerce")
+    # Ensure numeric conversion for flow and head with improved handling
+    # Replace NaN with 0 to avoid comparison issues
+    filtered_pumps["Max Flow (LPM)"] = pd.to_numeric(filtered_pumps["Max Flow (LPM)"], errors="coerce").fillna(0)
+    filtered_pumps["Max Head (M)"] = pd.to_numeric(filtered_pumps["Max Head (M)"], errors="coerce").fillna(0)
 
     # Apply filters with safe handling of missing values
     if flow_lpm > 0:
@@ -260,7 +281,7 @@ if st.button("🔍 Search"):
         filtered_pumps = filtered_pumps[filtered_pumps["Max Head (M)"] >= head_m]
     if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
         # Convert to numeric first to handle potential string values
-        filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce")
+        filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce").fillna(0)
         filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
 
     st.subheader("✅ Matching Pumps")
@@ -271,9 +292,15 @@ if st.button("🔍 Search"):
         
         # Sort by relevant criteria for better user experience
         if "Max Flow (LPM)" in results.columns and "Max Head (M)" in results.columns:
+            # Properly handle data types before calculations
+            results["Max Flow (LPM)"] = pd.to_numeric(results["Max Flow (LPM)"], errors="coerce").fillna(0)
+            results["Max Head (M)"] = pd.to_numeric(results["Max Head (M)"], errors="coerce").fillna(0)
+            
             # Sort by closest match to requested flow and head
             results["Flow Difference"] = abs(results["Max Flow (LPM)"] - flow_lpm)
             results["Head Difference"] = abs(results["Max Head (M)"] - head_m)
+            
+            # Weight differences properly and handle NaN values
             results["Match Score"] = results["Flow Difference"] + results["Head Difference"]
             results = results.sort_values("Match Score")
             
@@ -283,6 +310,21 @@ if st.button("🔍 Search"):
         # Apply percentage limit
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
+        
+        # Add pagination
+        total_pages = (len(displayed_results) + items_per_page - 1) // items_per_page
+        
+        if total_pages > 1:
+            page = st.number_input("Page", min_value=1, max_value=total_pages, value=1)
+        else:
+            page = 1
+            
+        start_idx = (page - 1) * items_per_page
+        end_idx = min(start_idx + items_per_page, len(displayed_results))
+        
+        # Show current page info
+        if len(displayed_results) > 0:
+            st.write(f"Showing {start_idx + 1}-{end_idx} of {len(displayed_results)} results")
         
         # Create column configuration for product links and proper formatting
         column_config = {}
@@ -310,10 +352,10 @@ if st.button("🔍 Search"):
                 format="%.1f m"
             )
         
-        # Display the results with the column configuration
+        # Display the paginated results
         st.write("### Matching Pumps Results")
         st.data_editor(
-            displayed_results,
+            displayed_results.iloc[start_idx:end_idx],
             column_config=column_config,
             hide_index=True,
             disabled=True,
