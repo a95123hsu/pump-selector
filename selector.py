@@ -29,16 +29,21 @@ except Exception as e:
 @st.cache_data(ttl=600)  # Cache data for 10 minutes
 def load_pump_data():
     try:
-        # Fetch pump data from Supabase table
-        response = supabase.table("pump_selection_data").select("*").execute()
+        # Fetch pump data from Supabase table with increased limit to 2000 rows
+        # This should handle your 1465 records
+        response = supabase.table("pump_selection_data").select("*").limit(2000).execute()
+        
         # Convert to DataFrame
         df = pd.DataFrame(response.data)
+        st.sidebar.info(f"Loaded {len(df)} records from Supabase")
         return df
     except Exception as e:
         st.error(f"❌ Failed to load data from Supabase: {e}")
         # Fallback to CSV if Supabase fetch fails
         try:
-            return pd.read_csv("Pump Selection Data.csv")
+            df = pd.read_csv("Pump Selection Data.csv")
+            st.sidebar.info(f"Loaded {len(df)} records from CSV (fallback)")
+            return df
         except Exception as csv_error:
             st.error(f"❌ Failed to load CSV file: {csv_error}")
             return pd.DataFrame()
