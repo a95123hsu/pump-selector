@@ -140,8 +140,9 @@ else:
 if "Phase" in pumps.columns:
     # Convert to numeric first to handle consistency
     pumps["Phase"] = pd.to_numeric(pumps["Phase"], errors='coerce')
-    phase_options = sorted(pumps["Phase"].dropna().unique())
-    phase = st.selectbox("* Phase:", ["Select..."] + [int(p) for p in phase_options if pd.notna(p)])
+    # Filter to only include 1 and 3 phase options that exist in the data
+    phase_options = [p for p in sorted(pumps["Phase"].dropna().unique()) if p in [1, 3]]
+    phase = st.selectbox("* Phase:", ["Select..."] + phase_options)
 else:
     phase = st.selectbox("* Phase:", ["Select...", 1, 3])
 
@@ -220,7 +221,6 @@ if category == "Booster":
 # --- Result Display Limit ---
 st.markdown("### 📊 Result Display Control")
 result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_value=100, value=100, step=1)
-items_per_page = st.number_input("Items Per Page", min_value=10, max_value=200, value=50, step=10)
 
 # --- Search Logic ---
 if st.button("🔍 Search"):
@@ -311,20 +311,13 @@ if st.button("🔍 Search"):
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
-        # Add pagination
-        total_pages = (len(displayed_results) + items_per_page - 1) // items_per_page
-        
-        if total_pages > 1:
-            page = st.number_input("Page", min_value=1, max_value=total_pages, value=1)
-        else:
-            page = 1
-            
-        start_idx = (page - 1) * items_per_page
-        end_idx = min(start_idx + items_per_page, len(displayed_results))
-        
-        # Show current page info
+        # Show all data without pagination
         if len(displayed_results) > 0:
-            st.write(f"Showing {start_idx + 1}-{end_idx} of {len(displayed_results)} results")
+            st.write(f"Showing all {len(displayed_results)} results")
+            
+        # No pagination - use entire dataset
+        start_idx = 0
+        end_idx = len(displayed_results)
         
         # Create column configuration for product links and proper formatting
         column_config = {}
