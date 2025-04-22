@@ -26,7 +26,8 @@ except Exception as e:
     st.stop()
 
 # --- Load Pump Data ---
-@st.cache_data(ttl=600)  # Cache data for 10 minutes
+# --- Load Pump Data ---
+@st.cache_data(ttl=60)  # Cache data for 1 minute instead of 10 minutes for more frequent updates
 def load_pump_data():
     try:
         # Use pagination to fetch all records instead of a single query with limit
@@ -92,6 +93,19 @@ with col_title:
 
 # --- Title and Reset Button ---
 st.title("Pump Selection Tool")
+
+# Add refresh data button
+col1, col2 = st.columns([1, 9])
+with col1:
+    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="primary")
+    if refresh_clicked:
+        # Clear cache to force data reload
+        st.cache_data.clear()
+        st.experimental_rerun()
+        
+with col2:
+    # Display data freshness information
+    st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 # Reset All Inputs Button
 reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary")
