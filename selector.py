@@ -94,39 +94,31 @@ with col_title:
 # --- Title and Reset Button ---
 st.title("Pump Selection Tool")
 
-# Create a row for both buttons to be side by side
-col_refresh, col_reset, col_info = st.columns([1, 1, 8])
-
-with col_refresh:
-    refresh_clicked = st.button("🔄 Refresh Data", key="refresh_button", help="Refresh data from database", use_container_width=True)
+# Add refresh data button
+col1, col2 = st.columns([1, 9])
+with col1:
+    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary")
     if refresh_clicked:
         # Clear cache to force data reload
         st.cache_data.clear()
         # Use st.rerun() instead of the deprecated experimental_rerun
         st.rerun()
         
-with col_reset:
-    reset_clicked = st.button("🔄 Reset Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
-    if reset_clicked:
-        for key, val in default_values.items():
-            st.session_state[key] = val
-
-with col_info:
+with col2:
     # Display data freshness information
     st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+# Reset All Inputs Button
+reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary")
 if reset_clicked:
     for key, val in default_values.items():
         st.session_state[key] = val
 
-# Apply custom styling for the buttons
+# Apply custom styling - using the same style for both buttons
 st.markdown("""
 <style>
 button[data-testid="baseButton-secondary"] {
     background-color: #e63946;
-    color: white;
-}
-button[data-testid="baseButton"] {
-    background-color: #0057B8;
     color: white;
 }
 </style>
