@@ -319,15 +319,5 @@ if st.button("🔍 Search"):
             disabled=True,
             use_container_width=True
         )
-        
-        # Show export option
-        if st.button("Export Results to CSV"):
-            csv = displayed_results.to_csv(index=False)
-            st.download_button(
-                label="Download CSV",
-                data=csv,
-                file_name="pump_selection_results.csv",
-                mime="text/csv"
-            )
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
