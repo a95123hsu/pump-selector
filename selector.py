@@ -97,11 +97,12 @@ st.title("Pump Selection Tool")
 # Add refresh data button
 col1, col2 = st.columns([1, 9])
 with col1:
-    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="primary")
+    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database")
     if refresh_clicked:
         # Clear cache to force data reload
         st.cache_data.clear()
-        st.experimental_rerun()
+        # Use st.rerun() instead of the deprecated experimental_rerun
+        st.rerun()
         
 with col2:
     # Display data freshness information
@@ -113,11 +114,15 @@ if reset_clicked:
     for key, val in default_values.items():
         st.session_state[key] = val
 
-# Apply custom styling
+# Apply custom styling for the buttons
 st.markdown("""
 <style>
 button[data-testid="baseButton-secondary"] {
     background-color: #e63946;
+    color: white;
+}
+button[data-testid="baseButton"] {
+    background-color: #0057B8;
     color: white;
 }
 </style>
