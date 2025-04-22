@@ -94,19 +94,26 @@ with col_title:
 # --- Title and Reset Button ---
 st.title("Pump Selection Tool")
 
-# Add refresh data button directly below the title
-refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary")
-if refresh_clicked:
-    # Clear cache to force data reload
-    st.cache_data.clear()
-    # Use st.rerun() instead of the deprecated experimental_rerun
-    st.rerun()
-
 # Show data freshness information
 st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+# Create two columns for the buttons to be parallel
+col1, col2 = st.columns(2)
+
+with col1:
+    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary", use_container_width=True)
+    if refresh_clicked:
+        # Clear cache to force data reload
+        st.cache_data.clear()
+        # Use st.rerun() instead of the deprecated experimental_rerun
+        st.rerun()
     
-# Reset All Inputs Button
-reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary")
+with col2:
+    # Reset All Inputs Button
+    reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
+    if reset_clicked:
+        for key, val in default_values.items():
+            st.session_state[key] = val
 if reset_clicked:
     for key, val in default_values.items():
         st.session_state[key] = val
