@@ -50,14 +50,12 @@ def load_pump_data():
         
         # Convert to DataFrame
         df = pd.DataFrame(all_records)
-        st.sidebar.info(f"Loaded {len(df)} records from Supabase")
         return df
     except Exception as e:
         st.error(f"❌ Failed to load data from Supabase: {e}")
         # Fallback to CSV if Supabase fetch fails
         try:
             df = pd.read_csv("Pump Selection Data.csv")
-            st.sidebar.info(f"Loaded {len(df)} records from CSV (fallback)")
             return df
         except Exception as csv_error:
             st.error(f"❌ Failed to load CSV file: {csv_error}")
