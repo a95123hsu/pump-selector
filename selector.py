@@ -108,8 +108,8 @@ with col1:
         st.rerun()
     
 with col2:
-    # Reset All Inputs Button
-    reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
+    # Reset All Inputs Button - make text stay on one line by using a non-breaking space
+    reset_clicked = st.button("🔄 Reset\xa0All\xa0Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
     if reset_clicked:
         for key, val in default_values.items():
             st.session_state[key] = val
@@ -120,6 +120,7 @@ st.markdown("""
 button[data-testid="baseButton-secondary"] {
     background-color: #e63946;
     color: white;
+    white-space: nowrap;
 }
 </style>
 """, unsafe_allow_html=True)
