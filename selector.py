@@ -97,8 +97,8 @@ st.title("Pump Selection Tool")
 # Show data freshness information
 st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-# Create two columns for the buttons to be parallel
-col1, col2 = st.columns(2)
+# Create multiple columns to make buttons smaller
+col1, col_space1, col2, col_space2 = st.columns([1, 2, 1, 2])
 
 with col1:
     refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary", use_container_width=True)
