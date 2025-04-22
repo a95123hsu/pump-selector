@@ -1,26 +1,4 @@
-# --- Title and Reset Button ---
-st.title("Pump Selection Tool")
-
-# Show data freshness information
-st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-# Create columns with buttons close together on the left side
-col1, col2, col_space = st.columns([1, 1, 6])
-
-with col1:
-    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary", use_container_width=True)
-    if refresh_clicked:
-        # Clear cache to force data reload
-        st.cache_data.clear()
-        # Use st.rerun() instead of the deprecated experimental_rerun
-        st.rerun()
-    
-with col2:
-    # Reset All Inputs Button
-    reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
-    if reset_clicked:
-        for key, val in default_values.items():
-            st.session_state[key] = val
+import streamlit as st
 import pandas as pd
 from supabase import create_client
 import os
@@ -47,7 +25,6 @@ except Exception as e:
     st.error(f"❌ Failed to connect to Supabase: {e}")
     st.stop()
 
-# --- Load Pump Data ---
 # --- Load Pump Data ---
 @st.cache_data(ttl=60)  # Cache data for 1 minute instead of 10 minutes for more frequent updates
 def load_pump_data():
@@ -119,8 +96,8 @@ st.title("Pump Selection Tool")
 # Show data freshness information
 st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-# Create multiple columns to make buttons smaller
-col1, col_space1, col2, col_space2 = st.columns([1, 2, 1, 2])
+# Create columns with buttons close together on the left side
+col1, col2, col_space = st.columns([1, 1, 6])
 
 with col1:
     refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary", use_container_width=True)
@@ -136,9 +113,6 @@ with col2:
     if reset_clicked:
         for key, val in default_values.items():
             st.session_state[key] = val
-if reset_clicked:
-    for key, val in default_values.items():
-        st.session_state[key] = val
 
 # Apply custom styling - using the same style for both buttons
 st.markdown("""
@@ -346,12 +320,6 @@ if st.button("🔍 Search"):
             # Remove temporary columns used for sorting
             results = results.drop(columns=["Flow Difference", "Head Difference", "Match Score"])
         
-        # Default sorting by DB ID (ascending)
-        if "id" in results.columns:
-            results = results.sort_values("id")
-        elif "ID" in results.columns:
-            results = results.sort_values("ID")
-        
         # Sort by DB ID first, then apply percentage filter
         if "DB ID" in results.columns:
             results = results.sort_values("DB ID")
@@ -363,6 +331,10 @@ if st.button("🔍 Search"):
         # Apply percentage limit after sorting by DB ID
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
+        
+        # We don't need to sort again since it's already sorted
+        # Display the results
+        st.write("### Matching Pumps Results")
         
         # Show all data without pagination
         if len(displayed_results) > 0:
@@ -377,7 +349,14 @@ if st.button("🔍 Search"):
         
         # Configure the ID column for default sorting if it exists
         id_column = None
-        if "id" in displayed_results.columns:
+        if "DB ID" in displayed_results.columns:
+            id_column = "DB ID"
+            column_config["DB ID"] = st.column_config.NumberColumn(
+                "DB ID",
+                help="Database ID",
+                format="%d"
+            )
+        elif "id" in displayed_results.columns:
             id_column = "id"
             column_config["id"] = st.column_config.NumberColumn(
                 "ID",
@@ -415,10 +394,7 @@ if st.button("🔍 Search"):
                 format="%.1f m"
             )
         
-        # We don't need to sort again since it's already sorted
         # Display the results
-        st.write("### Matching Pumps Results")
-        
         st.data_editor(
             displayed_results.iloc[start_idx:end_idx],
             column_config=column_config,
