@@ -97,7 +97,7 @@ st.title("Pump Selection Tool")
 st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 # Create columns with buttons close together on the left side
-col1, col2, col_space = st.columns([1, 1, 6])
+col1, col2, col_space = st.columns([1, 1.2, 5.8])
 
 with col1:
     refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary", use_container_width=True)
@@ -108,8 +108,8 @@ with col1:
         st.rerun()
     
 with col2:
-    # Reset All Inputs Button - make text stay on one line by using a non-breaking space
-    reset_clicked = st.button("🔄 Reset\xa0All\xa0Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
+    # Reset All Inputs Button - with shortened text
+    reset_clicked = st.button("🔄 Reset Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
     if reset_clicked:
         for key, val in default_values.items():
             st.session_state[key] = val
