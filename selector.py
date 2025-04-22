@@ -328,6 +328,23 @@ if st.button("🔍 Search"):
         # Create column configuration for product links and proper formatting
         column_config = {}
         
+        # Configure the ID column for default sorting if it exists
+        id_column = None
+        if "id" in displayed_results.columns:
+            id_column = "id"
+            column_config["id"] = st.column_config.NumberColumn(
+                "ID",
+                help="Database ID",
+                format="%d"
+            )
+        elif "ID" in displayed_results.columns:
+            id_column = "ID"
+            column_config["ID"] = st.column_config.NumberColumn(
+                "ID",
+                help="Database ID",
+                format="%d"
+            )
+        
         # Configure the Product Link column if it exists
         if "Product Link" in displayed_results.columns:
             column_config["Product Link"] = st.column_config.LinkColumn(
@@ -351,14 +368,22 @@ if st.button("🔍 Search"):
                 format="%.1f m"
             )
         
-        # Display the paginated results
+        # Display the results with the column configuration and sorting
         st.write("### Matching Pumps Results")
+        
+        # Set default sorting by ID column if available
+        default_sort_column = None
+        if id_column:
+            default_sort_column = id_column
+            
         st.data_editor(
             displayed_results.iloc[start_idx:end_idx],
             column_config=column_config,
             hide_index=True,
             disabled=True,
-            use_container_width=True
+            use_container_width=True,
+            column_order=[id_column] if id_column else None,  # ID column first if available
+            sort_by=[id_column] if id_column else None  # Sort by ID column by default
         )
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
