@@ -20,7 +20,7 @@ with col2:
     reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
     if reset_clicked:
         for key, val in default_values.items():
-            st.session_state[key] = valimport streamlit as st
+            st.session_state[key] = val
 import pandas as pd
 from supabase import create_client
 import os
