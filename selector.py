@@ -307,6 +307,12 @@ if st.button("🔍 Search"):
             # Remove temporary columns used for sorting
             results = results.drop(columns=["Flow Difference", "Head Difference", "Match Score"])
         
+        # Default sorting by DB ID (ascending)
+        if "id" in results.columns:
+            results = results.sort_values("id")
+        elif "ID" in results.columns:
+            results = results.sort_values("ID")
+        
         # Apply percentage limit
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
