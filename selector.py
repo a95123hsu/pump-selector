@@ -368,22 +368,23 @@ if st.button("🔍 Search"):
                 format="%.1f m"
             )
         
-        # Display the results with the column configuration and sorting
+        # Sort the dataframe by DB ID before displaying
+        if "DB ID" in displayed_results.columns:
+            displayed_results = displayed_results.sort_values("DB ID")
+        elif "id" in displayed_results.columns:
+            displayed_results = displayed_results.sort_values("id")
+        elif "ID" in displayed_results.columns:
+            displayed_results = displayed_results.sort_values("ID")
+            
+        # Display the results
         st.write("### Matching Pumps Results")
         
-        # Set default sorting by ID column if available
-        default_sort_column = None
-        if id_column:
-            default_sort_column = id_column
-            
         st.data_editor(
             displayed_results.iloc[start_idx:end_idx],
             column_config=column_config,
             hide_index=True,
             disabled=True,
-            use_container_width=True,
-            column_order=[id_column] if id_column else None,  # ID column first if available
-            sort_by=[id_column] if id_column else None  # Sort by ID column by default
+            use_container_width=True
         )
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
