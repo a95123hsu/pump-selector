@@ -1,4 +1,26 @@
-import streamlit as st
+# --- Title and Reset Button ---
+st.title("Pump Selection Tool")
+
+# Show data freshness information
+st.caption(f"Data loaded: {len(pumps)} records | Last update: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+# Create columns with buttons close together on the left side
+col1, col2, col_space = st.columns([1, 1, 6])
+
+with col1:
+    refresh_clicked = st.button("🔄 Refresh Data", help="Refresh data from database", type="secondary", use_container_width=True)
+    if refresh_clicked:
+        # Clear cache to force data reload
+        st.cache_data.clear()
+        # Use st.rerun() instead of the deprecated experimental_rerun
+        st.rerun()
+    
+with col2:
+    # Reset All Inputs Button
+    reset_clicked = st.button("🔄 Reset All Inputs", key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True)
+    if reset_clicked:
+        for key, val in default_values.items():
+            st.session_state[key] = valimport streamlit as st
 import pandas as pd
 from supabase import create_client
 import os
