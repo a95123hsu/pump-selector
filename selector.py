@@ -313,7 +313,15 @@ if st.button("🔍 Search"):
         elif "ID" in results.columns:
             results = results.sort_values("ID")
         
-        # Apply percentage limit
+        # Sort by DB ID first, then apply percentage filter
+        if "DB ID" in results.columns:
+            results = results.sort_values("DB ID")
+        elif "id" in results.columns:
+            results = results.sort_values("id")
+        elif "ID" in results.columns:
+            results = results.sort_values("ID")
+        
+        # Apply percentage limit after sorting by DB ID
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
@@ -368,14 +376,7 @@ if st.button("🔍 Search"):
                 format="%.1f m"
             )
         
-        # Sort the dataframe by DB ID before displaying
-        if "DB ID" in displayed_results.columns:
-            displayed_results = displayed_results.sort_values("DB ID")
-        elif "id" in displayed_results.columns:
-            displayed_results = displayed_results.sort_values("id")
-        elif "ID" in displayed_results.columns:
-            displayed_results = displayed_results.sort_values("ID")
-            
+        # We don't need to sort again since it's already sorted
         # Display the results
         st.write("### Matching Pumps Results")
         
