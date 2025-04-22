@@ -99,10 +99,32 @@ button[data-testid="baseButton-secondary"] {
 # --- Step 1: Initial Selection ---
 st.markdown("### 🔧 Step 1: Select Basic Criteria")
 
-category_options = ["All Categories"] + sorted(pumps["Category"].dropna().unique())
+# Clean up Category values to ensure consistent filtering
+if "Category" in pumps.columns:
+    # Convert all category values to strings and strip whitespace
+    pumps["Category"] = pumps["Category"].astype(str).str.strip()
+    # Replace NaN, None, etc. with empty string for consistent handling
+    pumps["Category"] = pumps["Category"].replace(["nan", "None", "NaN"], "")
+    # Get unique categories excluding blank/empty values
+    unique_categories = [c for c in pumps["Category"].unique() if c and c.strip() and c.lower() not in ["nan", "none"]]
+    category_options = ["All Categories"] + sorted(unique_categories)
+else:
+    category_options = ["All Categories"]
+
 category = st.selectbox("* Category:", category_options)
-frequency = st.selectbox("* Frequency (Hz):", ["Select..."] + sorted(pumps["Frequency (Hz)"].dropna().unique()))
-phase = st.selectbox("* Phase:", ["Select...", 1, 3])
+
+# Use dropna() to handle missing values in frequency and phase
+if "Frequency (Hz)" in pumps.columns:
+    freq_options = sorted(pumps["Frequency (Hz)"].dropna().unique())
+    frequency = st.selectbox("* Frequency (Hz):", ["Select..."] + freq_options)
+else:
+    frequency = st.selectbox("* Frequency (Hz):", ["Select..."])
+
+if "Phase" in pumps.columns:
+    phase_options = sorted(pumps["Phase"].dropna().unique())
+    phase = st.selectbox("* Phase:", ["Select..."] + [int(p) for p in phase_options if pd.notna(p)])
+else:
+    phase = st.selectbox("* Phase:", ["Select...", 1, 3])
 
 if frequency == "Select..." or phase == "Select...":
     st.warning("Please select Frequency and Phase to proceed.")
@@ -183,11 +205,37 @@ result_percent = st.slider("Show Top Percentage of Results", min_value=5, max_va
 # --- Search Logic ---
 if st.button("🔍 Search"):
     filtered_pumps = pumps.copy()
-    filtered_pumps = filtered_pumps[
-        (filtered_pumps["Frequency (Hz)"] == frequency) &
-        (filtered_pumps["Phase"] == int(phase))
-    ]
+    
+    # Ensure Frequency and Phase are treated properly
+    try:
+        # Convert types appropriately with error handling
+        filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
+        filtered_pumps["Phase"] = pd.to_numeric(filtered_pumps["Phase"], errors='coerce')
+        
+        # Apply frequency filter - handle different data types
+        if isinstance(frequency, str) and frequency != "Select...":
+            try:
+                freq_value = float(frequency)
+                filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == freq_value]
+            except ValueError:
+                filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+        elif frequency != "Select...":
+            filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+            
+        # Apply phase filter - handle different data types  
+        if isinstance(phase, str) and phase != "Select...":
+            try:
+                phase_value = int(phase)
+                filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase_value]
+            except ValueError:
+                filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
+        elif phase != "Select...":
+            filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == int(phase)]
+    except Exception as e:
+        st.error(f"Error filtering by frequency/phase: {e}")
+        # If filtering fails, show a message but continue with other filters
 
+    # Apply category filter
     if category != "All Categories":
         filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
 
@@ -201,25 +249,42 @@ if st.button("🔍 Search"):
     # Convert head to meters
     head_m = head_value if head_unit == "m" else head_value * 0.3048
 
-    # Ensure numeric conversion
+    # Ensure numeric conversion for flow and head with coercion to handle inconsistent data
     filtered_pumps["Max Flow (LPM)"] = pd.to_numeric(filtered_pumps["Max Flow (LPM)"], errors="coerce")
+    filtered_pumps["Max Head (M)"] = pd.to_numeric(filtered_pumps["Max Head (M)"], errors="coerce")
 
-    # Apply filters
+    # Apply filters with safe handling of missing values
     if flow_lpm > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Flow (LPM)"] >= flow_lpm]
     if head_m > 0:
         filtered_pumps = filtered_pumps[filtered_pumps["Max Head (M)"] >= head_m]
     if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
+        # Convert to numeric first to handle potential string values
+        filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce")
         filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
 
     st.subheader("✅ Matching Pumps")
+    st.write(f"Found {len(filtered_pumps)} matching pumps")
 
     if not filtered_pumps.empty:
         results = filtered_pumps.copy()
+        
+        # Sort by relevant criteria for better user experience
+        if "Max Flow (LPM)" in results.columns and "Max Head (M)" in results.columns:
+            # Sort by closest match to requested flow and head
+            results["Flow Difference"] = abs(results["Max Flow (LPM)"] - flow_lpm)
+            results["Head Difference"] = abs(results["Max Head (M)"] - head_m)
+            results["Match Score"] = results["Flow Difference"] + results["Head Difference"]
+            results = results.sort_values("Match Score")
+            
+            # Remove temporary columns used for sorting
+            results = results.drop(columns=["Flow Difference", "Head Difference", "Match Score"])
+        
+        # Apply percentage limit
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
-        # Create column configuration for product links
+        # Create column configuration for product links and proper formatting
         column_config = {}
         
         # Configure the Product Link column if it exists
@@ -228,6 +293,21 @@ if st.button("🔍 Search"):
                 "Product Link",
                 help="Click to view product details",
                 display_text="View Product"
+            )
+        
+        # Better formatting for numeric columns
+        if "Max Flow (LPM)" in displayed_results.columns:
+            column_config["Max Flow (LPM)"] = st.column_config.NumberColumn(
+                "Max Flow (LPM)",
+                help="Maximum flow rate in liters per minute",
+                format="%.1f LPM"
+            )
+        
+        if "Max Head (M)" in displayed_results.columns:
+            column_config["Max Head (M)"] = st.column_config.NumberColumn(
+                "Max Head (M)",
+                help="Maximum head in meters",
+                format="%.1f m"
             )
         
         # Display the results with the column configuration
@@ -239,5 +319,15 @@ if st.button("🔍 Search"):
             disabled=True,
             use_container_width=True
         )
+        
+        # Show export option
+        if st.button("Export Results to CSV"):
+            csv = displayed_results.to_csv(index=False)
+            st.download_button(
+                label="Download CSV",
+                data=csv,
+                file_name="pump_selection_results.csv",
+                mime="text/csv"
+            )
     else:
         st.warning("⚠️ No pumps match your criteria. Try adjusting the parameters.")
