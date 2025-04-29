@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- Language Support ---
-# Translation dictionary
+# Translation dictionary - add category translations 
 translations = {
     "English": {
         # App title and headers
@@ -28,6 +28,24 @@ translations = {
         "Phase": "* Phase:",
         "Select...": "Select...",
         "All Categories": "All Categories",
+        
+        # Categories - Add translations for common pump categories
+        "Booster": "Booster",
+        "Submersible": "Submersible",
+        "Sewage": "Sewage",
+        "Self-Priming": "Self-Priming",
+        "End Suction": "End Suction",
+        "Vertical Multi-Stage": "Vertical Multi-Stage",
+        "Horizontal Multi-Stage": "Horizontal Multi-Stage",
+        "Chemical": "Chemical",
+        "Sump": "Sump",
+        "Turbine": "Turbine",
+        "Water": "Water",
+        "Drainage": "Drainage",
+        "Industrial": "Industrial",
+        "Pressure": "Pressure",
+        "Transfer": "Transfer",
+        "Centrifugal": "Centrifugal",
         
         # Application section
         "Application Input": "### 🏢 Application Input",
@@ -67,6 +85,13 @@ translations = {
         "Found Pumps": "Found {count} matching pumps",
         "Matching Results": "### Matching Pumps Results",
         "Showing Results": "Showing all {count} results",
+        "View Product": "View Product",
+        
+        # Column headers
+        "Max Flow (LPM)": "Max Flow (LPM)",
+        "Maximum flow rate in liters per minute": "Maximum flow rate in liters per minute",
+        "Max Head (M)": "Max Head (M)",
+        "Maximum head in meters": "Maximum head in meters",
         
         # Flow units
         "L/min": "L/min",
@@ -106,6 +131,24 @@ translations = {
         "Select...": "請選擇...",
         "All Categories": "所有類別",
         
+        # Categories - Add translations for common pump categories
+        "Booster": "增壓泵",
+        "Submersible": "潛水泵",
+        "Sewage": "污水泵",
+        "Self-Priming": "自吸泵",
+        "End Suction": "端吸泵",
+        "Vertical Multi-Stage": "立式多級泵",
+        "Horizontal Multi-Stage": "臥式多級泵",
+        "Chemical": "化工泵",
+        "Sump": "集水坑泵",
+        "Turbine": "渦輪泵",
+        "Water": "水泵",
+        "Drainage": "排水泵",
+        "Industrial": "工業泵",
+        "Pressure": "加壓泵",
+        "Transfer": "輸送泵",
+        "Centrifugal": "離心泵",
+        
         # Application section
         "Application Input": "### 🏢 應用輸入",
         "Floor Faucet Info": "💡 每樓層 = 3.5 米揚程 | 每水龍頭 = 15 LPM",
@@ -144,6 +187,13 @@ translations = {
         "Found Pumps": "找到 {count} 個符合的幫浦",
         "Matching Results": "### 符合幫浦結果",
         "Showing Results": "顯示全部 {count} 筆結果",
+        "View Product": "查看產品",
+        
+        # Column headers
+        "Max Flow (LPM)": "最大流量 (LPM)",
+        "Maximum flow rate in liters per minute": "每分鐘最大流量（公升）",
+        "Max Head (M)": "最大揚程 (M)",
+        "Maximum head in meters": "最大揚程（米）",
         
         # Flow units
         "L/min": "公升/分鐘",
@@ -319,11 +369,41 @@ if "Category" in pumps.columns:
     pumps["Category"] = pumps["Category"].replace(["nan", "None", "NaN"], "")
     # Get unique categories excluding blank/empty values
     unique_categories = [c for c in pumps["Category"].unique() if c and c.strip() and c.lower() not in ["nan", "none"]]
-    category_options = [get_text("All Categories")] + sorted(unique_categories)
+    
+    # Create a mapping between translated categories and original categories
+    # Store the original category name for filtering later
+    translated_categories = []
+    original_to_translated = {}
+    translated_to_original = {}
+    
+    # First, add the "All Categories" option
+    all_categories_translated = get_text("All Categories")
+    translated_categories.append(all_categories_translated)
+    translated_to_original[all_categories_translated] = get_text("All Categories")
+    
+    # Then process each category from the database
+    for cat in sorted(unique_categories):
+        # Get translated category if available, otherwise use the original
+        translated_cat = get_text(cat)
+        translated_categories.append(translated_cat)
+        # Store mappings in both directions
+        original_to_translated[cat] = translated_cat
+        translated_to_original[translated_cat] = cat
+    
+    # Use translated categories for display
+    category_options = translated_categories
 else:
     category_options = [get_text("All Categories")]
+    translated_to_original = {get_text("All Categories"): get_text("All Categories")}
 
-category = st.selectbox(get_text("Category"), category_options)
+# Display the translated category dropdown
+category_translated = st.selectbox(get_text("Category"), category_options)
+
+# Get the original category name for filtering
+if category_translated in translated_to_original:
+    category = translated_to_original[category_translated]
+else:
+    category = category_translated  # Fallback if translation not found
 
 # Use dropna() to handle missing values in frequency and phase
 if "Frequency (Hz)" in pumps.columns:
@@ -348,6 +428,7 @@ if frequency == get_text("Select...") or phase == get_text("Select..."):
     st.stop()
 
 # --- 🏢 Application Section - Only show when Booster is selected ---
+# We need to check against the original English category name, not the translated one
 if category == "Booster":
     st.markdown(get_text("Application Input"))
     st.caption(get_text("Floor Faucet Info"))
@@ -462,7 +543,7 @@ if st.button(get_text("Search")):
         st.error(f"Error filtering by frequency/phase: {e}")
         # If filtering fails, show a message but continue with other filters
 
-    # Apply category filter
+    # Apply category filter - use the original English category name for filtering
     if category != get_text("All Categories"):
         filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
 
@@ -541,6 +622,7 @@ if st.button(get_text("Search")):
         column_config = {}
         
         # Configure the ID column for default sorting if it exists
+        # Configure the ID column for default sorting if it exists
         id_column = None
         if "DB ID" in displayed_results.columns:
             id_column = "DB ID"
@@ -590,6 +672,25 @@ if st.button(get_text("Search")):
                 help=head_help,
                 format="%.1f m"
             )
+            
+        # Translate category column if it exists in the results
+        if "Category" in displayed_results.columns:
+            # Create a copy of the Category column with translated values
+            displayed_results["Category_Translated"] = displayed_results["Category"].apply(
+                lambda x: get_text(x) if x in translations[st.session_state.language] else x
+            )
+            
+            # Configure the category column to use the translated values
+            category_label = get_text("Category") if "Category" in translations[st.session_state.language] else "Category"
+            column_config["Category"] = st.column_config.TextColumn(
+                category_label,
+                help="Pump category"
+            )
+            
+            # If we want to show the translated category instead of the original
+            if "Category_Translated" in displayed_results.columns:
+                # Use the translated column and rename it
+                displayed_results = displayed_results.rename(columns={"Category_Translated": "Category"})
         
         # Display the results
         st.data_editor(
