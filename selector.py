@@ -89,8 +89,8 @@ translations = {
     },
     "繁體中文": {
         # App title and headers
-        "Hung Pump": "鴻幫浦",
-        "Pump Selection Tool": "幫浦選型工具",
+        "Hung Pump": "宏泵",
+        "Pump Selection Tool": "水泵選型工具",
         "Data loaded": "已載入資料: {n_records} 筆記錄 | 最後更新: {timestamp}",
         
         # Buttons
