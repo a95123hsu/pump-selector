@@ -129,10 +129,10 @@ translations = {
         "Clean Water": "清水泵",
         "Speciality Pump": "特殊用途泵",
         "Grinder": "研磨泵",
-        "Construction": "建築泵",
+        "Construction": "工業泵",
         "Sewage and Wastewater": "污水和廢水泵",
         "High Pressure": "高壓泵",
-        "Booster": "增壓泵",
+        "Booster": "加壓泵",
         "BLDC": "無刷直流泵",
         
         # Application section
