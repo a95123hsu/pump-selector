@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- Language Support ---
-# Translation dictionary - add category translations 
+# Translation dictionary with ALL categories from your database
 translations = {
     "English": {
         # App title and headers
@@ -29,23 +29,16 @@ translations = {
         "Select...": "Select...",
         "All Categories": "All Categories",
         
-        # Categories - Add translations for common pump categories
+        # Categories from your actual database
+        "Dirty Water": "Dirty Water",
+        "Clean Water": "Clean Water",
+        "Speciality Pump": "Speciality Pump",
+        "Grinder": "Grinder",
+        "Construction": "Construction",
+        "Sewage and Wastewater": "Sewage and Wastewater",
+        "High Pressure": "High Pressure",
         "Booster": "Booster",
-        "Submersible": "Submersible",
-        "Sewage": "Sewage",
-        "Self-Priming": "Self-Priming",
-        "End Suction": "End Suction",
-        "Vertical Multi-Stage": "Vertical Multi-Stage",
-        "Horizontal Multi-Stage": "Horizontal Multi-Stage",
-        "Chemical": "Chemical",
-        "Sump": "Sump",
-        "Turbine": "Turbine",
-        "Water": "Water",
-        "Drainage": "Drainage",
-        "Industrial": "Industrial",
-        "Pressure": "Pressure",
-        "Transfer": "Transfer",
-        "Centrifugal": "Centrifugal",
+        "BLDC": "BLDC",
         
         # Application section
         "Application Input": "### 🏢 Application Input",
@@ -131,23 +124,16 @@ translations = {
         "Select...": "請選擇...",
         "All Categories": "所有類別",
         
-        # Categories - Add translations for common pump categories
+        # Categories from your actual database - translated to Traditional Chinese
+        "Dirty Water": "污水泵",
+        "Clean Water": "清水泵",
+        "Speciality Pump": "特殊用途泵",
+        "Grinder": "研磨泵",
+        "Construction": "建築泵",
+        "Sewage and Wastewater": "污水和廢水泵",
+        "High Pressure": "高壓泵",
         "Booster": "增壓泵",
-        "Submersible": "潛水泵",
-        "Sewage": "污水泵",
-        "Self-Priming": "自吸泵",
-        "End Suction": "端吸泵",
-        "Vertical Multi-Stage": "立式多級泵",
-        "Horizontal Multi-Stage": "臥式多級泵",
-        "Chemical": "化工泵",
-        "Sump": "集水坑泵",
-        "Turbine": "渦輪泵",
-        "Water": "水泵",
-        "Drainage": "排水泵",
-        "Industrial": "工業泵",
-        "Pressure": "加壓泵",
-        "Transfer": "輸送泵",
-        "Centrifugal": "離心泵",
+        "BLDC": "無刷直流泵",
         
         # Application section
         "Application Input": "### 🏢 應用輸入",
@@ -216,13 +202,40 @@ translations = {
     }
 }
 
+# Function to normalize category names
+def normalize_category(category):
+    """Normalize category names for consistent comparison"""
+    if not category:
+        return ""
+    # Convert to string, lowercase, strip whitespace
+    return str(category).lower().strip()
+
 # Function to get translated text
 def get_text(key, **kwargs):
-    if key not in translations[st.session_state.language]:
-        # Fallback to English if translation missing
-        return translations["English"].get(key, key).format(**kwargs) if kwargs else translations["English"].get(key, key)
-    text = translations[st.session_state.language][key]
-    return text.format(**kwargs) if kwargs else text
+    # First try exact match
+    if key in translations[st.session_state.language]:
+        text = translations[st.session_state.language][key]
+        return text.format(**kwargs) if kwargs else text
+    
+    # For categories, try case-insensitive match
+    normalized_key = normalize_category(key)
+    for trans_key in translations[st.session_state.language]:
+        if normalize_category(trans_key) == normalized_key:
+            text = translations[st.session_state.language][trans_key]
+            return text.format(**kwargs) if kwargs else text
+    
+    # Fallback to English if translation missing
+    if key in translations["English"]:
+        return translations["English"][key].format(**kwargs) if kwargs else translations["English"][key]
+    
+    # For categories in English, try case-insensitive match
+    for trans_key in translations["English"]:
+        if normalize_category(trans_key) == normalized_key:
+            text = translations["English"][trans_key]
+            return text.format(**kwargs) if kwargs else text
+    
+    # If all else fails, return the key itself
+    return key
 
 # App config
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -329,6 +342,9 @@ if pumps.empty:
 # Show data freshness information
 st.caption(get_text("Data loaded", n_records=len(pumps), timestamp=pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')))
 
+# Debug option for troubleshooting (hidden in sidebar)
+debug_mode = st.sidebar.checkbox("Show category debug info", value=False)
+
 # Create columns with buttons close together on the left side
 col1, col2, col_space = st.columns([1, 1.2, 5.8])
 
@@ -363,12 +379,25 @@ st.markdown(get_text("Step 1"))
 
 # Clean up Category values to ensure consistent filtering
 if "Category" in pumps.columns:
+    # Debug information if enabled
+    if debug_mode:
+        st.sidebar.write("Original categories from database:", pumps["Category"].unique())
+    
     # Convert all category values to strings and strip whitespace
     pumps["Category"] = pumps["Category"].astype(str).str.strip()
     # Replace NaN, None, etc. with empty string for consistent handling
     pumps["Category"] = pumps["Category"].replace(["nan", "None", "NaN"], "")
     # Get unique categories excluding blank/empty values
     unique_categories = [c for c in pumps["Category"].unique() if c and c.strip() and c.lower() not in ["nan", "none"]]
+    
+    # Debug information if enabled
+    if debug_mode:
+        st.sidebar.write("Cleaned categories:", unique_categories)
+        
+        # Test translation for each category
+        st.sidebar.write("Translation results:")
+        for cat in unique_categories:
+            st.sidebar.write(f"'{cat}' → '{get_text(cat)}'")
     
     # Create a mapping between translated categories and original categories
     # Store the original category name for filtering later
@@ -389,6 +418,11 @@ if "Category" in pumps.columns:
         # Store mappings in both directions
         original_to_translated[cat] = translated_cat
         translated_to_original[translated_cat] = cat
+    
+    # Debug information if enabled
+    if debug_mode:
+        st.sidebar.write("Original to translated mapping:", original_to_translated)
+        st.sidebar.write("Translated to original mapping:", translated_to_original)
     
     # Use translated categories for display
     category_options = translated_categories
@@ -622,7 +656,6 @@ if st.button(get_text("Search")):
         column_config = {}
         
         # Configure the ID column for default sorting if it exists
-        # Configure the ID column for default sorting if it exists
         id_column = None
         if "DB ID" in displayed_results.columns:
             id_column = "DB ID"
@@ -673,32 +706,40 @@ if st.button(get_text("Search")):
                 format="%.1f m"
             )
             
-        # Translate category column if it exists in the results
+        # Add category translation - using a safer approach with a separate column
         if "Category" in displayed_results.columns:
-            # Create a copy of the Category column with translated values
-            displayed_results["Category_Translated"] = displayed_results["Category"].apply(
-                lambda x: get_text(x) if x in translations[st.session_state.language] else x
-            )
-            
-            # Configure the category column to use the translated values
-            category_label = get_text("Category") if "Category" in translations[st.session_state.language] else "Category"
+            # Keep original category column for reference
             column_config["Category"] = st.column_config.TextColumn(
-                category_label,
+                get_text("Category"),
                 help="Pump category"
             )
             
-            # If we want to show the translated category instead of the original
-            if "Category_Translated" in displayed_results.columns:
-                # Use the translated column and rename it
-                displayed_results = displayed_results.rename(columns={"Category_Translated": "Category"})
+            # Add a new column with translated values (without renaming)
+            displayed_results["Category Display"] = displayed_results["Category"].apply(
+                lambda x: get_text(x) if x and isinstance(x, str) else x
+            )
+            
+            # Configure the translated column
+            column_config["Category Display"] = st.column_config.TextColumn(
+                get_text("Category") + " (" + st.session_state.language + ")",
+                help="Translated pump category"
+            )
         
-        # Display the results
-        st.data_editor(
-            displayed_results.iloc[start_idx:end_idx],
-            column_config=column_config,
-            hide_index=True,
-            disabled=True,
-            use_container_width=True
-        )
+        # Display the results with error handling
+        try:
+            st.dataframe(
+                displayed_results.iloc[start_idx:end_idx],
+                column_config=column_config,
+                hide_index=True,
+                use_container_width=True
+            )
+        except Exception as e:
+            # If the dataframe with column_config fails, fall back to simple dataframe
+            st.error(f"Error displaying results with translations: {e}")
+            st.dataframe(
+                displayed_results.iloc[start_idx:end_idx],
+                hide_index=True,
+                use_container_width=True
+            )
     else:
         st.warning(get_text("No Matches"))
