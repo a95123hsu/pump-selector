@@ -394,8 +394,6 @@ st.markdown(get_text("Step 1"))
 # Clean up Category values to ensure consistent filtering
 if "Category" in pumps.columns:
     # Debug information if enabled
-    if debug_mode:
-        st.sidebar.write("Original categories from database:", pumps["Category"].unique())
     
     # Convert all category values to strings and strip whitespace
     pumps["Category"] = pumps["Category"].astype(str).str.strip()
@@ -405,13 +403,6 @@ if "Category" in pumps.columns:
     unique_categories = [c for c in pumps["Category"].unique() if c and c.strip() and c.lower() not in ["nan", "none"]]
     
     # Debug information if enabled
-    if debug_mode:
-        st.sidebar.write("Cleaned categories:", unique_categories)
-        
-        # Test translation for each category
-        st.sidebar.write("Translation results:")
-        for cat in unique_categories:
-            st.sidebar.write(f"'{cat}' → '{get_text(cat)}'")
     
     # Create a mapping between translated categories and original categories
     # Store the original category name for filtering later
@@ -434,9 +425,6 @@ if "Category" in pumps.columns:
         translated_to_original[translated_cat] = cat
     
     # Debug information if enabled
-    if debug_mode:
-        st.sidebar.write("Original to translated mapping:", original_to_translated)
-        st.sidebar.write("Translated to original mapping:", translated_to_original)
     
     # Use translated categories for display
     category_options = translated_categories
