@@ -28,8 +28,15 @@ translations = {
         "Phase": "* Phase:",
         "Select...": "Select...",
         "All Categories": "All Categories",
-        "Show All Frequency": "Show All Frequency",  # NEW
-        "Show All Phase": "Show All Phase",  # NEW
+        "Show All Frequency": "Show All Frequency",
+        "Show All Phase": "Show All Phase",
+        
+        # Column Selection - NEW
+        "Column Selection": "### 📋 Column Selection",
+        "Select Columns": "Select columns to display in results:",
+        "Select All": "Select All",
+        "Deselect All": "Deselect All",
+        "Essential Columns": "Essential Columns (always shown)",
         
         # Categories from your actual database
         "Dirty Water": "Dirty Water",
@@ -125,8 +132,15 @@ translations = {
         "Phase": "* 相數:",
         "Select...": "請選擇...",
         "All Categories": "所有類別",
-        "Show All Frequency": "顯示所有頻率",  # NEW
-        "Show All Phase": "顯示所有相數",  # NEW
+        "Show All Frequency": "顯示所有頻率",
+        "Show All Phase": "顯示所有相數",
+        
+        # Column Selection - NEW
+        "Column Selection": "### 📋 欄位選擇",
+        "Select Columns": "選擇要在結果中顯示的欄位:",
+        "Select All": "全選",
+        "Deselect All": "全部取消",
+        "Essential Columns": "必要欄位 (總是顯示)",
         
         # Categories from your actual database - translated to Traditional Chinese
         "Dirty Water": "污水泵",
@@ -264,7 +278,7 @@ except Exception as e:
     st.stop()
 
 # --- Load Pump Data ---
-@st.cache_data(ttl=60)  # Cache data for 1 minute instead of 10 minutes for more frequent updates
+@st.cache_data(ttl=60)
 def load_pump_data():
     try:
         # Use pagination to fetch all records instead of a single query with limit
@@ -357,7 +371,6 @@ with col1:
     if refresh_clicked:
         # Clear cache to force data reload
         st.cache_data.clear()
-        # Use st.rerun() instead of the deprecated experimental_rerun
         st.rerun()
     
 with col2:
@@ -443,7 +456,7 @@ if category_translated in translated_to_original:
 else:
     category = category_translated  # Fallback if translation not found
 
-# UPDATED: Use "Show All Frequency" instead of "Select..." for frequency
+# Use "Show All Frequency" instead of "Select..." for frequency
 if "Frequency (Hz)" in pumps.columns:
     # Convert to numeric first to handle consistency
     pumps["Frequency (Hz)"] = pd.to_numeric(pumps["Frequency (Hz)"], errors='coerce')
@@ -452,7 +465,7 @@ if "Frequency (Hz)" in pumps.columns:
 else:
     frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")])
 
-# UPDATED: Use "Show All Phase" instead of "Select..." for phase
+# Use "Show All Phase" instead of "Select..." for phase
 if "Phase" in pumps.columns:
     # Convert to numeric first to handle consistency
     pumps["Phase"] = pd.to_numeric(pumps["Phase"], errors='coerce')
@@ -462,11 +475,68 @@ if "Phase" in pumps.columns:
 else:
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
-# UPDATED: Remove the warning that stops execution - now "Show All" options are valid
-# No need to stop execution when "Show All" is selected
+# --- NEW: Column Selection Section ---
+st.markdown(get_text("Column Selection"))
+
+# Get all available columns from the dataset (excluding some internal ones)
+if not pumps.empty:
+    # Define essential columns that are always shown
+    essential_columns = ["DB ID", "id", "ID", "Model", "Product Link"]
+    available_columns = [col for col in pumps.columns if col not in ["Category"]]  # Exclude original Category
+    
+    # Add translated category to available columns
+    available_columns.append("Category Display")
+    
+    # Separate essential and optional columns
+    optional_columns = [col for col in available_columns if col not in essential_columns]
+    
+    # Create two columns for the selection interface
+    col_selection_left, col_selection_right = st.columns([1, 1])
+    
+    with col_selection_left:
+        st.caption(get_text("Essential Columns"))
+        st.write(", ".join([col for col in essential_columns if col in available_columns]))
+        
+        # Select/Deselect All buttons
+        col_btn1, col_btn2 = st.columns(2)
+        with col_btn1:
+            select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
+        with col_btn2:
+            deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
+    
+    with col_selection_right:
+        st.caption(get_text("Select Columns"))
+        
+        # Initialize selected columns in session state if not exists
+        if 'selected_columns' not in st.session_state:
+            # Default selection - include some commonly used columns
+            default_selected = [
+                "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
+                "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
+            ]
+            st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
+        
+        # Handle Select All / Deselect All button clicks
+        if select_all:
+            st.session_state.selected_columns = optional_columns.copy()
+        if deselect_all:
+            st.session_state.selected_columns = []
+        
+        # Multi-select for optional columns
+        selected_optional_columns = st.multiselect(
+            "",
+            options=optional_columns,
+            default=st.session_state.selected_columns,
+            key="column_multiselect"
+        )
+        
+        # Update session state
+        st.session_state.selected_columns = selected_optional_columns
+else:
+    selected_optional_columns = []
+    essential_columns = []
 
 # --- 🏢 Application Section - Only show when Booster is selected ---
-# We need to check against the original English category name, not the translated one
 if category == "Booster":
     st.markdown(get_text("Application Input"))
     st.caption(get_text("Floor Faucet Info"))
@@ -506,7 +576,6 @@ underground_depth = st.number_input(get_text("Pump Depth"), min_value=0.0, step=
 particle_size = st.number_input(get_text("Particle Size"), min_value=0.0, step=1.0, key="particle_size")
 
 # --- Auto calculations ---
-# Update auto calculations considering both booster and pond drainage
 if category == "Booster":
     auto_flow = max(num_faucets * 15, pond_lpm)
     auto_tdh = max(num_floors * 3.5, height)
@@ -534,7 +603,6 @@ head_unit_original = head_unit_map.get(head_unit, "m")
 head_value = st.number_input(get_text("TDH"), min_value=0.0, step=1.0, value=float(auto_tdh), key="head_value")
 
 # --- Estimated application from manual ---
-# Only show estimated application metrics when Booster is selected
 if category == "Booster":
     estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
     estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
@@ -547,12 +615,11 @@ if category == "Booster":
 # --- Result Display Limit ---
 st.markdown(get_text("Result Display"))
 result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
-
 # --- Search Logic ---
 if st.button(get_text("Search")):
     filtered_pumps = pumps.copy()
     
-    # UPDATED: Handle frequency and phase filtering with "Show All" options
+    # Handle frequency and phase filtering with "Show All" options
     try:
         # Convert types appropriately with error handling before filtering
         filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
@@ -597,7 +664,7 @@ if st.button(get_text("Search")):
     # Convert head to meters
     head_m = head_value if head_unit_original == "m" else head_value * 0.3048
 
-    # UPDATED: Use Q Rated/LPM and Head Rated/M instead of Max Flow and Max Head
+    # Use Q Rated/LPM and Head Rated/M instead of Max Flow and Max Head
     # Ensure numeric conversion for flow and head with improved handling
     # Replace NaN with 0 to avoid comparison issues
     filtered_pumps["Q Rated/LPM"] = pd.to_numeric(filtered_pumps["Q Rated/LPM"], errors="coerce").fillna(0)
@@ -619,7 +686,7 @@ if st.button(get_text("Search")):
     if not filtered_pumps.empty:
         results = filtered_pumps.copy()
         
-        # UPDATED: Sort by Q Rated/LPM and Head Rated/M for better user experience
+        # Sort by Q Rated/LPM and Head Rated/M for better user experience
         if "Q Rated/LPM" in results.columns and "Head Rated/M" in results.columns:
             # Properly handle data types before calculations
             results["Q Rated/LPM"] = pd.to_numeric(results["Q Rated/LPM"], errors="coerce").fillna(0)
@@ -648,8 +715,7 @@ if st.button(get_text("Search")):
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
-        # UPDATED: Remove the English Category column and reorder columns
-        # First, create the translated category column
+        # Create the translated category column and remove English category
         if "Category" in displayed_results.columns:
             displayed_results["Category Display"] = displayed_results["Category"].apply(
                 lambda x: get_text(x) if x and isinstance(x, str) else x
@@ -657,132 +723,147 @@ if st.button(get_text("Search")):
             # Remove the original English Category column
             displayed_results = displayed_results.drop(columns=["Category"])
         
-        # UPDATED: Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) and before Max Flow
-        def reorder_columns(df):
-            """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
-            cols = list(df.columns)
+        # NEW: Apply column selection - only show selected columns
+        # Determine which columns to show based on user selection
+        columns_to_show = []
+        
+        # Always include essential columns that exist in the data
+        for col in essential_columns:
+            if col in displayed_results.columns:
+                columns_to_show.append(col)
+        
+        # Add user-selected optional columns that exist in the data
+        for col in selected_optional_columns:
+            if col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # If no columns selected, show a message
+        if not columns_to_show:
+            st.warning("⚠️ No columns selected for display. Please select at least one column from the Column Selection section above.")
+        else:
+            # Filter the dataframe to only show selected columns
+            displayed_results = displayed_results[columns_to_show]
             
-            # Find the positions of key columns
-            pass_solid_idx = None
-            max_flow_idx = None
-            q_rated_idx = None
-            head_rated_idx = None
-            
-            for i, col in enumerate(cols):
-                if "Pass Solid Dia" in str(col):
-                    pass_solid_idx = i
-                elif "Max Flow" in str(col):
-                    max_flow_idx = i
-                elif col == "Q Rated/LPM":
-                    q_rated_idx = i
-                elif col == "Head Rated/M":
-                    head_rated_idx = i
-            
-            # If we have the required columns, reorder them
-            if pass_solid_idx is not None and q_rated_idx is not None and head_rated_idx is not None:
-                # Remove Q Rated/LPM and Head Rated/M from their current positions
-                new_cols = [col for col in cols if col not in ["Q Rated/LPM", "Head Rated/M"]]
+            # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
+            def reorder_columns(df):
+                """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
+                cols = list(df.columns)
                 
-                # Insert them after Pass Solid Dia(mm)
-                insert_position = pass_solid_idx + 1
-                new_cols.insert(insert_position, "Q Rated/LPM")
-                new_cols.insert(insert_position + 1, "Head Rated/M")
+                # Find the positions of key columns
+                pass_solid_idx = None
+                q_rated_idx = None
+                head_rated_idx = None
                 
-                return df[new_cols]
-            else:
-                # If we can't find the reference columns, return as is
-                return df
-        
-        # Apply column reordering
-        displayed_results = reorder_columns(displayed_results)
-        
-        # Display the results
-        st.write(get_text("Matching Results"))
-        
-        # Show all data without pagination
-        if len(displayed_results) > 0:
-            st.write(get_text("Showing Results", count=len(displayed_results)))
+                for i, col in enumerate(cols):
+                    if "Pass Solid Dia" in str(col):
+                        pass_solid_idx = i
+                    elif col == "Q Rated/LPM":
+                        q_rated_idx = i
+                    elif col == "Head Rated/M":
+                        head_rated_idx = i
+                
+                # If we have the required columns, reorder them
+                if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
+                    # Remove Q Rated/LPM and Head Rated/M from their current positions
+                    reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
+                    new_cols = [col for col in cols if col not in reorder_cols]
+                    
+                    # Insert them after Pass Solid Dia(mm)
+                    insert_position = pass_solid_idx + 1
+                    if "Q Rated/LPM" in cols:
+                        new_cols.insert(insert_position, "Q Rated/LPM")
+                        insert_position += 1
+                    if "Head Rated/M" in cols:
+                        new_cols.insert(insert_position, "Head Rated/M")
+                    
+                    return df[new_cols]
+                else:
+                    # If we can't find the reference columns, return as is
+                    return df
             
-        # No pagination - use entire dataset
-        start_idx = 0
-        end_idx = len(displayed_results)
-        
-        # Create column configuration for product links and proper formatting
-        column_config = {}
-        
-        # Configure the ID column for default sorting if it exists
-        id_column = None
-        if "DB ID" in displayed_results.columns:
-            id_column = "DB ID"
-            column_config["DB ID"] = st.column_config.NumberColumn(
-                "DB ID",
-                help="Database ID",
-                format="%d"
-            )
-        elif "id" in displayed_results.columns:
-            id_column = "id"
-            column_config["id"] = st.column_config.NumberColumn(
-                "ID",
-                help="Database ID",
-                format="%d"
-            )
-        elif "ID" in displayed_results.columns:
-            id_column = "ID"
-            column_config["ID"] = st.column_config.NumberColumn(
-                "ID",
-                help="Database ID",
-                format="%d"
-            )
-        
-        # Configure the Product Link column if it exists
-        if "Product Link" in displayed_results.columns:
-            column_config["Product Link"] = st.column_config.LinkColumn(
-                "Product Link",
-                help="Click to view product details",
-                display_text=get_text("View Product") if "View Product" in translations[st.session_state.language] else "View Product"
-            )
-        
-        # UPDATED: Better formatting for Q Rated/LPM and Head Rated/M columns
-        if "Q Rated/LPM" in displayed_results.columns:
-            flow_label = get_text("Q Rated/LPM") if "Q Rated/LPM" in translations[st.session_state.language] else "Q Rated/LPM"
-            flow_help = get_text("Rated flow rate in liters per minute") if "Rated flow rate in liters per minute" in translations[st.session_state.language] else "Rated flow rate in liters per minute"
-            column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
-                flow_label,
-                help=flow_help,
-                format="%.1f LPM"
-            )
-        
-        if "Head Rated/M" in displayed_results.columns:
-            head_label = get_text("Head Rated/M") if "Head Rated/M" in translations[st.session_state.language] else "Head Rated/M"
-            head_help = get_text("Rated head in meters") if "Rated head in meters" in translations[st.session_state.language] else "Rated head in meters"
-            column_config["Head Rated/M"] = st.column_config.NumberColumn(
-                head_label,
-                help=head_help,
-                format="%.1f m"
-            )
-        
-        # UPDATED: Configure the translated category column (English category column is already removed)
-        if "Category Display" in displayed_results.columns:
-            column_config["Category Display"] = st.column_config.TextColumn(
-                get_text("Category"),
-                help="Translated pump category"
-            )
-        
-        # Display the results with error handling
-        try:
-            st.dataframe(
-                displayed_results.iloc[start_idx:end_idx],
-                column_config=column_config,
-                hide_index=True,
-                use_container_width=True
-            )
-        except Exception as e:
-            # If the dataframe with column_config fails, fall back to simple dataframe
-            st.error(f"Error displaying results with translations: {e}")
-            st.dataframe(
-                displayed_results.iloc[start_idx:end_idx],
-                hide_index=True,
-                use_container_width=True
-            )
+            # Apply column reordering
+            displayed_results = reorder_columns(displayed_results)
+            
+            # Display the results
+            st.write(get_text("Matching Results"))
+            
+            # Show information about displayed results and columns
+            if len(displayed_results) > 0:
+                st.write(get_text("Showing Results", count=len(displayed_results)))
+                st.caption(f"📋 Displaying {len(displayed_results.columns)} columns: {', '.join(displayed_results.columns[:5])}{'...' if len(displayed_results.columns) > 5 else ''}")
+            
+            # Create column configuration for product links and proper formatting
+            column_config = {}
+            
+            # Configure the ID column for default sorting if it exists
+            if "DB ID" in displayed_results.columns:
+                column_config["DB ID"] = st.column_config.NumberColumn(
+                    "DB ID",
+                    help="Database ID",
+                    format="%d"
+                )
+            elif "id" in displayed_results.columns:
+                column_config["id"] = st.column_config.NumberColumn(
+                    "ID",
+                    help="Database ID",
+                    format="%d"
+                )
+            elif "ID" in displayed_results.columns:
+                column_config["ID"] = st.column_config.NumberColumn(
+                    "ID",
+                    help="Database ID",
+                    format="%d"
+                )
+            
+            # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product")
+                )
+            
+            # Better formatting for Q Rated/LPM and Head Rated/M columns
+            if "Q Rated/LPM" in displayed_results.columns:
+                flow_label = get_text("Q Rated/LPM")
+                flow_help = get_text("Rated flow rate in liters per minute")
+                column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
+                    flow_label,
+                    help=flow_help,
+                    format="%.1f LPM"
+                )
+            
+            if "Head Rated/M" in displayed_results.columns:
+                head_label = get_text("Head Rated/M")
+                head_help = get_text("Rated head in meters")
+                column_config["Head Rated/M"] = st.column_config.NumberColumn(
+                    head_label,
+                    help=head_help,
+                    format="%.1f m"
+                )
+            
+            # Configure the translated category column
+            if "Category Display" in displayed_results.columns:
+                column_config["Category Display"] = st.column_config.TextColumn(
+                    get_text("Category"),
+                    help="Translated pump category"
+                )
+            
+            # Display the results with error handling
+            try:
+                st.dataframe(
+                    displayed_results,
+                    column_config=column_config,
+                    hide_index=True,
+                    use_container_width=True
+                )
+            except Exception as e:
+                # If the dataframe with column_config fails, fall back to simple dataframe
+                st.error(f"Error displaying results with translations: {e}")
+                st.dataframe(
+                    displayed_results,
+                    hide_index=True,
+                    use_container_width=True
+                )
     else:
         st.warning(get_text("No Matches"))
