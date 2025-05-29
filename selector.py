@@ -360,9 +360,6 @@ if pumps.empty:
 # Show data freshness information
 st.caption(get_text("Data loaded", n_records=len(pumps), timestamp=pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')))
 
-# Debug option for troubleshooting (hidden in sidebar)
-debug_mode = st.sidebar.checkbox("Show category debug info", value=False)
-
 # Create columns with buttons close together on the left side
 col1, col2, col_space = st.columns([1, 1.2, 5.8])
 
