@@ -32,7 +32,7 @@ translations = {
         "Show All Phase": "Show All Phase",
         
         # Column Selection - NEW
-        "Column Selection": "### 📋 Column Selection",
+        "Column Selection": "📋 Column Selection",
         "Select Columns": "Select columns to display in results:",
         "Select All": "Select All",
         "Deselect All": "Deselect All",
@@ -136,7 +136,7 @@ translations = {
         "Show All Phase": "顯示所有相數",
         
         # Column Selection - NEW
-        "Column Selection": "### 📋 欄位選擇",
+        "Column Selection": "📋 欄位選擇",
         "Select Columns": "選擇要在結果中顯示的欄位:",
         "Select All": "全選",
         "Deselect All": "全部取消",
@@ -475,10 +475,7 @@ if "Phase" in pumps.columns:
 else:
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
-# --- NEW: Column Selection Section ---
-st.markdown(get_text("Column Selection"))
-
-# Get all available columns from the dataset (excluding some internal ones)
+# Get all available columns from the dataset for later use in column selection
 if not pumps.empty:
     # Define essential columns that are always shown
     essential_columns = ["DB ID", "id", "ID", "Model", "Product Link"]
@@ -489,52 +486,9 @@ if not pumps.empty:
     
     # Separate essential and optional columns
     optional_columns = [col for col in available_columns if col not in essential_columns]
-    
-    # Create two columns for the selection interface
-    col_selection_left, col_selection_right = st.columns([1, 1])
-    
-    with col_selection_left:
-        st.caption(get_text("Essential Columns"))
-        st.write(", ".join([col for col in essential_columns if col in available_columns]))
-        
-        # Select/Deselect All buttons
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
-            select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
-        with col_btn2:
-            deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
-    
-    with col_selection_right:
-        st.caption(get_text("Select Columns"))
-        
-        # Initialize selected columns in session state if not exists
-        if 'selected_columns' not in st.session_state:
-            # Default selection - include some commonly used columns
-            default_selected = [
-                "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
-                "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
-            ]
-            st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
-        
-        # Handle Select All / Deselect All button clicks
-        if select_all:
-            st.session_state.selected_columns = optional_columns.copy()
-        if deselect_all:
-            st.session_state.selected_columns = []
-        
-        # Multi-select for optional columns
-        selected_optional_columns = st.multiselect(
-            "",
-            options=optional_columns,
-            default=st.session_state.selected_columns,
-            key="column_multiselect"
-        )
-        
-        # Update session state
-        st.session_state.selected_columns = selected_optional_columns
 else:
-    selected_optional_columns = []
     essential_columns = []
+    optional_columns = []
 
 # --- 🏢 Application Section - Only show when Booster is selected ---
 if category == "Booster":
@@ -614,7 +568,58 @@ if category == "Booster":
 
 # --- Result Display Limit ---
 st.markdown(get_text("Result Display"))
+
+# Column Selection in Result Display Control section
+if not pumps.empty and optional_columns:
+    with st.expander(get_text("Column Selection"), expanded=False):
+        # Create two columns for the selection interface
+        col_selection_left, col_selection_right = st.columns([1, 1])
+        
+        with col_selection_left:
+            st.caption(get_text("Essential Columns"))
+            st.write(", ".join([col for col in essential_columns if col in available_columns]))
+            
+            # Select/Deselect All buttons
+            col_btn1, col_btn2 = st.columns(2)
+            with col_btn1:
+                select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
+            with col_btn2:
+                deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
+        
+        with col_selection_right:
+            st.caption(get_text("Select Columns"))
+            
+            # Initialize selected columns in session state if not exists
+            if 'selected_columns' not in st.session_state:
+                # Default selection - include some commonly used columns
+                default_selected = [
+                    "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
+                    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
+                ]
+                st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
+            
+            # Handle Select All / Deselect All button clicks
+            if select_all:
+                st.session_state.selected_columns = optional_columns.copy()
+                st.rerun()
+            if deselect_all:
+                st.session_state.selected_columns = []
+                st.rerun()
+            
+            # Create checkboxes for each optional column
+            selected_optional_columns = []
+            for col in optional_columns:
+                is_selected = col in st.session_state.selected_columns
+                if st.checkbox(col, value=is_selected, key=f"col_check_{col}"):
+                    selected_optional_columns.append(col)
+            
+            # Update session state
+            st.session_state.selected_columns = selected_optional_columns
+else:
+    selected_optional_columns = st.session_state.get('selected_columns', [])
+
 result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
+
 # --- Search Logic ---
 if st.button(get_text("Search")):
     filtered_pumps = pumps.copy()
@@ -723,7 +728,7 @@ if st.button(get_text("Search")):
             # Remove the original English Category column
             displayed_results = displayed_results.drop(columns=["Category"])
         
-        # NEW: Apply column selection - only show selected columns
+        # Apply column selection - only show selected columns
         # Determine which columns to show based on user selection
         columns_to_show = []
         
