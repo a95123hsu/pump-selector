@@ -648,6 +648,54 @@ if st.button(get_text("Search")):
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
+        # UPDATED: Remove the English Category column and reorder columns
+        # First, create the translated category column
+        if "Category" in displayed_results.columns:
+            displayed_results["Category Display"] = displayed_results["Category"].apply(
+                lambda x: get_text(x) if x and isinstance(x, str) else x
+            )
+            # Remove the original English Category column
+            displayed_results = displayed_results.drop(columns=["Category"])
+        
+        # UPDATED: Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) and before Max Flow
+        def reorder_columns(df):
+            """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
+            cols = list(df.columns)
+            
+            # Find the positions of key columns
+            pass_solid_idx = None
+            max_flow_idx = None
+            q_rated_idx = None
+            head_rated_idx = None
+            
+            for i, col in enumerate(cols):
+                if "Pass Solid Dia" in str(col):
+                    pass_solid_idx = i
+                elif "Max Flow" in str(col):
+                    max_flow_idx = i
+                elif col == "Q Rated/LPM":
+                    q_rated_idx = i
+                elif col == "Head Rated/M":
+                    head_rated_idx = i
+            
+            # If we have the required columns, reorder them
+            if pass_solid_idx is not None and q_rated_idx is not None and head_rated_idx is not None:
+                # Remove Q Rated/LPM and Head Rated/M from their current positions
+                new_cols = [col for col in cols if col not in ["Q Rated/LPM", "Head Rated/M"]]
+                
+                # Insert them after Pass Solid Dia(mm)
+                insert_position = pass_solid_idx + 1
+                new_cols.insert(insert_position, "Q Rated/LPM")
+                new_cols.insert(insert_position + 1, "Head Rated/M")
+                
+                return df[new_cols]
+            else:
+                # If we can't find the reference columns, return as is
+                return df
+        
+        # Apply column reordering
+        displayed_results = reorder_columns(displayed_results)
+        
         # Display the results
         st.write(get_text("Matching Results"))
         
@@ -712,23 +760,11 @@ if st.button(get_text("Search")):
                 help=head_help,
                 format="%.1f m"
             )
-            
-        # Add category translation - using a safer approach with a separate column
-        if "Category" in displayed_results.columns:
-            # Keep original category column for reference
-            column_config["Category"] = st.column_config.TextColumn(
-                get_text("Category"),
-                help="Pump category"
-            )
-            
-            # Add a new column with translated values (without renaming)
-            displayed_results["Category Display"] = displayed_results["Category"].apply(
-                lambda x: get_text(x) if x and isinstance(x, str) else x
-            )
-            
-            # Configure the translated column
+        
+        # UPDATED: Configure the translated category column (English category column is already removed)
+        if "Category Display" in displayed_results.columns:
             column_config["Category Display"] = st.column_config.TextColumn(
-                get_text("Category") + " (" + st.session_state.language + ")",
+                get_text("Category"),
                 help="Translated pump category"
             )
         
