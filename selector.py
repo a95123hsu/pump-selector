@@ -28,6 +28,8 @@ translations = {
         "Phase": "* Phase:",
         "Select...": "Select...",
         "All Categories": "All Categories",
+        "Show All Frequency": "Show All Frequency",  # NEW
+        "Show All Phase": "Show All Phase",  # NEW
         
         # Categories from your actual database
         "Dirty Water": "Dirty Water",
@@ -123,6 +125,8 @@ translations = {
         "Phase": "* 相數:",
         "Select...": "請選擇...",
         "All Categories": "所有類別",
+        "Show All Frequency": "顯示所有頻率",  # NEW
+        "Show All Phase": "顯示所有相數",  # NEW
         
         # Categories from your actual database - translated to Traditional Chinese
         "Dirty Water": "污水泵",
@@ -439,27 +443,27 @@ if category_translated in translated_to_original:
 else:
     category = category_translated  # Fallback if translation not found
 
-# Use dropna() to handle missing values in frequency and phase
+# UPDATED: Use "Show All Frequency" instead of "Select..." for frequency
 if "Frequency (Hz)" in pumps.columns:
     # Convert to numeric first to handle consistency
     pumps["Frequency (Hz)"] = pd.to_numeric(pumps["Frequency (Hz)"], errors='coerce')
     freq_options = sorted(pumps["Frequency (Hz)"].dropna().unique())
-    frequency = st.selectbox(get_text("Frequency"), [get_text("Select...")] + freq_options)
+    frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")] + freq_options)
 else:
-    frequency = st.selectbox(get_text("Frequency"), [get_text("Select...")])
+    frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")])
 
+# UPDATED: Use "Show All Phase" instead of "Select..." for phase
 if "Phase" in pumps.columns:
     # Convert to numeric first to handle consistency
     pumps["Phase"] = pd.to_numeric(pumps["Phase"], errors='coerce')
     # Filter to only include 1 and 3 phase options that exist in the data
     phase_options = [p for p in sorted(pumps["Phase"].dropna().unique()) if p in [1, 3]]
-    phase = st.selectbox(get_text("Phase"), [get_text("Select...")] + phase_options)
+    phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase")] + phase_options)
 else:
-    phase = st.selectbox(get_text("Phase"), [get_text("Select..."), 1, 3])
+    phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
-if frequency == get_text("Select...") or phase == get_text("Select..."):
-    st.warning(get_text("Select Warning"))
-    st.stop()
+# UPDATED: Remove the warning that stops execution - now "Show All" options are valid
+# No need to stop execution when "Show All" is selected
 
 # --- 🏢 Application Section - Only show when Booster is selected ---
 # We need to check against the original English category name, not the translated one
@@ -548,31 +552,33 @@ result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=1
 if st.button(get_text("Search")):
     filtered_pumps = pumps.copy()
     
-    # Ensure Frequency and Phase are treated properly - improved error handling
+    # UPDATED: Handle frequency and phase filtering with "Show All" options
     try:
         # Convert types appropriately with error handling before filtering
         filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
         filtered_pumps["Phase"] = pd.to_numeric(filtered_pumps["Phase"], errors='coerce')
         
-        # Apply frequency filter with improved type handling
-        if isinstance(frequency, str) and frequency != get_text("Select..."):
-            try:
-                freq_value = float(frequency)
-                filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == freq_value]
-            except ValueError:
+        # Apply frequency filter - skip filtering if "Show All Frequency" is selected
+        if frequency != get_text("Show All Frequency"):
+            if isinstance(frequency, str):
+                try:
+                    freq_value = float(frequency)
+                    filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == freq_value]
+                except ValueError:
+                    filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+            else:
                 filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
-        elif frequency != get_text("Select..."):
-            filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
             
-        # Apply phase filter with improved type handling
-        if isinstance(phase, str) and phase != get_text("Select..."):
-            try:
-                phase_value = int(phase)
-                filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase_value]
-            except ValueError:
-                filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
-        elif phase != get_text("Select..."):
-            filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == int(phase)]
+        # Apply phase filter - skip filtering if "Show All Phase" is selected
+        if phase != get_text("Show All Phase"):
+            if isinstance(phase, str):
+                try:
+                    phase_value = int(phase)
+                    filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase_value]
+                except ValueError:
+                    filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
+            else:
+                filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == int(phase)]
     except Exception as e:
         st.error(f"Error filtering by frequency/phase: {e}")
         # If filtering fails, show a message but continue with other filters
@@ -617,9 +623,9 @@ if st.button(get_text("Search")):
         if "Q Rated/LPM" in results.columns and "Head Rated/M" in results.columns:
             # Properly handle data types before calculations
             results["Q Rated/LPM"] = pd.to_numeric(results["Q Rated/LPM"], errors="coerce").fillna(0)
-            results["Head Rated/M"] = pd.to_numeric(results["Head Rated/M"], errors="coerce").fillna(0)
+           results["Head Rated/M"] = pd.to_numeric(results["Head Rated/M"], errors="coerce").fillna(0)
             
-           # Sort by closest match to requested flow and head
+            # Sort by closest match to requested flow and head
             results["Flow Difference"] = abs(results["Q Rated/LPM"] - flow_lpm)
             results["Head Difference"] = abs(results["Head Rated/M"] - head_m)
             
