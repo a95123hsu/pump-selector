@@ -80,11 +80,11 @@ translations = {
         "Showing Results": "Showing all {count} results",
         "View Product": "View Product",
         
-        # Column headers
-        "Max Flow (LPM)": "Max Flow (LPM)",
-        "Maximum flow rate in liters per minute": "Maximum flow rate in liters per minute",
-        "Max Head (M)": "Max Head (M)",
-        "Maximum head in meters": "Maximum head in meters",
+        # Column headers - UPDATED FOR NEW FIELDS
+        "Q Rated/LPM": "Q Rated/LPM",
+        "Rated flow rate in liters per minute": "Rated flow rate in liters per minute",
+        "Head Rated/M": "Head Rated/M",
+        "Rated head in meters": "Rated head in meters",
         
         # Flow units
         "L/min": "L/min",
@@ -175,11 +175,11 @@ translations = {
         "Showing Results": "顯示全部 {count} 筆結果",
         "View Product": "查看產品",
         
-        # Column headers
-        "Max Flow (LPM)": "最大流量 (LPM)",
-        "Maximum flow rate in liters per minute": "每分鐘最大流量（公升）",
-        "Max Head (M)": "最大揚程 (M)",
-        "Maximum head in meters": "最大揚程（米）",
+        # Column headers - UPDATED FOR NEW FIELDS
+        "Q Rated/LPM": "額定流量 (LPM)",
+        "Rated flow rate in liters per minute": "每分鐘額定流量（公升）",
+        "Head Rated/M": "額定揚程 (M)",
+        "Rated head in meters": "額定揚程（米）",
         
         # Flow units
         "L/min": "公升/分鐘",
@@ -591,16 +591,17 @@ if st.button(get_text("Search")):
     # Convert head to meters
     head_m = head_value if head_unit_original == "m" else head_value * 0.3048
 
+    # UPDATED: Use Q Rated/LPM and Head Rated/M instead of Max Flow and Max Head
     # Ensure numeric conversion for flow and head with improved handling
     # Replace NaN with 0 to avoid comparison issues
-    filtered_pumps["Max Flow (LPM)"] = pd.to_numeric(filtered_pumps["Max Flow (LPM)"], errors="coerce").fillna(0)
-    filtered_pumps["Max Head (M)"] = pd.to_numeric(filtered_pumps["Max Head (M)"], errors="coerce").fillna(0)
+    filtered_pumps["Q Rated/LPM"] = pd.to_numeric(filtered_pumps["Q Rated/LPM"], errors="coerce").fillna(0)
+    filtered_pumps["Head Rated/M"] = pd.to_numeric(filtered_pumps["Head Rated/M"], errors="coerce").fillna(0)
 
     # Apply filters with safe handling of missing values
     if flow_lpm > 0:
-        filtered_pumps = filtered_pumps[filtered_pumps["Max Flow (LPM)"] >= flow_lpm]
+        filtered_pumps = filtered_pumps[filtered_pumps["Q Rated/LPM"] >= flow_lpm]
     if head_m > 0:
-        filtered_pumps = filtered_pumps[filtered_pumps["Max Head (M)"] >= head_m]
+        filtered_pumps = filtered_pumps[filtered_pumps["Head Rated/M"] >= head_m]
     if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
         # Convert to numeric first to handle potential string values
         filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce").fillna(0)
@@ -612,15 +613,15 @@ if st.button(get_text("Search")):
     if not filtered_pumps.empty:
         results = filtered_pumps.copy()
         
-        # Sort by relevant criteria for better user experience
-        if "Max Flow (LPM)" in results.columns and "Max Head (M)" in results.columns:
+        # UPDATED: Sort by Q Rated/LPM and Head Rated/M for better user experience
+        if "Q Rated/LPM" in results.columns and "Head Rated/M" in results.columns:
             # Properly handle data types before calculations
-            results["Max Flow (LPM)"] = pd.to_numeric(results["Max Flow (LPM)"], errors="coerce").fillna(0)
-            results["Max Head (M)"] = pd.to_numeric(results["Max Head (M)"], errors="coerce").fillna(0)
+            results["Q Rated/LPM"] = pd.to_numeric(results["Q Rated/LPM"], errors="coerce").fillna(0)
+            results["Head Rated/M"] = pd.to_numeric(results["Head Rated/M"], errors="coerce").fillna(0)
             
-            # Sort by closest match to requested flow and head
-            results["Flow Difference"] = abs(results["Max Flow (LPM)"] - flow_lpm)
-            results["Head Difference"] = abs(results["Max Head (M)"] - head_m)
+           # Sort by closest match to requested flow and head
+            results["Flow Difference"] = abs(results["Q Rated/LPM"] - flow_lpm)
+            results["Head Difference"] = abs(results["Head Rated/M"] - head_m)
             
             # Weight differences properly and handle NaN values
             results["Match Score"] = results["Flow Difference"] + results["Head Difference"]
@@ -687,20 +688,20 @@ if st.button(get_text("Search")):
                 display_text=get_text("View Product") if "View Product" in translations[st.session_state.language] else "View Product"
             )
         
-        # Better formatting for numeric columns
-        if "Max Flow (LPM)" in displayed_results.columns:
-            flow_label = get_text("Max Flow (LPM)") if "Max Flow (LPM)" in translations[st.session_state.language] else "Max Flow (LPM)"
-            flow_help = get_text("Maximum flow rate in liters per minute") if "Maximum flow rate in liters per minute" in translations[st.session_state.language] else "Maximum flow rate in liters per minute"
-            column_config["Max Flow (LPM)"] = st.column_config.NumberColumn(
+        # UPDATED: Better formatting for Q Rated/LPM and Head Rated/M columns
+        if "Q Rated/LPM" in displayed_results.columns:
+            flow_label = get_text("Q Rated/LPM") if "Q Rated/LPM" in translations[st.session_state.language] else "Q Rated/LPM"
+            flow_help = get_text("Rated flow rate in liters per minute") if "Rated flow rate in liters per minute" in translations[st.session_state.language] else "Rated flow rate in liters per minute"
+            column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
                 flow_label,
                 help=flow_help,
                 format="%.1f LPM"
             )
         
-        if "Max Head (M)" in displayed_results.columns:
-            head_label = get_text("Max Head (M)") if "Max Head (M)" in translations[st.session_state.language] else "Max Head (M)"
-            head_help = get_text("Maximum head in meters") if "Maximum head in meters" in translations[st.session_state.language] else "Maximum head in meters"
-            column_config["Max Head (M)"] = st.column_config.NumberColumn(
+        if "Head Rated/M" in displayed_results.columns:
+            head_label = get_text("Head Rated/M") if "Head Rated/M" in translations[st.session_state.language] else "Head Rated/M"
+            head_help = get_text("Rated head in meters") if "Rated head in meters" in translations[st.session_state.language] else "Rated head in meters"
+            column_config["Head Rated/M"] = st.column_config.NumberColumn(
                 head_label,
                 help=head_help,
                 format="%.1f m"
