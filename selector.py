@@ -601,27 +601,33 @@ if not pumps.empty and optional_columns:
             # Handle Select All / Deselect All button clicks
             if select_all:
                 st.session_state.selected_columns = optional_columns.copy()
-                st.rerun()
             if deselect_all:
                 st.session_state.selected_columns = []
-                st.rerun()
             
-            # Create checkboxes for each optional column
-            selected_optional_columns = []
+            # Create checkboxes for each optional column - store current state without immediate update
+            current_selection = []
             for col in optional_columns:
                 is_selected = col in st.session_state.selected_columns
                 if st.checkbox(col, value=is_selected, key=f"col_check_{col}"):
-                    selected_optional_columns.append(col)
+                    current_selection.append(col)
             
-            # Update session state
-            st.session_state.selected_columns = selected_optional_columns
+            # Store the current selection in a temporary state (don't update main state yet)
+            st.session_state.temp_selected_columns = current_selection
 else:
+    # Use the last confirmed selection from search, or default if none
     selected_optional_columns = st.session_state.get('selected_columns', [])
 
 result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Search Logic ---
 if st.button(get_text("Search")):
+    # Update the column selection when search is pressed
+    if 'temp_selected_columns' in st.session_state:
+        st.session_state.selected_columns = st.session_state.temp_selected_columns
+        selected_optional_columns = st.session_state.selected_columns
+    else:
+        selected_optional_columns = st.session_state.get('selected_columns', [])
+    
     filtered_pumps = pumps.copy()
     
     # Handle frequency and phase filtering with "Show All" options
@@ -640,7 +646,6 @@ if st.button(get_text("Search")):
                     filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
             else:
                 filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
-            
         # Apply phase filter - skip filtering if "Show All Phase" is selected
         if phase != get_text("Show All Phase"):
             if isinstance(phase, str):
