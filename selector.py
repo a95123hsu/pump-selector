@@ -623,7 +623,7 @@ if st.button(get_text("Search")):
         if "Q Rated/LPM" in results.columns and "Head Rated/M" in results.columns:
             # Properly handle data types before calculations
             results["Q Rated/LPM"] = pd.to_numeric(results["Q Rated/LPM"], errors="coerce").fillna(0)
-           results["Head Rated/M"] = pd.to_numeric(results["Head Rated/M"], errors="coerce").fillna(0)
+            results["Head Rated/M"] = pd.to_numeric(results["Head Rated/M"], errors="coerce").fillna(0)
             
             # Sort by closest match to requested flow and head
             results["Flow Difference"] = abs(results["Q Rated/LPM"] - flow_lpm)
