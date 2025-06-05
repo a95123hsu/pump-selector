@@ -937,50 +937,31 @@ if st.session_state.table_state:
         if len(st.session_state.selected_pumps_for_curves) == 0:
             st.session_state.selected_pumps_for_curves = set(unique_models[:5])
         
-        # Add checkbox column to the dataframe
-        checkbox_data = []
-        for idx, row in displayed_results.iterrows():
-            model_name = str(row[model_column]) if pd.notna(row[model_column]) else ""
-            is_selected = model_name in st.session_state.selected_pumps_for_curves
-            checkbox_data.append(is_selected)
-        
-        # Add checkbox column to the beginning of the dataframe
-        displayed_results_with_checkbox = displayed_results.copy()
-        displayed_results_with_checkbox.insert(0, get_text("Show Curve"), checkbox_data)
-        
-        # Apply column selection - only show selected columns (but always include checkbox column)
+        # Apply column selection - only show selected columns
         # Determine which columns to show based on user selection
-        columns_to_show = [get_text("Show Curve")]  # Always include checkbox column first
+        columns_to_show = []
         
         # Always include essential columns that exist in the data
         for col in essential_columns:
-            if col in displayed_results_with_checkbox.columns:
+            if col in displayed_results.columns:
                 columns_to_show.append(col)
         
         # Add user-selected optional columns that exist in the data
         for col in selected_optional_columns:
-            if col in displayed_results_with_checkbox.columns and col not in columns_to_show:
+            if col in displayed_results.columns and col not in columns_to_show:
                 columns_to_show.append(col)
         
-        # If no columns selected (except checkbox), show a message
-        if len(columns_to_show) <= 1:
+        # If no columns selected, show a message
+        if not columns_to_show:
             st.warning("⚠️ No columns selected for display. Please select at least one column from the Column Selection section above.")
         else:
             # Filter the dataframe to only show selected columns
-            displayed_results_filtered = displayed_results_with_checkbox[columns_to_show]
+            displayed_results_filtered = displayed_results[columns_to_show]
             
             # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
             def reorder_columns(df):
                 """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
                 cols = list(df.columns)
-                
-                # Always keep checkbox column first
-                checkbox_col = get_text("Show Curve")
-                if checkbox_col in cols:
-                    cols.remove(checkbox_col)
-                    new_cols = [checkbox_col]
-                else:
-                    new_cols = []
                 
                 # Find the positions of key columns
                 pass_solid_idx = None
@@ -999,22 +980,20 @@ if st.session_state.table_state:
                 if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
                     # Remove Q Rated/LPM and Head Rated/M from their current positions
                     reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
-                    new_cols_remaining = [col for col in cols if col not in reorder_cols]
+                    new_cols = [col for col in cols if col not in reorder_cols]
                     
                     # Insert them after Pass Solid Dia(mm)
                     insert_position = pass_solid_idx + 1
                     if "Q Rated/LPM" in cols:
-                        new_cols_remaining.insert(insert_position, "Q Rated/LPM")
+                        new_cols.insert(insert_position, "Q Rated/LPM")
                         insert_position += 1
                     if "Head Rated/M" in cols:
-                        new_cols_remaining.insert(insert_position, "Head Rated/M")
+                        new_cols.insert(insert_position, "Head Rated/M")
                     
-                    new_cols.extend(new_cols_remaining)
+                    return df[new_cols]
                 else:
                     # If we can't find the reference columns, return as is
-                    new_cols.extend(cols)
-                
-                return df[new_cols]
+                    return df
             
             # Apply column reordering
             displayed_results_filtered = reorder_columns(displayed_results_filtered)
@@ -1027,113 +1006,103 @@ if st.session_state.table_state:
                 st.write(get_text("Showing Results", count=len(displayed_results_filtered)))
                 st.caption(f"📋 Displaying {len(displayed_results_filtered.columns)} columns: {', '.join(displayed_results_filtered.columns[:5])}{'...' if len(displayed_results_filtered.columns) > 5 else ''}")
             
-            # Create column configuration for product links and proper formatting
-            column_config = {}
+            # Create layout with checkboxes on the left and table on the right
+            checkbox_col, table_col = st.columns([1, 4])
             
-            # Configure the checkbox column
-            column_config[get_text("Show Curve")] = st.column_config.CheckboxColumn(
-                get_text("Show Curve"),
-                help="Select pumps to display in performance curves",
-                default=False
-            )
-            
-            # Configure the ID column for default sorting if it exists
-            if "DB ID" in displayed_results_filtered.columns:
-                column_config["DB ID"] = st.column_config.NumberColumn(
-                    "DB ID",
-                    help="Database ID",
-                    format="%d"
-                )
-            elif "id" in displayed_results_filtered.columns:
-                column_config["id"] = st.column_config.NumberColumn(
-                    "ID",
-                    help="Database ID",
-                    format="%d"
-                )
-            elif "ID" in displayed_results_filtered.columns:
-                column_config["ID"] = st.column_config.NumberColumn(
-                    "ID",
-                    help="Database ID",
-                    format="%d"
-                )
-            
-            # Configure the Product Link column if it exists
-            if "Product Link" in displayed_results_filtered.columns:
-                column_config["Product Link"] = st.column_config.LinkColumn(
-                    "Product Link",
-                    help="Click to view product details",
-                    display_text=get_text("View Product")
-                )
-            
-            # Better formatting for Q Rated/LPM and Head Rated/M columns
-            if "Q Rated/LPM" in displayed_results_filtered.columns:
-                flow_label = get_text("Q Rated/LPM")
-                flow_help = get_text("Rated flow rate in liters per minute")
-                column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
-                    flow_label,
-                    help=flow_help,
-                    format="%.1f LPM"
-                )
-            
-            if "Head Rated/M" in displayed_results_filtered.columns:
-                head_label = get_text("Head Rated/M")
-                head_help = get_text("Rated head in meters")
-                column_config["Head Rated/M"] = st.column_config.NumberColumn(
-                    head_label,
-                    help=head_help,
-                    format="%.1f m"
-                )
-            
-            # Configure the translated category column
-            if "Category Display" in displayed_results_filtered.columns:
-                column_config["Category Display"] = st.column_config.TextColumn(
-                    get_text("Category"),
-                    help="Translated pump category"
-                )
-            
-            # Display the results with error handling - use data_editor for interactive checkboxes
-            try:
-                # Reset index to ensure proper alignment
-                displayed_results_filtered_reset = displayed_results_filtered.reset_index(drop=True)
+            with checkbox_col:
+                st.markdown(f"**{get_text('Show Curve')}**")
+                st.caption("Select pumps for curves:")
                 
-                # Use data_editor to allow checkbox interaction
-                edited_data = st.data_editor(
-                    displayed_results_filtered_reset,
-                    column_config=column_config,
-                    hide_index=True,
-                    use_container_width=True,
-                    key="pump_results_table_with_checkbox"
-                )
-                
-                # Update selected pumps based on checkbox changes
-                if get_text("Show Curve") in edited_data.columns and model_column:
-                    # Find which pumps are now selected
-                    new_selected_pumps = set()
+                # Create checkboxes for each pump
+                for i, model in enumerate(unique_models):
+                    checkbox_key = f"pump_checkbox_{model}_{i}"
+                    is_checked = model in st.session_state.selected_pumps_for_curves
                     
-                    # Iterate through the edited data to find selected pumps
-                    for idx in range(len(edited_data)):
-                        try:
-                            if edited_data.iloc[idx][get_text("Show Curve")]:
-                                # Get the corresponding model from the edited data itself
-                                if model_column in edited_data.columns:
-                                    model_name = str(edited_data.iloc[idx][model_column]) if pd.notna(edited_data.iloc[idx][model_column]) else ""
-                                    if model_name:
-                                        new_selected_pumps.add(model_name)
-                        except (IndexError, KeyError):
-                            # Skip if there's an indexing issue
-                            continue
-                    
-                    # Update session state
-                    st.session_state.selected_pumps_for_curves = new_selected_pumps
+                    # Create checkbox with callback handling
+                    if st.checkbox(
+                        f"{model}", 
+                        value=is_checked, 
+                        key=checkbox_key,
+                        help=f"Select {model} for curve comparison"
+                    ):
+                        st.session_state.selected_pumps_for_curves.add(model)
+                    else:
+                        st.session_state.selected_pumps_for_curves.discard(model)
+            
+            with table_col:
+                # Create column configuration for product links and proper formatting
+                column_config = {}
                 
-            except Exception as e:
-                # If the data_editor with column_config fails, fall back to simple dataframe
-                st.error(f"Error displaying interactive table: {e}")
-                st.dataframe(
-                    displayed_results_filtered,
-                    hide_index=True,
-                    use_container_width=True
-                )
+                # Configure the ID column for default sorting if it exists
+                if "DB ID" in displayed_results_filtered.columns:
+                    column_config["DB ID"] = st.column_config.NumberColumn(
+                        "DB ID",
+                        help="Database ID",
+                        format="%d"
+                    )
+                elif "id" in displayed_results_filtered.columns:
+                    column_config["id"] = st.column_config.NumberColumn(
+                        "ID",
+                        help="Database ID",
+                        format="%d"
+                    )
+                elif "ID" in displayed_results_filtered.columns:
+                    column_config["ID"] = st.column_config.NumberColumn(
+                        "ID",
+                        help="Database ID",
+                        format="%d"
+                    )
+                
+                # Configure the Product Link column if it exists
+                if "Product Link" in displayed_results_filtered.columns:
+                    column_config["Product Link"] = st.column_config.LinkColumn(
+                        "Product Link",
+                        help="Click to view product details",
+                        display_text=get_text("View Product")
+                    )
+                
+                # Better formatting for Q Rated/LPM and Head Rated/M columns
+                if "Q Rated/LPM" in displayed_results_filtered.columns:
+                    flow_label = get_text("Q Rated/LPM")
+                    flow_help = get_text("Rated flow rate in liters per minute")
+                    column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
+                        flow_label,
+                        help=flow_help,
+                        format="%.1f LPM"
+                    )
+                
+                if "Head Rated/M" in displayed_results_filtered.columns:
+                    head_label = get_text("Head Rated/M")
+                    head_help = get_text("Rated head in meters")
+                    column_config["Head Rated/M"] = st.column_config.NumberColumn(
+                        head_label,
+                        help=head_help,
+                        format="%.1f m"
+                    )
+                
+                # Configure the translated category column
+                if "Category Display" in displayed_results_filtered.columns:
+                    column_config["Category Display"] = st.column_config.TextColumn(
+                        get_text("Category"),
+                        help="Translated pump category"
+                    )
+                
+                # Display the read-only results table
+                try:
+                    st.dataframe(
+                        displayed_results_filtered,
+                        column_config=column_config,
+                        hide_index=True,
+                        use_container_width=True
+                    )
+                except Exception as e:
+                    # If the dataframe with column_config fails, fall back to simple dataframe
+                    st.error(f"Error displaying table: {e}")
+                    st.dataframe(
+                        displayed_results_filtered,
+                        hide_index=True,
+                        use_container_width=True
+                    )
             
             # Show selection status
             if st.session_state.selected_pumps_for_curves:
