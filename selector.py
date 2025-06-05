@@ -3,6 +3,8 @@ import pandas as pd
 from supabase import create_client
 import os
 from dotenv import load_dotenv
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # Load environment variables from .env file
 load_dotenv()
@@ -88,6 +90,15 @@ translations = {
         "Matching Results": "### Matching Pumps Results",
         "Showing Results": "Showing all {count} results",
         "View Product": "View Product",
+        
+        # Pump Curves - NEW
+        "Pump Curves": "📈 Pump Performance Curves",
+        "Curves Info": "Showing curves for the first 5 selected pumps",
+        "Flow LPM": "Flow (LPM)",
+        "Head M": "Head (m)",
+        "Pump Curve": "Pump Curve for",
+        "No Curve Data": "No curve data available for selected pumps",
+        "Curve Data Error": "Error loading curve data: {error}",
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "Q Rated/LPM",
@@ -192,6 +203,15 @@ translations = {
         "Matching Results": "### 符合幫浦結果",
         "Showing Results": "顯示全部 {count} 筆結果",
         "View Product": "查看產品",
+        
+        # Pump Curves - NEW
+        "Pump Curves": "📈 幫浦性能曲線",
+        "Curves Info": "顯示前5個選中幫浦的曲線",
+        "Flow LPM": "流量 (LPM)",
+        "Head M": "揚程 (米)",
+        "Pump Curve": "幫浦曲線:",
+        "No Curve Data": "所選幫浦無可用曲線數據",
+        "Curve Data Error": "載入曲線數據錯誤: {error}",
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "額定流量 (LPM)",
@@ -313,6 +333,127 @@ def load_pump_data():
             st.error(get_text("Failed CSV", error=str(csv_error)))
             return pd.DataFrame()
 
+# --- Load Pump Curve Data ---
+@st.cache_data(ttl=60)
+def load_pump_curve_data():
+    try:
+        # Fetch pump curve data from Supabase
+        all_records = []
+        page_size = 1000
+        current_page = 0
+        
+        while True:
+            response = supabase.table("pump_curve_data").select("*") \
+                              .range(current_page * page_size, (current_page + 1) * page_size - 1) \
+                              .execute()
+            
+            if not response.data:
+                break
+                
+            all_records.extend(response.data)
+            current_page += 1
+            
+            if len(response.data) < page_size:
+                break
+        
+        # Convert to DataFrame
+        df = pd.DataFrame(all_records)
+        return df
+    except Exception as e:
+        st.error(get_text("Curve Data Error", error=str(e)))
+        return pd.DataFrame()
+
+# --- Function to create pump curves ---
+def create_pump_curves(curve_data_df, pump_models):
+    """Create interactive plotly charts for pump curves"""
+    if curve_data_df.empty or not pump_models:
+        return None
+    
+    # Filter curve data for the selected pump models
+    filtered_curves = curve_data_df[curve_data_df['Model No.'].isin(pump_models)].copy()
+    
+    if filtered_curves.empty:
+        return None
+    
+    # Create subplots for multiple pumps
+    fig = make_subplots(
+        rows=len(pump_models), cols=1,
+        subplot_titles=[f"{get_text('Pump Curve')} {model}" for model in pump_models],
+        vertical_spacing=0.08
+    )
+    
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+    
+    for idx, model in enumerate(pump_models):
+        model_data = filtered_curves[filtered_curves['Model No.'] == model]
+        
+        if not model_data.empty:
+            # Get the first row for this model
+            row_data = model_data.iloc[0]
+            
+            # Extract flow and head data from columns
+            flows = []
+            heads = []
+            
+            # Define the head columns to check (in meters)
+            head_columns = ['1M', '1.5M', '2M', '3M', '4M', '4.5M', '5M', '6M', '7.5M', '8M', 
+                           '9M', '10M', '10.5', '12M', '14M', '15M', '16M', '18M', '20M', 
+                           '21M', '24M', '25M', '27M', '30M', '36M', '40M', '45M', '50M']
+            
+            for col in head_columns:
+                if col in row_data and pd.notna(row_data[col]) and row_data[col] != '':
+                    try:
+                        flow_value = float(row_data[col])
+                        # Extract head value from column name
+                        if col.endswith('M'):
+                            head_value = float(col.replace('M', ''))
+                        elif col == '10.5':
+                            head_value = 10.5
+                        else:
+                            continue
+                        
+                        if flow_value > 0:  # Only add positive flow values
+                            flows.append(flow_value)
+                            heads.append(head_value)
+                    except (ValueError, TypeError):
+                        continue
+            
+            # Sort by head for proper curve plotting
+            if flows and heads:
+                sorted_data = sorted(zip(heads, flows))
+                heads, flows = zip(*sorted_data)
+                
+                fig.add_trace(
+                    go.Scatter(
+                        x=list(flows),
+                        y=list(heads),
+                        mode='lines+markers',
+                        name=f"{model}",
+                        line=dict(color=colors[idx % len(colors)], width=2),
+                        marker=dict(size=6),
+                        hovertemplate=f"<b>{model}</b><br>" +
+                                    f"{get_text('Flow LPM')}: %{{x}}<br>" +
+                                    f"{get_text('Head M')}: %{{y}}<br>" +
+                                    "<extra></extra>"
+                    ),
+                    row=idx + 1, col=1
+                )
+    
+    # Update layout
+    fig.update_layout(
+        height=400 * len(pump_models),
+        showlegend=True,
+        title_text=get_text("Pump Curves"),
+        title_x=0.5
+    )
+    
+    # Update axes labels for all subplots
+    for i in range(len(pump_models)):
+        fig.update_xaxes(title_text=get_text("Flow LPM"), row=i+1, col=1)
+        fig.update_yaxes(title_text=get_text("Head M"), row=i+1, col=1)
+    
+    return fig
+
 # --- Default values ---
 default_values = {
     "floors": 0, "faucets": 0,
@@ -352,6 +493,7 @@ st.title(get_text("Pump Selection Tool"))
 
 # Load the data
 pumps = load_pump_data()
+curve_data = load_pump_curve_data()
 
 if pumps.empty:
     st.error(get_text("No Data"))
@@ -524,6 +666,8 @@ else:
 
 # --- 🎛️ Manual Input Section ---
 st.markdown(get_text("Manual Input"))
+
+# Continuation from previous code...
 
 flow_unit_options = ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"]
 flow_unit_translated = [get_text(unit) for unit in flow_unit_options]
@@ -860,5 +1004,49 @@ if st.button(get_text("Search")):
                     hide_index=True,
                     use_container_width=True
                 )
+            
+            # --- NEW: Display Pump Curves for First 5 Results ---
+            st.markdown("---")  # Add separator
+            st.markdown(get_text("Pump Curves"))
+            st.caption(get_text("Curves Info"))
+            
+            # Get the first 5 pump models from the filtered results
+            pump_models_for_curves = []
+            
+            # Try to find Model column in different possible names
+            model_column = None
+            for col in ["Model", "Model No.", "Model No", "model", "model_no"]:
+                if col in displayed_results.columns:
+                    model_column = col
+                    break
+            
+            if model_column:
+                # Get first 5 unique models
+                unique_models = displayed_results[model_column].dropna().unique()[:5]
+                pump_models_for_curves = [str(model) for model in unique_models if model and str(model).strip()]
+            else:
+                # If no Model column found, try to use DB ID to match with curve data
+                if "DB ID" in displayed_results.columns and "DB_ID" in curve_data.columns:
+                    # Match using DB ID
+                    db_ids = displayed_results["DB ID"].dropna().unique()[:5]
+                    matching_curves = curve_data[curve_data["DB_ID"].isin(db_ids)]
+                    if "Model No." in matching_curves.columns:
+                        pump_models_for_curves = matching_curves["Model No."].dropna().unique().tolist()[:5]
+            
+            if pump_models_for_curves and not curve_data.empty:
+                try:
+                    # Create and display the pump curves
+                    curve_fig = create_pump_curves(curve_data, pump_models_for_curves)
+                    
+                    if curve_fig:
+                        st.plotly_chart(curve_fig, use_container_width=True)
+                    else:
+                        st.info(get_text("No Curve Data"))
+                        
+                except Exception as e:
+                    st.error(get_text("Curve Data Error", error=str(e)))
+            else:
+                st.info(get_text("No Curve Data"))
+                
     else:
         st.warning(get_text("No Matches"))
