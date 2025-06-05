@@ -1093,9 +1093,12 @@ if st.session_state.table_state:
             
             # Display the results with error handling - use data_editor for interactive checkboxes
             try:
+                # Reset index to ensure proper alignment
+                displayed_results_filtered_reset = displayed_results_filtered.reset_index(drop=True)
+                
                 # Use data_editor to allow checkbox interaction
                 edited_data = st.data_editor(
-                    displayed_results_filtered,
+                    displayed_results_filtered_reset,
                     column_config=column_config,
                     hide_index=True,
                     use_container_width=True,
@@ -1108,14 +1111,17 @@ if st.session_state.table_state:
                     new_selected_pumps = set()
                     
                     # Iterate through the edited data to find selected pumps
-                    for idx, row in edited_data.iterrows():
-                        if row[get_text("Show Curve")]:
-                            # Get the corresponding model from the original data
-                            original_row = displayed_results_with_checkbox.iloc[idx]
-                            if model_column in original_row:
-                                model_name = str(original_row[model_column]) if pd.notna(original_row[model_column]) else ""
-                                if model_name:
-                                    new_selected_pumps.add(model_name)
+                    for idx in range(len(edited_data)):
+                        try:
+                            if edited_data.iloc[idx][get_text("Show Curve")]:
+                                # Get the corresponding model from the edited data itself
+                                if model_column in edited_data.columns:
+                                    model_name = str(edited_data.iloc[idx][model_column]) if pd.notna(edited_data.iloc[idx][model_column]) else ""
+                                    if model_name:
+                                        new_selected_pumps.add(model_name)
+                        except (IndexError, KeyError):
+                            # Skip if there's an indexing issue
+                            continue
                     
                     # Update session state
                     st.session_state.selected_pumps_for_curves = new_selected_pumps
