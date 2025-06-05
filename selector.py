@@ -3,8 +3,8 @@ import pandas as pd
 from supabase import create_client
 import os
 from dotenv import load_dotenv
-import matplotlib.pyplot as plt
-import numpy as np
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # Load environment variables from .env file
 load_dotenv()
@@ -371,9 +371,9 @@ def load_pump_curve_data():
         st.error(get_text("Curve Data Error", error=str(e)))
         return pd.DataFrame()
 
-# --- Function to create pump curves using matplotlib ---
-def create_pump_curves_matplotlib(curve_data_df, pump_models):
-    """Create matplotlib charts for pump curves"""
+# --- Function to create pump curves using Plotly ---
+def create_pump_curves(curve_data_df, pump_models):
+    """Create interactive plotly charts for pump curves"""
     if curve_data_df.empty or not pump_models:
         return None
     
@@ -383,18 +383,13 @@ def create_pump_curves_matplotlib(curve_data_df, pump_models):
     if filtered_curves.empty:
         return None
     
-    # Set up the plot style
-    plt.style.use('default')
+    # Create subplots for multiple pumps
+    fig = make_subplots(
+        rows=len(pump_models), cols=1,
+        subplot_titles=[f"{get_text('Pump Curve')} {model}" for model in pump_models],
+        vertical_spacing=0.08
+    )
     
-    # Create figure and subplots
-    n_pumps = len(pump_models)
-    fig, axes = plt.subplots(n_pumps, 1, figsize=(10, 4 * n_pumps))
-    
-    # If only one pump, make axes a list for consistent handling
-    if n_pumps == 1:
-        axes = [axes]
-    
-    # Colors for different pumps
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
     
     for idx, model in enumerate(pump_models):
@@ -436,24 +431,47 @@ def create_pump_curves_matplotlib(curve_data_df, pump_models):
                 sorted_data = sorted(zip(heads, flows))
                 heads, flows = zip(*sorted_data)
                 
-                # Plot the curve
-                axes[idx].plot(flows, heads, 'o-', 
-                              color=colors[idx % len(colors)], 
-                              linewidth=2, 
-                              markersize=6,
-                              label=f"{model}")
-                
-                axes[idx].set_xlabel(get_text("Flow LPM"))
-                axes[idx].set_ylabel(get_text("Head M"))
-                axes[idx].set_title(f"{get_text('Pump Curve')} {model}")
-                axes[idx].grid(True, alpha=0.3)
-                axes[idx].legend()
-                
-                # Set reasonable axis limits
-                axes[idx].set_xlim(0, max(flows) * 1.1)
-                axes[idx].set_ylim(0, max(heads) * 1.1)
+                fig.add_trace(
+                    go.Scatter(
+                        x=list(flows),
+                        y=list(heads),
+                        mode='lines+markers',
+                        name=f"{model}",
+                        line=dict(color=colors[idx % len(colors)], width=3),
+                        marker=dict(size=8),
+                        hovertemplate=f"<b>{model}</b><br>" +
+                                    f"{get_text('Flow LPM')}: %{{x}}<br>" +
+                                    f"{get_text('Head M')}: %{{y}}<br>" +
+                                    "<extra></extra>"
+                    ),
+                    row=idx + 1, col=1
+                )
     
-    plt.tight_layout()
+    # Update layout
+    fig.update_layout(
+        height=400 * len(pump_models),
+        showlegend=True,
+        title_text=get_text("Pump Curves"),
+        title_x=0.5,
+        title_font_size=20,
+        font=dict(size=12)
+    )
+    
+    # Update axes labels for all subplots
+    for i in range(len(pump_models)):
+        fig.update_xaxes(
+            title_text=get_text("Flow LPM"), 
+            row=i+1, col=1,
+            gridcolor='lightgray',
+            gridwidth=1
+        )
+        fig.update_yaxes(
+            title_text=get_text("Head M"), 
+            row=i+1, col=1,
+            gridcolor='lightgray',
+            gridwidth=1
+        )
+    
     return fig
 
 # --- Default values ---
@@ -653,11 +671,11 @@ if pond_volume > 0:
 if pond_lpm > 0:
     st.success(get_text("Required Flow", flow=round(pond_lpm)))
 
+# Continuation of the complete pump selector code...
+
 # --- Underground and particle size ---
 underground_depth = st.number_input(get_text("Pump Depth"), min_value=0.0, step=0.1, key="underground_depth")
 particle_size = st.number_input(get_text("Particle Size"), min_value=0.0, step=1.0, key="particle_size")
-
-# Continuation from previous code...
 
 # --- Auto calculations ---
 if category == "Booster":
@@ -1096,11 +1114,11 @@ if st.button(get_text("Search")):
                 
                 if selected_models and not curve_data.empty:
                     try:
-                        # Create and display the pump curves
-                        curve_fig = create_pump_curves_matplotlib(curve_data, selected_models)
+                        # Create and display the pump curves using Plotly
+                        curve_fig = create_pump_curves(curve_data, selected_models)
                         
                         if curve_fig:
-                            st.pyplot(curve_fig)
+                            st.plotly_chart(curve_fig, use_container_width=True)
                         else:
                             st.info(get_text("No Curve Data"))
                             
