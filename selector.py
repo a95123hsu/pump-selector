@@ -829,13 +829,6 @@ if st.button(get_text("Search")):
                     get_text("Category"),
                     help="Translated pump category"
                 )
-             # Configure the Product Link column if it exists
-            if "Product Link" in displayed_results.columns:
-                column_config["Product Link"] = st.column_config.LinkColumn(
-                    "Product Link",
-                    help="Click to view product details",
-                    display_text=get_text("View Product")
-                )
             
             # Display the results with error handling
             try:
@@ -852,6 +845,13 @@ if st.button(get_text("Search")):
                     displayed_results,
                     hide_index=True,
                     use_container_width=True
+                )
+             # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product")
                 )
     else:
         st.warning(get_text("No Matches"))
