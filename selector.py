@@ -829,6 +829,19 @@ if st.button(get_text("Search")):
                     "Model No.",
                     help="Pump model number"
                 )
+            if "Frequency (Hz)" in displayed_results.columns:
+                column_config["Frequency (Hz)"] = st.column_config.NumberColumn(
+                    "Frequency (Hz)",
+                    help="Operating frequency in Hertz",
+                    format="%d Hz"
+                )
+            
+            if "Phase" in displayed_results.columns:
+                column_config["Phase"] = st.column_config.NumberColumn(
+                    "Phase",
+                    help="Number of phases",
+                    format="%d"
+                )
             
             # Configure other numeric columns with proper formatting
             if "Max Flow (LPM)" in displayed_results.columns:
@@ -850,20 +863,6 @@ if st.button(get_text("Search")):
                     "Pass Solid Dia(mm)",
                     help="Maximum solid particle diameter that can pass through",
                     format="%.1f mm"
-                )
-            
-            if "Frequency (Hz)" in displayed_results.columns:
-                column_config["Frequency (Hz)"] = st.column_config.NumberColumn(
-                    "Frequency (Hz)",
-                    help="Operating frequency in Hertz",
-                    format="%d Hz"
-                )
-            
-            if "Phase" in displayed_results.columns:
-                column_config["Phase"] = st.column_config.NumberColumn(
-                    "Phase",
-                    help="Number of phases",
-                    format="%d"
                 )
             
             # Display the results with error handling
