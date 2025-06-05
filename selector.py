@@ -578,7 +578,7 @@ if not pumps.empty and optional_columns:
             if 'selected_columns' not in st.session_state:
                 # Default selection - UPDATED TO INCLUDE MODEL AND EXCLUDE DB ID
                 default_selected = [
-                    "Model", "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
+                    "Model No.", "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
                     "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
                 ]
                 st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
