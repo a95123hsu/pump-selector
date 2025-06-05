@@ -827,7 +827,7 @@ if st.button(get_text("Search")):
             if "Category Display" in displayed_results.columns:
                 column_config["Category Display"] = st.column_config.TextColumn(
                     get_text("Category"),
-                    help "Translated pump category"
+                    help="Translated pump category"
                 )
                          # Configure the Product Link column if it exists
             if "Product Link" in displayed_results.columns:
