@@ -462,8 +462,8 @@ else:
 
 # Get all available columns from the dataset for later use in column selection
 if not pumps.empty:
-    # Define essential columns that are always shown
-    essential_columns = ["DB ID", "id", "ID", "Model", "Product Link"]
+    # Define essential columns that are always shown - REMOVED DB ID
+    essential_columns = ["id", "ID", "Model", "Product Link"]
     available_columns = [col for col in pumps.columns if col not in ["Category"]]  # Exclude original Category
     
     # Add translated category to available columns
@@ -576,9 +576,9 @@ if not pumps.empty and optional_columns:
             
             # Initialize selected columns in session state if not exists
             if 'selected_columns' not in st.session_state:
-                # Default selection - include some commonly used columns
+                # Default selection - UPDATED TO INCLUDE MODEL AND EXCLUDE DB ID
                 default_selected = [
-                    "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
+                    "Model", "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
                     "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
                 ]
                 st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
@@ -698,15 +698,15 @@ if st.button(get_text("Search")):
             # Remove temporary columns used for sorting
             results = results.drop(columns=["Flow Difference", "Head Difference", "Match Score"])
         
-        # Sort by DB ID first, then apply percentage filter
-        if "DB ID" in results.columns:
-            results = results.sort_values("DB ID")
-        elif "id" in results.columns:
+        # Sort by ID first (excluding DB ID), then apply percentage filter
+        if "id" in results.columns:
             results = results.sort_values("id")
         elif "ID" in results.columns:
             results = results.sort_values("ID")
+        elif "Model" in results.columns:
+            results = results.sort_values("Model")
         
-        # Apply percentage limit after sorting by DB ID
+        # Apply percentage limit after sorting by ID
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
@@ -722,21 +722,21 @@ if st.button(get_text("Search")):
         # Determine which columns to show based on user selection
         columns_to_show = []
         
-        # Always include essential columns that exist in the data
+        # Always include essential columns that exist in the data (excluding DB ID)
         for col in essential_columns:
-            if col in displayed_results.columns:
+            if col in displayed_results.columns and col not in ["DB ID"]:
                 columns_to_show.append(col)
         
         # Add user-selected optional columns that exist in the data
         for col in selected_optional_columns:
-            if col in displayed_results.columns and col not in columns_to_show:
+            if col in displayed_results.columns and col not in columns_to_show and col not in ["DB ID"]:
                 columns_to_show.append(col)
         
         # If no columns selected, show a message
         if not columns_to_show:
             st.warning("⚠️ No columns selected for display. Please select at least one column from the Column Selection section above.")
         else:
-            # Filter the dataframe to only show selected columns
+            # Filter the dataframe to only show selected columns (ensuring DB ID is excluded)
             displayed_results = displayed_results[columns_to_show]
             
             # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
@@ -790,23 +790,17 @@ if st.button(get_text("Search")):
             # Create column configuration for product links and proper formatting
             column_config = {}
             
-            # Configure the ID column for default sorting if it exists
-            if "DB ID" in displayed_results.columns:
-                column_config["DB ID"] = st.column_config.NumberColumn(
-                    "DB ID",
-                    help="Database ID",
-                    format="%d"
-                )
-            elif "id" in displayed_results.columns:
+            # Configure the ID column for default sorting if it exists (excluding DB ID)
+            if "id" in displayed_results.columns:
                 column_config["id"] = st.column_config.NumberColumn(
                     "ID",
-                    help="Database ID",
+                    help="ID",
                     format="%d"
                 )
             elif "ID" in displayed_results.columns:
                 column_config["ID"] = st.column_config.NumberColumn(
                     "ID",
-                    help="Database ID",
+                    help="ID",
                     format="%d"
                 )
             
