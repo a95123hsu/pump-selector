@@ -4,7 +4,6 @@ from supabase import create_client
 import os
 from dotenv import load_dotenv
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 # Load environment variables from .env file
 load_dotenv()
@@ -94,12 +93,12 @@ translations = {
         "Show Curve": "Show Curve",
         
         # Pump Curves - NEW
-        "Pump Curves": "📈 Pump Performance Curves",
+        "Pump Curves": "📈 Pump Performance Curves Comparison",
         "Curves Info": "Select pumps above to display their performance curves",
-        "Curves Selected": "Showing curves for {count} selected pumps",
+        "Curves Selected": "Comparing {count} selected pumps",
         "Flow LPM": "Flow (LPM)",
         "Head M": "Head (m)",
-        "Pump Curve": "Pump Curve for",
+        "Pump Curve": "Performance Comparison",
         "No Curve Data": "No curve data available for selected pumps",
         "Curve Data Error": "Error loading curve data: {error}",
         "No Selection": "Please select pumps using the checkboxes above to display curves",
@@ -211,12 +210,12 @@ translations = {
         "Show Curve": "顯示曲線",
         
         # Pump Curves - NEW
-        "Pump Curves": "📈 幫浦性能曲線",
+        "Pump Curves": "📈 幫浦性能曲線比較",
         "Curves Info": "在上方選擇幫浦以顯示其性能曲線",
-        "Curves Selected": "顯示 {count} 個選中幫浦的曲線",
+        "Curves Selected": "比較 {count} 個選中的幫浦",
         "Flow LPM": "流量 (LPM)",
         "Head M": "揚程 (米)",
-        "Pump Curve": "幫浦曲線:",
+        "Pump Curve": "性能比較",
         "No Curve Data": "所選幫浦無可用曲線數據",
         "Curve Data Error": "載入曲線數據錯誤: {error}",
         "No Selection": "請使用上方的復選框選擇幫浦以顯示曲線",
@@ -371,9 +370,9 @@ def load_pump_curve_data():
         st.error(get_text("Curve Data Error", error=str(e)))
         return pd.DataFrame()
 
-# --- Function to create pump curves using Plotly ---
-def create_pump_curves(curve_data_df, pump_models):
-    """Create interactive plotly charts for pump curves"""
+# --- Function to create COMBINED pump curves using Plotly ---
+def create_combined_pump_curves(curve_data_df, pump_models):
+    """Create a SINGLE interactive plotly chart with ALL pump curves overlaid"""
     if curve_data_df.empty or not pump_models:
         return None
     
@@ -383,14 +382,12 @@ def create_pump_curves(curve_data_df, pump_models):
     if filtered_curves.empty:
         return None
     
-    # Create subplots for multiple pumps
-    fig = make_subplots(
-        rows=len(pump_models), cols=1,
-        subplot_titles=[f"{get_text('Pump Curve')} {model}" for model in pump_models],
-        vertical_spacing=0.08
-    )
+    # Create a single figure for comparison
+    fig = go.Figure()
     
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+    # Different colors for each pump
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
     
     for idx, model in enumerate(pump_models):
         model_data = filtered_curves[filtered_curves['Model No.'] == model]
@@ -431,46 +428,64 @@ def create_pump_curves(curve_data_df, pump_models):
                 sorted_data = sorted(zip(heads, flows))
                 heads, flows = zip(*sorted_data)
                 
+                # Add trace to the single figure
                 fig.add_trace(
                     go.Scatter(
                         x=list(flows),
                         y=list(heads),
                         mode='lines+markers',
                         name=f"{model}",
-                        line=dict(color=colors[idx % len(colors)], width=3),
-                        marker=dict(size=8),
+                        line=dict(
+                            color=colors[idx % len(colors)], 
+                            width=3
+                        ),
+                        marker=dict(
+                            size=8,
+                            color=colors[idx % len(colors)]
+                        ),
                         hovertemplate=f"<b>{model}</b><br>" +
                                     f"{get_text('Flow LPM')}: %{{x}}<br>" +
                                     f"{get_text('Head M')}: %{{y}}<br>" +
                                     "<extra></extra>"
-                    ),
-                    row=idx + 1, col=1
+                    )
                 )
     
-    # Update layout
+    # Update layout for the combined chart
     fig.update_layout(
-        height=400 * len(pump_models),
+        title={
+            'text': get_text("Pump Curve"),
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 20}
+        },
+        xaxis_title=get_text("Flow LPM"),
+        yaxis_title=get_text("Head M"),
+        height=600,  # Single chart height
         showlegend=True,
-        title_text=get_text("Pump Curves"),
-        title_x=0.5,
-        title_font_size=20,
-        font=dict(size=12)
+        legend=dict(
+            orientation="v",
+            yanchor="top",
+            y=1,
+            xanchor="left",
+            x=1.02
+        ),
+        font=dict(size=12),
+        hovermode='closest',
+        # Add grid
+        xaxis=dict(
+            gridcolor='lightgray',
+            gridwidth=1,
+            showgrid=True
+        ),
+        yaxis=dict(
+            gridcolor='lightgray',
+            gridwidth=1,
+            showgrid=True
+        ),
+        # Set background
+        plot_bgcolor='white',
+        paper_bgcolor='white'
     )
-    
-    # Update axes labels for all subplots
-    for i in range(len(pump_models)):
-        fig.update_xaxes(
-            title_text=get_text("Flow LPM"), 
-            row=i+1, col=1,
-            gridcolor='lightgray',
-            gridwidth=1
-        )
-        fig.update_yaxes(
-            title_text=get_text("Head M"), 
-            row=i+1, col=1,
-            gridcolor='lightgray',
-            gridwidth=1
-        )
     
     return fig
 
@@ -492,6 +507,10 @@ for key, val in default_values.items():
 # Initialize selected pumps for curve display
 if 'selected_pumps_for_curves' not in st.session_state:
     st.session_state.selected_pumps_for_curves = set()
+
+# Initialize table state to prevent reloads
+if 'table_state' not in st.session_state:
+    st.session_state.table_state = None
 
 # --- Header ---
 col_logo, col_title, col_lang = st.columns([1, 5, 3])
@@ -544,6 +563,7 @@ with col2:
             st.session_state[key] = val
         # Also reset selected pumps for curves
         st.session_state.selected_pumps_for_curves = set()
+        st.session_state.table_state = None
 
 # Apply custom styling - using the same style for both buttons
 st.markdown("""
@@ -636,6 +656,9 @@ else:
     essential_columns = []
     optional_columns = []
 
+# --- Continue with the rest of the form sections ---
+# (The application input, pond drainage, manual input sections remain the same)
+
 # --- 🏢 Application Section - Only show when Booster is selected ---
 if category == "Booster":
     st.markdown(get_text("Application Input"))
@@ -662,6 +685,8 @@ width = st.number_input(get_text("Pond Width"), min_value=0.0, step=0.1, key="wi
 height = st.number_input(get_text("Pond Height"), min_value=0.0, step=0.1, key="height")
 drain_time_hr = st.number_input(get_text("Drain Time"), min_value=0.01, step=0.1, key="drain_time_hr")
 
+# Continuation of the pump selector with combined curves...
+
 pond_volume = length * width * height * 1000
 drain_time_min = drain_time_hr * 60
 pond_lpm = pond_volume / drain_time_min if drain_time_min > 0 else 0
@@ -670,8 +695,6 @@ if pond_volume > 0:
     st.caption(get_text("Pond Volume", volume=round(pond_volume)))
 if pond_lpm > 0:
     st.success(get_text("Required Flow", flow=round(pond_lpm)))
-
-# Continuation of the complete pump selector code...
 
 # --- Underground and particle size ---
 underground_depth = st.number_input(get_text("Pump Depth"), min_value=0.0, step=0.1, key="underground_depth")
@@ -778,6 +801,7 @@ if st.button(get_text("Search")):
     
     # Reset selected pumps for curves when new search is performed
     st.session_state.selected_pumps_for_curves = set()
+    st.session_state.table_state = None
     
     filtered_pumps = pumps.copy()
     
@@ -884,35 +908,65 @@ if st.button(get_text("Search")):
             # Remove the original English Category column
             displayed_results = displayed_results.drop(columns=["Category"])
         
-        # --- NEW: Add checkbox column for curve selection ---
-        # Find the model column
-        model_column = None
-        for col in ["Model", "Model No.", "Model No", "model", "model_no"]:
-            if col in displayed_results.columns:
-                model_column = col
-                break
+        # Store the table data in session state to prevent reloads
+        st.session_state.table_state = {
+            'data': displayed_results,
+            'selected_optional_columns': selected_optional_columns,
+            'essential_columns': essential_columns
+        }
+
+# --- Display results table if we have data ---
+if st.session_state.table_state:
+    displayed_results = st.session_state.table_state['data']
+    selected_optional_columns = st.session_state.table_state['selected_optional_columns']
+    essential_columns = st.session_state.table_state['essential_columns']
+    
+    # --- NEW: Add checkbox column for curve selection ---
+    # Find the model column
+    model_column = None
+    for col in ["Model", "Model No.", "Model No", "model", "model_no"]:
+        if col in displayed_results.columns:
+            model_column = col
+            break
+    
+    if model_column:
+        # Get unique models and their indices for checkbox management
+        unique_models = displayed_results[model_column].dropna().unique()
         
-        if model_column:
-            # Get unique models and their indices for checkbox management
-            unique_models = displayed_results[model_column].dropna().unique()
-            
-            # Auto-select first 5 pumps for curves if this is a new search
-            if len(st.session_state.selected_pumps_for_curves) == 0:
-                st.session_state.selected_pumps_for_curves = set(unique_models[:5])
-            
-            # Create checkbox data for the table
-            checkbox_data = []
-            for idx, row in displayed_results.iterrows():
-                model_name = str(row[model_column]) if pd.notna(row[model_column]) else ""
-                is_selected = model_name in st.session_state.selected_pumps_for_curves
-                checkbox_data.append(is_selected)
-            
-            # Add checkbox column to the beginning of the dataframe
-            displayed_results.insert(0, get_text("Show Curve"), checkbox_data)
+        # Auto-select first 5 pumps for curves if this is a new search (no selections yet)
+        if len(st.session_state.selected_pumps_for_curves) == 0:
+            st.session_state.selected_pumps_for_curves = set(unique_models[:5])
         
-        # Apply column selection - only show selected columns (but always include checkbox column)
+        # Create a container for the table to prevent scrolling on updates
+        table_container = st.container()
+        
+        with table_container:
+            # Create individual checkboxes for pump selection
+            st.markdown("### Select Pumps for Curve Comparison")
+            
+            # Create columns for checkboxes (3 per row)
+            cols_per_row = 3
+            for i in range(0, len(unique_models), cols_per_row):
+                cols = st.columns(cols_per_row)
+                for j, model in enumerate(unique_models[i:i+cols_per_row]):
+                    with cols[j]:
+                        # Use a unique key for each checkbox
+                        checkbox_key = f"pump_checkbox_{model}_{i+j}"
+                        is_checked = model in st.session_state.selected_pumps_for_curves
+                        
+                        # Create checkbox with callback handling
+                        if st.checkbox(
+                            f"{model}", 
+                            value=is_checked, 
+                            key=checkbox_key
+                        ):
+                            st.session_state.selected_pumps_for_curves.add(model)
+                        else:
+                            st.session_state.selected_pumps_for_curves.discard(model)
+        
+        # Apply column selection - only show selected columns
         # Determine which columns to show based on user selection
-        columns_to_show = [get_text("Show Curve")]  # Always include checkbox column first
+        columns_to_show = []
         
         # Always include essential columns that exist in the data
         for col in essential_columns:
@@ -924,25 +978,17 @@ if st.button(get_text("Search")):
             if col in displayed_results.columns and col not in columns_to_show:
                 columns_to_show.append(col)
         
-        # If no columns selected (except checkbox), show a message
-        if len(columns_to_show) <= 1:
+        # If no columns selected, show a message
+        if not columns_to_show:
             st.warning("⚠️ No columns selected for display. Please select at least one column from the Column Selection section above.")
         else:
             # Filter the dataframe to only show selected columns
-            displayed_results = displayed_results[columns_to_show]
+            displayed_results_filtered = displayed_results[columns_to_show]
             
             # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
             def reorder_columns(df):
                 """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
                 cols = list(df.columns)
-                
-                # Always keep checkbox column first
-                checkbox_col = get_text("Show Curve")
-                if checkbox_col in cols:
-                    cols.remove(checkbox_col)
-                    new_cols = [checkbox_col]
-                else:
-                    new_cols = []
                 
                 # Find the positions of key columns
                 pass_solid_idx = None
@@ -961,58 +1007,49 @@ if st.button(get_text("Search")):
                 if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
                     # Remove Q Rated/LPM and Head Rated/M from their current positions
                     reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
-                    remaining_cols = [col for col in cols if col not in reorder_cols]
+                    new_cols = [col for col in cols if col not in reorder_cols]
                     
                     # Insert them after Pass Solid Dia(mm)
                     insert_position = pass_solid_idx + 1
                     if "Q Rated/LPM" in cols:
-                        remaining_cols.insert(insert_position, "Q Rated/LPM")
+                        new_cols.insert(insert_position, "Q Rated/LPM")
                         insert_position += 1
                     if "Head Rated/M" in cols:
-                        remaining_cols.insert(insert_position, "Head Rated/M")
+                        new_cols.insert(insert_position, "Head Rated/M")
                     
-                    new_cols.extend(remaining_cols)
+                    return df[new_cols]
                 else:
                     # If we can't find the reference columns, return as is
-                    new_cols.extend(cols)
-                
-                return df[new_cols]
+                    return df
             
             # Apply column reordering
-            displayed_results = reorder_columns(displayed_results)
+            displayed_results_filtered = reorder_columns(displayed_results_filtered)
             
             # Display the results
             st.write(get_text("Matching Results"))
             
             # Show information about displayed results and columns
-            if len(displayed_results) > 0:
-                st.write(get_text("Showing Results", count=len(displayed_results)))
-                st.caption(f"📋 Displaying {len(displayed_results.columns)} columns: {', '.join(displayed_results.columns[:5])}{'...' if len(displayed_results.columns) > 5 else ''}")
+            if len(displayed_results_filtered) > 0:
+                st.write(get_text("Showing Results", count=len(displayed_results_filtered)))
+                st.caption(f"📋 Displaying {len(displayed_results_filtered.columns)} columns: {', '.join(displayed_results_filtered.columns[:5])}{'...' if len(displayed_results_filtered.columns) > 5 else ''}")
             
             # Create column configuration for product links and proper formatting
             column_config = {}
             
-            # Configure the checkbox column
-            column_config[get_text("Show Curve")] = st.column_config.CheckboxColumn(
-                get_text("Show Curve"),
-                help="Select pumps to display in performance curves",
-                default=False
-            )
-            
             # Configure the ID column for default sorting if it exists
-            if "DB ID" in displayed_results.columns:
+            if "DB ID" in displayed_results_filtered.columns:
                 column_config["DB ID"] = st.column_config.NumberColumn(
                     "DB ID",
                     help="Database ID",
                     format="%d"
                 )
-            elif "id" in displayed_results.columns:
+            elif "id" in displayed_results_filtered.columns:
                 column_config["id"] = st.column_config.NumberColumn(
                     "ID",
                     help="Database ID",
                     format="%d"
                 )
-            elif "ID" in displayed_results.columns:
+            elif "ID" in displayed_results_filtered.columns:
                 column_config["ID"] = st.column_config.NumberColumn(
                     "ID",
                     help="Database ID",
@@ -1020,7 +1057,7 @@ if st.button(get_text("Search")):
                 )
             
             # Configure the Product Link column if it exists
-            if "Product Link" in displayed_results.columns:
+            if "Product Link" in displayed_results_filtered.columns:
                 column_config["Product Link"] = st.column_config.LinkColumn(
                     "Product Link",
                     help="Click to view product details",
@@ -1028,7 +1065,7 @@ if st.button(get_text("Search")):
                 )
             
             # Better formatting for Q Rated/LPM and Head Rated/M columns
-            if "Q Rated/LPM" in displayed_results.columns:
+            if "Q Rated/LPM" in displayed_results_filtered.columns:
                 flow_label = get_text("Q Rated/LPM")
                 flow_help = get_text("Rated flow rate in liters per minute")
                 column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
@@ -1037,7 +1074,7 @@ if st.button(get_text("Search")):
                     format="%.1f LPM"
                 )
             
-            if "Head Rated/M" in displayed_results.columns:
+            if "Head Rated/M" in displayed_results_filtered.columns:
                 head_label = get_text("Head Rated/M")
                 head_help = get_text("Rated head in meters")
                 column_config["Head Rated/M"] = st.column_config.NumberColumn(
@@ -1047,62 +1084,34 @@ if st.button(get_text("Search")):
                 )
             
             # Configure the translated category column
-            if "Category Display" in displayed_results.columns:
+            if "Category Display" in displayed_results_filtered.columns:
                 column_config["Category Display"] = st.column_config.TextColumn(
                     get_text("Category"),
                     help="Translated pump category"
                 )
             
-            # Display the results with error handling
+            # Display the results with error handling - use regular dataframe to avoid reloads
             try:
-                # Store the current state before showing the data_editor
-                current_data = displayed_results.copy()
-                
-                # Use data_editor to allow checkbox interaction
-                edited_data = st.data_editor(
-                    displayed_results,
+                st.dataframe(
+                    displayed_results_filtered,
                     column_config=column_config,
                     hide_index=True,
-                    use_container_width=True,
-                    key="pump_results_table"
+                    use_container_width=True
                 )
-                
-                # Update selected pumps based on checkbox changes
-                if model_column and get_text("Show Curve") in edited_data.columns:
-                    # Find which pumps are now selected
-                    new_selected_pumps = set()
-                    
-                    # Iterate through the edited data to find selected pumps
-                    for idx, row in edited_data.iterrows():
-                        if row[get_text("Show Curve")] and model_column in current_data.columns:
-                            # Get the corresponding model from the original data
-                            original_row = current_data.iloc[idx]
-                            if model_column in original_row:
-                                model_name = str(original_row[model_column]) if pd.notna(original_row[model_column]) else ""
-                                if model_name:
-                                    new_selected_pumps.add(model_name)
-                    
-                    # Update session state
-                    st.session_state.selected_pumps_for_curves = new_selected_pumps
-                
             except Exception as e:
-                # If the data_editor with column_config fails, fall back to simple dataframe
-                st.error(f"Error displaying interactive table: {e}")
+                # If the dataframe with column_config fails, fall back to simple dataframe
+                st.error(f"Error displaying table: {e}")
                 st.dataframe(
-                    displayed_results,
+                    displayed_results_filtered,
                     hide_index=True,
                     use_container_width=True
                 )
             
-            # Add button to update curves based on selection
-            col_update, col_info = st.columns([2, 3])
-            with col_update:
-                update_curves = st.button(get_text("Update Curves"), type="primary")
-            with col_info:
-                if st.session_state.selected_pumps_for_curves:
-                    st.info(f"🎯 {len(st.session_state.selected_pumps_for_curves)} pumps selected for curves")
+            # Show selection status
+            if st.session_state.selected_pumps_for_curves:
+                st.info(f"🎯 {len(st.session_state.selected_pumps_for_curves)} pumps selected for curves: {', '.join(list(st.session_state.selected_pumps_for_curves)[:3])}{'...' if len(st.session_state.selected_pumps_for_curves) > 3 else ''}")
             
-            # --- Display Pump Curves for Selected Results ---
+            # --- Display COMBINED Pump Curves for Selected Results ---
             st.markdown("---")  # Add separator
             st.markdown(get_text("Pump Curves"))
             
@@ -1114,8 +1123,8 @@ if st.button(get_text("Search")):
                 
                 if selected_models and not curve_data.empty:
                     try:
-                        # Create and display the pump curves using Plotly
-                        curve_fig = create_pump_curves(curve_data, selected_models)
+                        # Create and display the COMBINED pump curves using Plotly
+                        curve_fig = create_combined_pump_curves(curve_data, selected_models)
                         
                         if curve_fig:
                             st.plotly_chart(curve_fig, use_container_width=True)
@@ -1129,6 +1138,9 @@ if st.button(get_text("Search")):
             else:
                 st.info(get_text("No Selection"))
                 st.caption(get_text("Curves Info"))
-                
-    else:
+else:
+    # No search performed yet
+    if pumps.empty:
         st.warning(get_text("No Matches"))
+    else:
+        st.info("👆 Please perform a search to see pump results and curves.")
