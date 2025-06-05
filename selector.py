@@ -393,8 +393,6 @@ st.markdown(get_text("Step 1"))
 
 # Clean up Category values to ensure consistent filtering
 if "Category" in pumps.columns:
-    # Debug information if enabled
-    
     # Convert all category values to strings and strip whitespace
     pumps["Category"] = pumps["Category"].astype(str).str.strip()
     # Replace NaN, None, etc. with empty string for consistent handling
@@ -402,10 +400,7 @@ if "Category" in pumps.columns:
     # Get unique categories excluding blank/empty values
     unique_categories = [c for c in pumps["Category"].unique() if c and c.strip() and c.lower() not in ["nan", "none"]]
     
-    # Debug information if enabled
-    
     # Create a mapping between translated categories and original categories
-    # Store the original category name for filtering later
     translated_categories = []
     original_to_translated = {}
     translated_to_original = {}
@@ -423,8 +418,6 @@ if "Category" in pumps.columns:
         # Store mappings in both directions
         original_to_translated[cat] = translated_cat
         translated_to_original[translated_cat] = cat
-    
-    # Debug information if enabled
     
     # Use translated categories for display
     category_options = translated_categories
@@ -464,10 +457,7 @@ else:
 if not pumps.empty:
     # Define essential columns that are always shown - REMOVED DB ID
     essential_columns = ["id", "ID", "Model"]
-    available_columns = [col for col in pumps.columns if col not in ["Category"]]  # Exclude original Category
-    
-    # Add translated category to available columns
-    available_columns.append("Category Display")
+    available_columns = [col for col in pumps.columns if col not in ["DB ID"]]  # Exclude DB ID
     
     # Separate essential and optional columns
     optional_columns = [col for col in available_columns if col not in essential_columns]
@@ -576,11 +566,11 @@ if not pumps.empty and optional_columns:
             
             # Initialize selected columns in session state if not exists
             if 'selected_columns' not in st.session_state:
-                # Default selection - UPDATED TO INCLUDE MODEL AND EXCLUDE DB ID
+                # Default selection - Model will be first as essential, then these optional columns
                 default_selected = [
-    "Model", "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
-    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
-]
+                    "Category", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
+                    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
+                ]
                 st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
             
             # Handle Select All / Deselect All button clicks
@@ -631,6 +621,7 @@ if st.button(get_text("Search")):
                     filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
             else:
                 filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+        
         # Apply phase filter - skip filtering if "Show All Phase" is selected
         if phase != get_text("Show All Phase"):
             if isinstance(phase, str):
@@ -710,8 +701,7 @@ if st.button(get_text("Search")):
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
-        # Don't create translated category column - keep original
-        # The original Category column will be displayed as-is
+        # Keep original Category column - no translation needed for display
         
         # Apply column selection - build columns in logical order
         columns_to_show = []
@@ -762,16 +752,6 @@ if st.button(get_text("Search")):
         else:
             # Filter the dataframe to only show selected columns (ensuring DB ID is excluded)
             displayed_results = displayed_results[columns_to_show]
-            
-            # Note: Column ordering is now handled in the column selection logic above
-            # No need for additional reordering_cols = priority_cols + other_cols
-                if "Product Link" in cols:
-                    final_cols.append("Product Link")
-                
-                return df[final_cols]
-            
-            # Apply column reordering
-            displayed_results = reorder_columns(displayed_results)
             
             # Display the results
             st.write(get_text("Matching Results"))
