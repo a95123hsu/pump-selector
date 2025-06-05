@@ -824,8 +824,8 @@ if st.button(get_text("Search")):
                 )
             
             # Configure the translated category column
-            if "Category Display" in displayed_results.columns:
-                column_config["Category Display"] = st.column_config.TextColumn(
+            if "Category" in displayed_results.columns:
+                column_config["Category"] = st.column_config.TextColumn(
                     get_text("Category"),
                     help="Translated pump category"
                 )
