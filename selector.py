@@ -710,27 +710,51 @@ if st.button(get_text("Search")):
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
-        # Create the translated category column and remove English category
-        if "Category" in displayed_results.columns:
-            displayed_results["Category Display"] = displayed_results["Category"].apply(
-                lambda x: get_text(x) if x and isinstance(x, str) else x
-            )
-            # Remove the original English Category column
-            displayed_results = displayed_results.drop(columns=["Category"])
+        # Don't create translated category column - keep original
+        # The original Category column will be displayed as-is
         
-        # Apply column selection - only show selected columns
-        # Determine which columns to show based on user selection
+        # Apply column selection - build columns in logical order
         columns_to_show = []
         
-        # Always include essential columns that exist in the data (excluding DB ID)
-        for col in essential_columns:
-            if col in displayed_results.columns and col not in ["DB ID"]:
-                columns_to_show.append(col)
+        # 1. Essential identification columns first
+        if "Model" in displayed_results.columns:
+            columns_to_show.append("Model")
         
-        # Add user-selected optional columns that exist in the data
-        for col in selected_optional_columns:
+        # Add other essential columns (id, ID)
+        for col in essential_columns:
             if col in displayed_results.columns and col not in columns_to_show and col not in ["DB ID"]:
                 columns_to_show.append(col)
+        
+        # 2. Category (if selected)
+        if "Category" in selected_optional_columns and "Category" in displayed_results.columns:
+            columns_to_show.append("Category")
+        
+        # 3. Performance specifications (if selected)
+        performance_cols = ["Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m"]
+        for col in performance_cols:
+            if col in selected_optional_columns and col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # 4. Electrical specifications (if selected)
+        electrical_cols = ["Frequency (Hz)", "Phase"]
+        for col in electrical_cols:
+            if col in selected_optional_columns and col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # 5. Physical specifications (if selected)
+        physical_cols = ["Pass Solid Dia(mm)"]
+        for col in physical_cols:
+            if col in selected_optional_columns and col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # 6. Other selected columns (excluding Product Link for now)
+        for col in selected_optional_columns:
+            if col in displayed_results.columns and col not in columns_to_show and col != "Product Link":
+                columns_to_show.append(col)
+        
+        # 7. Product Link always last (if selected)
+        if "Product Link" in selected_optional_columns and "Product Link" in displayed_results.columns:
+            columns_to_show.append("Product Link")
         
         # If no columns selected, show a message
         if not columns_to_show:
@@ -739,42 +763,12 @@ if st.button(get_text("Search")):
             # Filter the dataframe to only show selected columns (ensuring DB ID is excluded)
             displayed_results = displayed_results[columns_to_show]
             
-            # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
-            def reorder_columns(df):
-                """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
-                cols = list(df.columns)
+            # Note: Column ordering is now handled in the column selection logic above
+            # No need for additional reordering_cols = priority_cols + other_cols
+                if "Product Link" in cols:
+                    final_cols.append("Product Link")
                 
-                # Find the positions of key columns
-                pass_solid_idx = None
-                q_rated_idx = None
-                head_rated_idx = None
-                
-                for i, col in enumerate(cols):
-                    if "Pass Solid Dia" in str(col):
-                        pass_solid_idx = i
-                    elif col == "Q Rated/LPM":
-                        q_rated_idx = i
-                    elif col == "Head Rated/M":
-                        head_rated_idx = i
-                
-                # If we have the required columns, reorder them
-                if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
-                    # Remove Q Rated/LPM and Head Rated/M from their current positions
-                    reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
-                    new_cols = [col for col in cols if col not in reorder_cols]
-                    
-                    # Insert them after Pass Solid Dia(mm)
-                    insert_position = pass_solid_idx + 1
-                    if "Q Rated/LPM" in cols:
-                        new_cols.insert(insert_position, "Q Rated/LPM")
-                        insert_position += 1
-                    if "Head Rated/M" in cols:
-                        new_cols.insert(insert_position, "Head Rated/M")
-                    
-                    return df[new_cols]
-                else:
-                    # If we can't find the reference columns, return as is
-                    return df
+                return df[final_cols]
             
             # Apply column reordering
             displayed_results = reorder_columns(displayed_results)
@@ -804,6 +798,14 @@ if st.button(get_text("Search")):
                     format="%d"
                 )
             
+            # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product")
+                )
+            
             # Better formatting for Q Rated/LPM and Head Rated/M columns
             if "Q Rated/LPM" in displayed_results.columns:
                 flow_label = get_text("Q Rated/LPM")
@@ -823,18 +825,11 @@ if st.button(get_text("Search")):
                     format="%.1f m"
                 )
             
-            # Configure the translated category column
-            if "Category Display" in displayed_results.columns:
-                column_config["Category Display"] = st.column_config.TextColumn(
+            # Configure the category column
+            if "Category" in displayed_results.columns:
+                column_config["Category"] = st.column_config.TextColumn(
                     get_text("Category"),
-                    help="Translated pump category"
-                )
-                         # Configure the Product Link column if it exists
-            if "Product Link" in displayed_results.columns:
-                column_config["Product Link"] = st.column_config.LinkColumn(
-                    "Product Link",
-                    help="Click to view product details",
-                    display_text=get_text("View Product")
+                    help="Pump category"
                 )
             
             # Display the results with error handling
