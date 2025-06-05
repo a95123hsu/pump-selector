@@ -393,8 +393,6 @@ st.markdown(get_text("Step 1"))
 
 # Clean up Category values to ensure consistent filtering
 if "Category" in pumps.columns:
-    # Debug information if enabled
-    
     # Convert all category values to strings and strip whitespace
     pumps["Category"] = pumps["Category"].astype(str).str.strip()
     # Replace NaN, None, etc. with empty string for consistent handling
@@ -402,10 +400,7 @@ if "Category" in pumps.columns:
     # Get unique categories excluding blank/empty values
     unique_categories = [c for c in pumps["Category"].unique() if c and c.strip() and c.lower() not in ["nan", "none"]]
     
-    # Debug information if enabled
-    
     # Create a mapping between translated categories and original categories
-    # Store the original category name for filtering later
     translated_categories = []
     original_to_translated = {}
     translated_to_original = {}
@@ -423,8 +418,6 @@ if "Category" in pumps.columns:
         # Store mappings in both directions
         original_to_translated[cat] = translated_cat
         translated_to_original[translated_cat] = cat
-    
-    # Debug information if enabled
     
     # Use translated categories for display
     category_options = translated_categories
@@ -463,11 +456,9 @@ else:
 # Get all available columns from the dataset for later use in column selection
 if not pumps.empty:
     # Define essential columns that are always shown - REMOVED DB ID
-    essential_columns = ["id", "ID", "Model"]
-    available_columns = [col for col in pumps.columns if col not in ["Category"]]  # Exclude original Category
-    
-    # Add translated category to available columns
-    available_columns.append("Category Display")
+    essential_columns = ["id", "ID", "Model", "Model No."]
+    # Include all columns except DB ID - KEEP ORIGINAL CATEGORY
+    available_columns = [col for col in pumps.columns if col not in ["DB ID"]]
     
     # Separate essential and optional columns
     optional_columns = [col for col in available_columns if col not in essential_columns]
@@ -576,11 +567,11 @@ if not pumps.empty and optional_columns:
             
             # Initialize selected columns in session state if not exists
             if 'selected_columns' not in st.session_state:
-                # Default selection - UPDATED TO INCLUDE MODEL AND EXCLUDE DB ID
+                # Default selection - Model will be first as essential, then these optional columns
                 default_selected = [
-    "Model No.", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
-    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Category","Product Link"
-]
+                    "Category", "Q Rated/LPM", "Head Rated/M", "Max Flow (LPM)", "Max Head (M)",
+                    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
+                ]
                 st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
             
             # Handle Select All / Deselect All button clicks
@@ -631,6 +622,7 @@ if st.button(get_text("Search")):
                     filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
             else:
                 filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+        
         # Apply phase filter - skip filtering if "Show All Phase" is selected
         if phase != get_text("Show All Phase"):
             if isinstance(phase, str):
@@ -705,32 +697,60 @@ if st.button(get_text("Search")):
             results = results.sort_values("ID")
         elif "Model" in results.columns:
             results = results.sort_values("Model")
+        elif "Model No." in results.columns:
+            results = results.sort_values("Model No.")
         
         # Apply percentage limit after sorting by ID
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
         
-        # Create the translated category column and remove English category
-        if "Category" in displayed_results.columns:
-            displayed_results["Category Display"] = displayed_results["Category"].apply(
-                lambda x: get_text(x) if x and isinstance(x, str) else x
-            )
-            # Remove the original English Category column
-            displayed_results = displayed_results.drop(columns=["Category"])
+        # KEEP ORIGINAL CATEGORY - DO NOT CREATE TRANSLATED VERSION
+        # The original Category column will be displayed as-is with English values
         
-        # Apply column selection - only show selected columns
-        # Determine which columns to show based on user selection
+        # Apply column selection - build columns in logical order
         columns_to_show = []
         
-        # Always include essential columns that exist in the data (excluding DB ID)
-        for col in essential_columns:
-            if col in displayed_results.columns and col not in ["DB ID"]:
-                columns_to_show.append(col)
+        # 1. Essential identification columns first
+        if "Model" in displayed_results.columns:
+            columns_to_show.append("Model")
+        elif "Model No." in displayed_results.columns:
+            columns_to_show.append("Model No.")
         
-        # Add user-selected optional columns that exist in the data
-        for col in selected_optional_columns:
+        # Add other essential columns (id, ID) - excluding DB ID
+        for col in essential_columns:
             if col in displayed_results.columns and col not in columns_to_show and col not in ["DB ID"]:
                 columns_to_show.append(col)
+        
+        # 2. Category (if selected) - ORIGINAL ENGLISH CATEGORY
+        if "Category" in selected_optional_columns and "Category" in displayed_results.columns:
+            columns_to_show.append("Category")
+        
+        # 3. Performance specifications (if selected)
+        performance_cols = ["Q Rated/LPM", "Head Rated/M", "Max Flow (LPM)", "Max Head (M)"]
+        for col in performance_cols:
+            if col in selected_optional_columns and col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # 4. Electrical specifications (if selected)
+        electrical_cols = ["Frequency (Hz)", "Phase"]
+        for col in electrical_cols:
+            if col in selected_optional_columns and col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # 5. Physical specifications (if selected)
+        physical_cols = ["Pass Solid Dia(mm)", "HP", "Power(KW)", "Outlet (mm)", "Outlet (inch)"]
+        for col in physical_cols:
+            if col in selected_optional_columns and col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # 6. Other selected columns (excluding Product Link for now)
+        for col in selected_optional_columns:
+            if col in displayed_results.columns and col not in columns_to_show and col != "Product Link":
+                columns_to_show.append(col)
+        
+        # 7. Product Link always last (if selected)
+        if "Product Link" in selected_optional_columns and "Product Link" in displayed_results.columns:
+            columns_to_show.append("Product Link")
         
         # If no columns selected, show a message
         if not columns_to_show:
@@ -738,46 +758,6 @@ if st.button(get_text("Search")):
         else:
             # Filter the dataframe to only show selected columns (ensuring DB ID is excluded)
             displayed_results = displayed_results[columns_to_show]
-            
-            # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
-            def reorder_columns(df):
-                """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
-                cols = list(df.columns)
-                
-                # Find the positions of key columns
-                pass_solid_idx = None
-                q_rated_idx = None
-                head_rated_idx = None
-                
-                for i, col in enumerate(cols):
-                    if "Pass Solid Dia" in str(col):
-                        pass_solid_idx = i
-                    elif col == "Q Rated/LPM":
-                        q_rated_idx = i
-                    elif col == "Head Rated/M":
-                        head_rated_idx = i
-                
-                # If we have the required columns, reorder them
-                if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
-                    # Remove Q Rated/LPM and Head Rated/M from their current positions
-                    reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
-                    new_cols = [col for col in cols if col not in reorder_cols]
-                    
-                    # Insert them after Pass Solid Dia(mm)
-                    insert_position = pass_solid_idx + 1
-                    if "Q Rated/LPM" in cols:
-                        new_cols.insert(insert_position, "Q Rated/LPM")
-                        insert_position += 1
-                    if "Head Rated/M" in cols:
-                        new_cols.insert(insert_position, "Head Rated/M")
-                    
-                    return df[new_cols]
-                else:
-                    # If we can't find the reference columns, return as is
-                    return df
-            
-            # Apply column reordering
-            displayed_results = reorder_columns(displayed_results)
             
             # Display the results
             st.write(get_text("Matching Results"))
@@ -804,6 +784,14 @@ if st.button(get_text("Search")):
                     format="%d"
                 )
             
+            # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product")
+                )
+            
             # Better formatting for Q Rated/LPM and Head Rated/M columns
             if "Q Rated/LPM" in displayed_results.columns:
                 flow_label = get_text("Q Rated/LPM")
@@ -823,18 +811,59 @@ if st.button(get_text("Search")):
                     format="%.1f m"
                 )
             
-            # Configure the translated category column
+            # Configure the ORIGINAL category column
             if "Category" in displayed_results.columns:
                 column_config["Category"] = st.column_config.TextColumn(
-                    get_text("Category"),
-                    help="Translated pump category"
+                    get_text("Category"),  # Header will be translated to "類別" in Chinese
+                    help="Pump category"   # But content will be original English like "Dirty Water", "Clean Water"
                 )
-                         # Configure the Product Link column if it exists
-            if "Product Link" in displayed_results.columns:
-                column_config["Product Link"] = st.column_config.LinkColumn(
-                    "Product Link",
-                    help="Click to view product details",
-                    display_text=get_text("View Product")
+            
+            # Configure Model columns
+            if "Model" in displayed_results.columns:
+                column_config["Model"] = st.column_config.TextColumn(
+                    "Model",
+                    help="Pump model"
+                )
+            elif "Model No." in displayed_results.columns:
+                column_config["Model No."] = st.column_config.TextColumn(
+                    "Model No.",
+                    help="Pump model number"
+                )
+            
+            # Configure other numeric columns with proper formatting
+            if "Max Flow (LPM)" in displayed_results.columns:
+                column_config["Max Flow (LPM)"] = st.column_config.NumberColumn(
+                    "Max Flow (LPM)",
+                    help="Maximum flow rate in liters per minute",
+                    format="%.1f LPM"
+                )
+            
+            if "Max Head (M)" in displayed_results.columns:
+                column_config["Max Head (M)"] = st.column_config.NumberColumn(
+                    "Max Head (M)",
+                    help="Maximum head in meters",
+                    format="%.1f m"
+                )
+            
+            if "Pass Solid Dia(mm)" in displayed_results.columns:
+                column_config["Pass Solid Dia(mm)"] = st.column_config.NumberColumn(
+                    "Pass Solid Dia(mm)",
+                    help="Maximum solid particle diameter that can pass through",
+                    format="%.1f mm"
+                )
+            
+            if "Frequency (Hz)" in displayed_results.columns:
+                column_config["Frequency (Hz)"] = st.column_config.NumberColumn(
+                    "Frequency (Hz)",
+                    help="Operating frequency in Hertz",
+                    format="%d Hz"
+                )
+            
+            if "Phase" in displayed_results.columns:
+                column_config["Phase"] = st.column_config.NumberColumn(
+                    "Phase",
+                    help="Number of phases",
+                    format="%d"
                 )
             
             # Display the results with error handling
@@ -847,7 +876,7 @@ if st.button(get_text("Search")):
                 )
             except Exception as e:
                 # If the dataframe with column_config fails, fall back to simple dataframe
-                st.error(f"Error displaying results with translations: {e}")
+                st.error(f"Error displaying results with column configuration: {e}")
                 st.dataframe(
                     displayed_results,
                     hide_index=True,
