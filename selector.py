@@ -937,58 +937,50 @@ if st.session_state.table_state:
         if len(st.session_state.selected_pumps_for_curves) == 0:
             st.session_state.selected_pumps_for_curves = set(unique_models[:5])
         
-        # Create a container for the table to prevent scrolling on updates
-        table_container = st.container()
+        # Add checkbox column to the dataframe
+        checkbox_data = []
+        for idx, row in displayed_results.iterrows():
+            model_name = str(row[model_column]) if pd.notna(row[model_column]) else ""
+            is_selected = model_name in st.session_state.selected_pumps_for_curves
+            checkbox_data.append(is_selected)
         
-        with table_container:
-            # Create individual checkboxes for pump selection
-            st.markdown("### Select Pumps for Curve Comparison")
-            
-            # Create columns for checkboxes (3 per row)
-            cols_per_row = 3
-            for i in range(0, len(unique_models), cols_per_row):
-                cols = st.columns(cols_per_row)
-                for j, model in enumerate(unique_models[i:i+cols_per_row]):
-                    with cols[j]:
-                        # Use a unique key for each checkbox
-                        checkbox_key = f"pump_checkbox_{model}_{i+j}"
-                        is_checked = model in st.session_state.selected_pumps_for_curves
-                        
-                        # Create checkbox with callback handling
-                        if st.checkbox(
-                            f"{model}", 
-                            value=is_checked, 
-                            key=checkbox_key
-                        ):
-                            st.session_state.selected_pumps_for_curves.add(model)
-                        else:
-                            st.session_state.selected_pumps_for_curves.discard(model)
+        # Add checkbox column to the beginning of the dataframe
+        displayed_results_with_checkbox = displayed_results.copy()
+        displayed_results_with_checkbox.insert(0, get_text("Show Curve"), checkbox_data)
         
-        # Apply column selection - only show selected columns
+        # Apply column selection - only show selected columns (but always include checkbox column)
         # Determine which columns to show based on user selection
-        columns_to_show = []
+        columns_to_show = [get_text("Show Curve")]  # Always include checkbox column first
         
         # Always include essential columns that exist in the data
         for col in essential_columns:
-            if col in displayed_results.columns:
+            if col in displayed_results_with_checkbox.columns:
                 columns_to_show.append(col)
         
         # Add user-selected optional columns that exist in the data
         for col in selected_optional_columns:
-            if col in displayed_results.columns and col not in columns_to_show:
+            if col in displayed_results_with_checkbox.columns and col not in columns_to_show:
                 columns_to_show.append(col)
         
-        # If no columns selected, show a message
-        if not columns_to_show:
+        # If no columns selected (except checkbox), show a message
+        if len(columns_to_show) <= 1:
             st.warning("⚠️ No columns selected for display. Please select at least one column from the Column Selection section above.")
         else:
             # Filter the dataframe to only show selected columns
-            displayed_results_filtered = displayed_results[columns_to_show]
+            displayed_results_filtered = displayed_results_with_checkbox[columns_to_show]
             
             # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
             def reorder_columns(df):
                 """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
                 cols = list(df.columns)
+                
+                # Always keep checkbox column first
+                checkbox_col = get_text("Show Curve")
+                if checkbox_col in cols:
+                    cols.remove(checkbox_col)
+                    new_cols = [checkbox_col]
+                else:
+                    new_cols = []
                 
                 # Find the positions of key columns
                 pass_solid_idx = None
@@ -1007,20 +999,22 @@ if st.session_state.table_state:
                 if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
                     # Remove Q Rated/LPM and Head Rated/M from their current positions
                     reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
-                    new_cols = [col for col in cols if col not in reorder_cols]
+                    new_cols_remaining = [col for col in cols if col not in reorder_cols]
                     
                     # Insert them after Pass Solid Dia(mm)
                     insert_position = pass_solid_idx + 1
                     if "Q Rated/LPM" in cols:
-                        new_cols.insert(insert_position, "Q Rated/LPM")
+                        new_cols_remaining.insert(insert_position, "Q Rated/LPM")
                         insert_position += 1
                     if "Head Rated/M" in cols:
-                        new_cols.insert(insert_position, "Head Rated/M")
+                        new_cols_remaining.insert(insert_position, "Head Rated/M")
                     
-                    return df[new_cols]
+                    new_cols.extend(new_cols_remaining)
                 else:
                     # If we can't find the reference columns, return as is
-                    return df
+                    new_cols.extend(cols)
+                
+                return df[new_cols]
             
             # Apply column reordering
             displayed_results_filtered = reorder_columns(displayed_results_filtered)
@@ -1035,6 +1029,13 @@ if st.session_state.table_state:
             
             # Create column configuration for product links and proper formatting
             column_config = {}
+            
+            # Configure the checkbox column
+            column_config[get_text("Show Curve")] = st.column_config.CheckboxColumn(
+                get_text("Show Curve"),
+                help="Select pumps to display in performance curves",
+                default=False
+            )
             
             # Configure the ID column for default sorting if it exists
             if "DB ID" in displayed_results_filtered.columns:
@@ -1090,17 +1091,38 @@ if st.session_state.table_state:
                     help="Translated pump category"
                 )
             
-            # Display the results with error handling - use regular dataframe to avoid reloads
+            # Display the results with error handling - use data_editor for interactive checkboxes
             try:
-                st.dataframe(
+                # Use data_editor to allow checkbox interaction
+                edited_data = st.data_editor(
                     displayed_results_filtered,
                     column_config=column_config,
                     hide_index=True,
-                    use_container_width=True
+                    use_container_width=True,
+                    key="pump_results_table_with_checkbox"
                 )
+                
+                # Update selected pumps based on checkbox changes
+                if get_text("Show Curve") in edited_data.columns and model_column:
+                    # Find which pumps are now selected
+                    new_selected_pumps = set()
+                    
+                    # Iterate through the edited data to find selected pumps
+                    for idx, row in edited_data.iterrows():
+                        if row[get_text("Show Curve")]:
+                            # Get the corresponding model from the original data
+                            original_row = displayed_results_with_checkbox.iloc[idx]
+                            if model_column in original_row:
+                                model_name = str(original_row[model_column]) if pd.notna(original_row[model_column]) else ""
+                                if model_name:
+                                    new_selected_pumps.add(model_name)
+                    
+                    # Update session state
+                    st.session_state.selected_pumps_for_curves = new_selected_pumps
+                
             except Exception as e:
-                # If the dataframe with column_config fails, fall back to simple dataframe
-                st.error(f"Error displaying table: {e}")
+                # If the data_editor with column_config fails, fall back to simple dataframe
+                st.error(f"Error displaying interactive table: {e}")
                 st.dataframe(
                     displayed_results_filtered,
                     hide_index=True,
