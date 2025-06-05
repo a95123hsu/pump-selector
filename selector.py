@@ -569,8 +569,8 @@ if not pumps.empty and optional_columns:
             if 'selected_columns' not in st.session_state:
                 # Default selection - Model will be first as essential, then these optional columns
                 default_selected = [
-                    "Category", "Q Rated/LPM", "Head Rated/M", "Max Flow (LPM)", "Max Head (M)",
-                    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
+                    "Category", "Frequency (Hz)", "Phase", "Q Rated/LPM", "Head Rated/M", "Max Flow (LPM)", "Max Head (M)",
+                    "Product Link"
                 ]
                 st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
             
