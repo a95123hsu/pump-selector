@@ -1123,6 +1123,525 @@ if st.session_state.table_state:
                     new_selections = set()
                     for idx, row in edited_df.iterrows():
                         if row[checkbox_col_name]:  # If checkbox is checked
+                            model_value = row[model_column]
+                            if pd.notna(model_value):
+                                new_selections.add(str(model_value))
+                    
+                    # Update session state with new selections
+                    st.session_state.selected_pumps_for_curves = new_selections
+                
+            except Exception as e:
+                # If the data_editor fails, fall back to read-only dataframe
+                st.error(f"Error displaying editable table: {e}")
+                st.write("Falling back to read-only table...")
+    else:
+        # If no suitable model column found, show read-only table
+        st.warning("⚠️ Could not find a suitable column for pump identification. Showing read-only table.")
+        st.info(f"Available columns: {', '.join(displayed_results_filtered.columns)}")
+        
+        # Display read-only results without checkboxes
+        st.write(get_text("Matching Results"))
+        
+        if len(displayed_results_filtered) > 0:
+            st.write(get_text("Showing Results", count=len(displayed_results_filtered)))
+            st.caption(f"📋 Displaying {len(displayed_results_filtered.columns)} columns: {', '.join(displayed_results_filtered.columns[:5])}{'...' if len(displayed_results_filtered.columns) > 5 else ''}")
+        
+        # Create basic column configuration for read-only display
+        column_config = {}
+        
+        # Configure the Product Link column if it exists
+        if "Product Link" in displayed_results_filtered.columns:
+            column_config["Product Link"] = st.column_config.LinkColumn(
+                "Product Link",
+                help="Click to view product details",
+                display_text=get_text("View Product")
+            )
+        
+        # Display the read-only dataframe
+        try:
+            st.dataframe(
+                displayed_results_filtered,
+                column_config=column_config,
+                hide_index=True,
+                use_container_width=True
+            )
+        except Exception as e:
+            st.dataframe(
+                displayed_results_filtered,
+                hide_index=True,
+                use_container_width=True
+            )# Continuation from previous file...
+
+height = st.number_input(get_text("Pond Height"), min_value=0.0, step=0.1, key="height")
+drain_time_hr = st.number_input(get_text("Drain Time"), min_value=0.01, step=0.1, key="drain_time_hr")
+
+pond_volume = length * width * height * 1000
+drain_time_min = drain_time_hr * 60
+pond_lpm = pond_volume / drain_time_min if drain_time_min > 0 else 0
+
+if pond_volume > 0:
+    st.caption(get_text("Pond Volume", volume=round(pond_volume)))
+if pond_lpm > 0:
+    st.success(get_text("Required Flow", flow=round(pond_lpm)))
+
+# --- Underground and particle size ---
+underground_depth = st.number_input(get_text("Pump Depth"), min_value=0.0, step=0.1, key="underground_depth")
+particle_size = st.number_input(get_text("Particle Size"), min_value=0.0, step=1.0, key="particle_size")
+
+# --- Auto calculations ---
+if category == "Booster":
+    auto_flow = max(num_faucets * 15, pond_lpm)
+    auto_tdh = max(num_floors * 3.5, height)
+else:
+    auto_flow = pond_lpm
+    auto_tdh = underground_depth if underground_depth > 0 else height
+
+# --- 🎛️ Manual Input Section ---
+st.markdown(get_text("Manual Input"))
+
+flow_unit_options = ["L/min", "L/sec", "m³/hr", "m³/min", "US gpm"]
+flow_unit_translated = [get_text(unit) for unit in flow_unit_options]
+flow_unit_map = dict(zip(flow_unit_translated, flow_unit_options))
+
+flow_unit = st.radio(get_text("Flow Unit"), flow_unit_translated, horizontal=True)
+flow_unit_original = flow_unit_map.get(flow_unit, "L/min")
+flow_value = st.number_input(get_text("Flow Value"), min_value=0.0, step=10.0, value=float(auto_flow), key="flow_value")
+
+head_unit_options = ["m", "ft"]
+head_unit_translated = [get_text(unit) for unit in head_unit_options]
+head_unit_map = dict(zip(head_unit_translated, head_unit_options))
+
+head_unit = st.radio(get_text("Head Unit"), head_unit_translated, horizontal=True)
+head_unit_original = head_unit_map.get(head_unit, "m")
+head_value = st.number_input(get_text("TDH"), min_value=0.0, step=1.0, value=float(auto_tdh), key="head_value")
+
+# --- Estimated application from manual ---
+if category == "Booster":
+    estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
+    estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
+
+    st.markdown(get_text("Estimated Application"))
+    col1, col2 = st.columns(2)
+    col1.metric(get_text("Estimated Floors"), estimated_floors)
+    col2.metric(get_text("Estimated Faucets"), estimated_faucets)
+
+# --- Result Display Limit ---
+st.markdown(get_text("Result Display"))
+
+# Column Selection in Result Display Control section
+if not pumps.empty and optional_columns:
+    with st.expander(get_text("Column Selection"), expanded=False):
+        # Create two columns for the selection interface
+        col_selection_left, col_selection_right = st.columns([1, 1])
+        
+        with col_selection_left:
+            st.caption(get_text("Essential Columns"))
+            st.write(", ".join([col for col in essential_columns if col in available_columns]))
+            
+            # Select/Deselect All buttons
+            col_btn1, col_btn2 = st.columns(2)
+            with col_btn1:
+                select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
+            with col_btn2:
+                deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
+        
+        with col_selection_right:
+            st.caption(get_text("Select Columns"))
+            
+            # Initialize selected columns in session state if not exists
+            if 'selected_columns' not in st.session_state:
+                # Default selection - include some commonly used columns
+                default_selected = [
+                    "Category Display", "Q Rated/LPM", "Head Rated/M", "Max Flow LPM", "Max Head m",
+                    "Frequency (Hz)", "Phase", "Pass Solid Dia(mm)", "Product Link"
+                ]
+                st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
+            
+            # Handle Select All / Deselect All button clicks
+            if select_all:
+                st.session_state.selected_columns = optional_columns.copy()
+            if deselect_all:
+                st.session_state.selected_columns = []
+            
+            # Create checkboxes for each optional column - store current state without immediate update
+            current_selection = []
+            for col in optional_columns:
+                is_selected = col in st.session_state.selected_columns
+                if st.checkbox(col, value=is_selected, key=f"col_check_{col}"):
+                    current_selection.append(col)
+            
+            # Store the current selection in a temporary state (don't update main state yet)
+            st.session_state.temp_selected_columns = current_selection
+else:
+    # Use the last confirmed selection from search, or default if none
+    selected_optional_columns = st.session_state.get('selected_columns', [])
+
+result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
+
+# --- Search Logic ---
+if st.button(get_text("Search")):
+    # Update the column selection when search is pressed
+    if 'temp_selected_columns' in st.session_state:
+        st.session_state.selected_columns = st.session_state.temp_selected_columns
+        selected_optional_columns = st.session_state.selected_columns
+    else:
+        selected_optional_columns = st.session_state.get('selected_columns', [])
+    
+    # Reset selected pumps for curves when new search is performed
+    st.session_state.selected_pumps_for_curves = set()
+    st.session_state.table_state = None
+    
+    filtered_pumps = pumps.copy()
+    
+    # Handle frequency and phase filtering with "Show All" options
+    try:
+        # Convert types appropriately with error handling before filtering
+        filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
+        filtered_pumps["Phase"] = pd.to_numeric(filtered_pumps["Phase"], errors='coerce')
+        
+        # Apply frequency filter - skip filtering if "Show All Frequency" is selected
+        if frequency != get_text("Show All Frequency"):
+            if isinstance(frequency, str):
+                try:
+                    freq_value = float(frequency)
+                    filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == freq_value]
+                except ValueError:
+                    filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+            else:
+                filtered_pumps = filtered_pumps[filtered_pumps["Frequency (Hz)"] == frequency]
+        # Apply phase filter - skip filtering if "Show All Phase" is selected
+        if phase != get_text("Show All Phase"):
+            if isinstance(phase, str):
+                try:
+                    phase_value = int(phase)
+                    filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase_value]
+                except ValueError:
+                    filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
+            else:
+                filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == int(phase)]
+    except Exception as e:
+        st.error(f"Error filtering by frequency/phase: {e}")
+        # If filtering fails, show a message but continue with other filters
+
+    # Apply category filter - use the original English category name for filtering
+    if category != get_text("All Categories"):
+        filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
+
+    # Convert flow to LPM
+    flow_lpm = flow_value
+    if flow_unit_original == "L/sec": flow_lpm *= 60
+    elif flow_unit_original == "m³/hr": flow_lpm = flow_value * 1000 / 60
+    elif flow_unit_original == "m³/min": flow_lpm *= 1000
+    elif flow_unit_original == "US gpm": flow_lpm *= 3.785
+
+    # Convert head to meters
+    head_m = head_value if head_unit_original == "m" else head_value * 0.3048
+
+    # Use Q Rated/LPM and Head Rated/M instead of Max Flow and Max Head
+    # Ensure numeric conversion for flow and head with improved handling
+    # Replace NaN with 0 to avoid comparison issues
+    filtered_pumps["Q Rated/LPM"] = pd.to_numeric(filtered_pumps["Q Rated/LPM"], errors="coerce").fillna(0)
+    filtered_pumps["Head Rated/M"] = pd.to_numeric(filtered_pumps["Head Rated/M"], errors="coerce").fillna(0)
+
+    # Apply filters with safe handling of missing values
+    if flow_lpm > 0:
+        filtered_pumps = filtered_pumps[filtered_pumps["Q Rated/LPM"] >= flow_lpm]
+    if head_m > 0:
+        filtered_pumps = filtered_pumps[filtered_pumps["Head Rated/M"] >= head_m]
+    if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
+        # Convert to numeric first to handle potential string values
+        filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce").fillna(0)
+        filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
+
+    st.subheader(get_text("Matching Pumps"))
+    st.write(get_text("Found Pumps", count=len(filtered_pumps)))
+
+    if not filtered_pumps.empty:
+        results = filtered_pumps.copy()
+        
+        # Sort by Q Rated/LPM and Head Rated/M for better user experience
+        if "Q Rated/LPM" in results.columns and "Head Rated/M" in results.columns:
+            # Properly handle data types before calculations
+            results["Q Rated/LPM"] = pd.to_numeric(results["Q Rated/LPM"], errors="coerce").fillna(0)
+            results["Head Rated/M"] = pd.to_numeric(results["Head Rated/M"], errors="coerce").fillna(0)
+            
+            # Sort by closest match to requested flow and head
+            results["Flow Difference"] = abs(results["Q Rated/LPM"] - flow_lpm)
+            results["Head Difference"] = abs(results["Head Rated/M"] - head_m)
+            
+            # Weight differences properly and handle NaN values
+            results["Match Score"] = results["Flow Difference"] + results["Head Difference"]
+            results = results.sort_values("Match Score")
+            
+            # Remove temporary columns used for sorting
+            results = results.drop(columns=["Flow Difference", "Head Difference", "Match Score"])
+        
+        # Sort by DB ID first, then apply percentage filter
+        if "DB ID" in results.columns:
+            results = results.sort_values("DB ID")
+        elif "id" in results.columns:
+            results = results.sort_values("id")
+        elif "ID" in results.columns:
+            results = results.sort_values("ID")
+        
+        # Apply percentage limit after sorting by DB ID
+        max_to_show = max(1, int(len(results) * (result_percent / 100)))
+        displayed_results = results.head(max_to_show).copy()
+        
+        # Create the translated category column and remove English category
+        if "Category" in displayed_results.columns:
+            displayed_results["Category Display"] = displayed_results["Category"].apply(
+                lambda x: get_text(x) if x and isinstance(x, str) else x
+            )
+            # Remove the original English Category column
+            displayed_results = displayed_results.drop(columns=["Category"])
+        
+        # Store the table data in session state to prevent reloads
+        st.session_state.table_state = {
+            'data': displayed_results,
+            'selected_optional_columns': selected_optional_columns,
+            'essential_columns': essential_columns
+        }
+
+# --- Display results table if we have data ---
+if st.session_state.table_state:
+    displayed_results = st.session_state.table_state['data']
+    selected_optional_columns = st.session_state.table_state['selected_optional_columns']
+    essential_columns = st.session_state.table_state['essential_columns']
+    
+    # --- NEW: Add checkbox column for curve selection ---
+    # Find the model column - prioritize exact matches for your database structure
+    model_column = None
+    possible_model_columns = [
+        "Model No.",  # Your exact column name from pump_curve_data
+        "Model",      # Common alternative
+        "Model No", 
+        "model", 
+        "model_no", 
+        "Model Number", 
+        "ModelNo"
+    ]
+    
+    for col in possible_model_columns:
+        if col in displayed_results.columns:
+            model_column = col
+            break
+    
+    # If no exact match, try partial matching
+    if model_column is None:
+        for col in displayed_results.columns:
+            if any(keyword.lower() in col.lower() for keyword in ["model", "pump", "product"]):
+                model_column = col
+                break
+    
+    # If still no model column found, use ID column as fallback
+    if model_column is None:
+        id_columns = ["DB ID", "id", "ID", "DB_ID"]
+        for id_col in id_columns:
+            if id_col in displayed_results.columns:
+                model_column = id_col
+                break
+        
+        if model_column is None and len(displayed_results.columns) > 0:
+            model_column = displayed_results.columns[0]
+    
+    if model_column and model_column in displayed_results.columns:
+        # Get unique models from the displayed results
+        unique_models = displayed_results[model_column].dropna().unique()
+        
+        # Auto-select first 3 pumps for curves if this is a new search (no selections yet)
+        if len(st.session_state.selected_pumps_for_curves) == 0:
+            st.session_state.selected_pumps_for_curves = set(unique_models[:3])
+        
+        # Apply column selection - only show selected columns
+        # Determine which columns to show based on user selection
+        columns_to_show = []
+        
+        # Always include essential columns that exist in the data
+        for col in essential_columns:
+            if col in displayed_results.columns:
+                columns_to_show.append(col)
+        
+        # Add user-selected optional columns that exist in the data
+        for col in selected_optional_columns:
+            if col in displayed_results.columns and col not in columns_to_show:
+                columns_to_show.append(col)
+        
+        # If no columns selected, show a message
+        if not columns_to_show:
+            st.warning("⚠️ No columns selected for display. Please select at least one column from the Column Selection section above.")
+        else:
+            # Filter the dataframe to only show selected columns
+            displayed_results_filtered = displayed_results[columns_to_show]
+            
+            # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
+            def reorder_columns(df):
+                """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
+                cols = list(df.columns)
+                
+                # Find the positions of key columns
+                pass_solid_idx = None
+                q_rated_idx = None
+                head_rated_idx = None
+                
+                for i, col in enumerate(cols):
+                    if "Pass Solid Dia" in str(col):
+                        pass_solid_idx = i
+                    elif col == "Q Rated/LPM":
+                        q_rated_idx = i
+                    elif col == "Head Rated/M":
+                        head_rated_idx = i
+                
+                # If we have the required columns, reorder them
+                if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
+                    # Remove Q Rated/LPM and Head Rated/M from their current positions
+                    reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
+                    new_cols = [col for col in cols if col not in reorder_cols]
+                    
+                    # Insert them after Pass Solid Dia(mm)
+                    insert_position = pass_solid_idx + 1
+                    if "Q Rated/LPM" in cols:
+                        new_cols.insert(insert_position, "Q Rated/LPM")
+                        insert_position += 1
+                    if "Head Rated/M" in cols:
+                        new_cols.insert(insert_position, "Head Rated/M")
+                    
+                    return df[new_cols]
+                else:
+                    # If we can't find the reference columns, return as is
+                    return df
+            
+            # Apply column reordering
+            displayed_results_filtered = reorder_columns(displayed_results_filtered)
+            
+            # --- NEW: Create an editable dataframe with checkboxes ---
+            # Add a checkbox column for curve selection
+            displayed_results_with_checkbox = displayed_results_filtered.copy()
+            
+            # Create checkbox column based on current selections
+            # Use a safer approach to create the checkbox column
+            checkbox_values = []
+            for idx, row in displayed_results_with_checkbox.iterrows():
+                model_value = row[model_column] if pd.notna(row[model_column]) else f"Row_{idx}"
+                is_selected = str(model_value) in [str(x) for x in st.session_state.selected_pumps_for_curves]
+                checkbox_values.append(is_selected)
+            
+            displayed_results_with_checkbox[get_text("Select for Curves")] = checkbox_values
+            
+            # Move checkbox column to the front
+            checkbox_col_name = get_text("Select for Curves")
+            cols = [checkbox_col_name] + [col for col in displayed_results_with_checkbox.columns if col != checkbox_col_name]
+            displayed_results_with_checkbox = displayed_results_with_checkbox[cols]
+            
+            # Display the results
+            st.write(get_text("Matching Results"))
+            
+            # Show information about displayed results and columns
+            if len(displayed_results_filtered) > 0:
+                st.write(get_text("Showing Results", count=len(displayed_results_filtered)))
+                st.caption(f"📋 Displaying {len(displayed_results_filtered.columns)} columns: {', '.join(displayed_results_filtered.columns[:5])}{'...' if len(displayed_results_filtered.columns) > 5 else ''}")
+            
+            # Create column configuration for the editable dataframe
+            column_config = {}
+            
+            # Configure the checkbox column to be editable
+            column_config[checkbox_col_name] = st.column_config.CheckboxColumn(
+                checkbox_col_name,
+                help="Select pumps to display in performance curves",
+                default=False
+            )
+            
+            # Configure the ID column for default sorting if it exists
+            if "DB ID" in displayed_results_with_checkbox.columns:
+                column_config["DB ID"] = st.column_config.NumberColumn(
+                    "DB ID",
+                    help="Database ID",
+                    format="%d",
+                    disabled=True  # Make non-editable
+                )
+            elif "id" in displayed_results_with_checkbox.columns:
+                column_config["id"] = st.column_config.NumberColumn(
+                    "ID",
+                    help="Database ID",
+                    format="%d",
+                    disabled=True  # Make non-editable
+                )
+            elif "ID" in displayed_results_with_checkbox.columns:
+                column_config["ID"] = st.column_config.NumberColumn(
+                    "ID",
+                    help="Database ID",
+                    format="%d",
+                    disabled=True  # Make non-editable
+                )
+            
+            # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results_with_checkbox.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product"),
+                    disabled=True  # Make non-editable
+                )
+            
+            # Better formatting for Q Rated/LPM and Head Rated/M columns
+            if "Q Rated/LPM" in displayed_results_with_checkbox.columns:
+                flow_label = get_text("Q Rated/LPM")
+                flow_help = get_text("Rated flow rate in liters per minute")
+                column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
+                    flow_label,
+                    help=flow_help,
+                    format="%.1f LPM",
+                    disabled=True  # Make non-editable
+                )
+            
+            if "Head Rated/M" in displayed_results_with_checkbox.columns:
+                head_label = get_text("Head Rated/M")
+                head_help = get_text("Rated head in meters")
+                column_config["Head Rated/M"] = st.column_config.NumberColumn(
+                    head_label,
+                    help=head_help,
+                    format="%.1f m",
+                    disabled=True  # Make non-editable
+                )
+            
+            # Configure the translated category column
+            if "Category Display" in displayed_results_with_checkbox.columns:
+                column_config["Category Display"] = st.column_config.TextColumn(
+                    get_text("Category"),
+                    help="Translated pump category",
+                    disabled=True  # Make non-editable
+                )
+            
+            # Make all other columns non-editable by default
+            for col in displayed_results_with_checkbox.columns:
+                if col not in column_config and col != checkbox_col_name:
+                    if displayed_results_with_checkbox[col].dtype in ['int64', 'float64']:
+                        column_config[col] = st.column_config.NumberColumn(
+                            col,
+                            disabled=True
+                        )
+                    else:
+                        column_config[col] = st.column_config.TextColumn(
+                            col,
+                            disabled=True
+                        )
+            
+            # Display the editable dataframe with checkboxes
+            try:
+                edited_df = st.data_editor(
+                    displayed_results_with_checkbox,
+                    column_config=column_config,
+                    hide_index=True,
+                    use_container_width=True,
+                    key="pump_selection_table"
+                )
+                
+                # Update selected pumps based on checkbox changes
+                if edited_df is not None and model_column in edited_df.columns:
+                    # Get the current selections from the edited dataframe
+                    new_selections = set()
+                    for idx, row in edited_df.iterrows():
+                        if row[checkbox_col_name]:  # If checkbox is checked
                             model_name = row[model_column]
                             if pd.notna(model_name):
                                 new_selections.add(model_name)
