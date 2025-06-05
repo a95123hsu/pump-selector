@@ -804,14 +804,6 @@ if st.button(get_text("Search")):
                     format="%d"
                 )
             
-            # Configure the Product Link column if it exists
-            if "Product Link" in displayed_results.columns:
-                column_config["Product Link"] = st.column_config.LinkColumn(
-                    "Product Link",
-                    help="Click to view product details",
-                    display_text=get_text("View Product")
-                )
-            
             # Better formatting for Q Rated/LPM and Head Rated/M columns
             if "Q Rated/LPM" in displayed_results.columns:
                 flow_label = get_text("Q Rated/LPM")
@@ -836,6 +828,13 @@ if st.button(get_text("Search")):
                 column_config["Category Display"] = st.column_config.TextColumn(
                     get_text("Category"),
                     help="Translated pump category"
+                )
+             # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product")
                 )
             
             # Display the results with error handling
