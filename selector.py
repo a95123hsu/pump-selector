@@ -542,6 +542,16 @@ if pumps.empty:
     st.error(get_text("No Data"))
     st.stop()
 
+# --- DEBUG: Show data info ---
+st.write("**🔍 Debug Info:**")
+st.write(f"- Pump data shape: {pumps.shape}")
+st.write(f"- Pump data columns: {list(pumps.columns)}")
+st.write(f"- Curve data shape: {curve_data.shape}")
+if not curve_data.empty:
+    st.write(f"- Curve data columns: {list(curve_data.columns)}")
+    if 'Model No.' in curve_data.columns:
+        st.write(f"- Sample curve models: {list(curve_data['Model No.'].dropna().unique()[:5])}")
+
 # Show data freshness information
 st.caption(get_text("Data loaded", n_records=len(pumps), timestamp=pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')))
 
@@ -678,6 +688,8 @@ else:
 st.markdown(get_text("Pond Drainage"))
 
 length = st.number_input(get_text("Pond Length"), min_value=0.0, step=0.1, key="length")
+# Continuation of the debug version...
+
 width = st.number_input(get_text("Pond Width"), min_value=0.0, step=0.1, key="width")
 height = st.number_input(get_text("Pond Height"), min_value=0.0, step=0.1, key="height")
 drain_time_hr = st.number_input(get_text("Drain Time"), min_value=0.01, step=0.1, key="drain_time_hr")
@@ -685,7 +697,6 @@ drain_time_hr = st.number_input(get_text("Drain Time"), min_value=0.01, step=0.1
 pond_volume = length * width * height * 1000
 drain_time_min = drain_time_hr * 60
 pond_lpm = pond_volume / drain_time_min if drain_time_min > 0 else 0
-# Continuation of the complete pump selector...
 
 if pond_volume > 0:
     st.caption(get_text("Pond Volume", volume=round(pond_volume)))
@@ -917,21 +928,80 @@ if st.session_state.table_state:
     selected_optional_columns = st.session_state.table_state['selected_optional_columns']
     essential_columns = st.session_state.table_state['essential_columns']
     
+    # --- DEBUG: Show available columns ---
+    st.write("**🔍 Debug - Available columns in results:**", list(displayed_results.columns))
+    
     # --- Add checkbox column for curve selection ---
-    # Find the model column
+    # Find the model column - check what columns we actually have
     model_column = None
-    for col in ["Model", "Model No.", "Model No", "model", "model_no"]:
+    possible_model_columns = [
+        "Model", "Model No.", "Model No", "model", "model_no", "Model_No", 
+        "model_no.", "Model Number", "ModelNo", "model_number", "MODEL", 
+        "Product Model", "Pump Model", "Model Name"
+    ]
+    
+    for col in possible_model_columns:
         if col in displayed_results.columns:
             model_column = col
+            st.success(f"✅ **Found model column:** {model_column}")
             break
+    
+    # If no exact match, try partial matching
+    if not model_column:
+        for col in displayed_results.columns:
+            if "model" in col.lower() or "產品" in col or "型號" in col:
+                model_column = col
+                st.success(f"✅ **Found model column (partial match):** {model_column}")
+                break
+    
+    if not model_column:
+        st.error("❌ **No model column found!** Available columns: " + ", ".join(displayed_results.columns))
+        st.info("💡 Please check your database table to ensure it has a Model column.")
+        # Let's try the first text column as a fallback
+        text_columns = []
+        for col in displayed_results.columns:
+            if displayed_results[col].dtype == 'object':
+                text_columns.append(col)
+        if text_columns:
+            model_column = text_columns[0]
+            st.warning(f"🔄 **Using fallback column:** {model_column}")
     
     if model_column:
         # Get unique models and their indices for checkbox management
         unique_models = displayed_results[model_column].dropna().unique()
+        st.write(f"**📋 Available pump models from {model_column}:** {list(unique_models)}")
         
         # Auto-select first 5 pumps for curves if this is a new search (no selections yet)
         if len(st.session_state.selected_pumps_for_curves) == 0:
             st.session_state.selected_pumps_for_curves = set(unique_models[:5])
+            st.write(f"**🎯 Auto-selected models:** {list(st.session_state.selected_pumps_for_curves)}")
+        
+        # Check curve data availability and matching
+        if not curve_data.empty:
+            st.write(f"**📊 Curve data columns:** {list(curve_data.columns)}")
+            
+            # Check what column names we have in curve data for matching
+            curve_model_columns = []
+            for col in curve_data.columns:
+                if "model" in col.lower() or "Model" in col:
+                    curve_model_columns.append(col)
+            st.write(f"**🔗 Curve data model columns:** {curve_model_columns}")
+            
+            # Try to find matching models between pump data and curve data
+            if curve_model_columns:
+                for curve_col in curve_model_columns:
+                    curve_models = curve_data[curve_col].dropna().unique()
+                    st.write(f"**📈 Sample models in {curve_col}:** {list(curve_models[:10])}")
+                    
+                    # Check for matches
+                    pump_models_set = set(str(x) for x in unique_models)
+                    curve_models_set = set(str(x) for x in curve_models)
+                    matches = pump_models_set.intersection(curve_models_set)
+                    st.write(f"**🎯 Matching models found:** {len(matches)} matches")
+                    if matches:
+                        st.write(f"**✅ Sample matches:** {list(matches)[:5]}")
+        else:
+            st.warning("⚠️ **No curve data loaded!**")
         
         # Add checkbox column to the dataframe
         checkbox_data = []
@@ -964,56 +1034,6 @@ if st.session_state.table_state:
         else:
             # Filter the dataframe to only show selected columns
             displayed_results_filtered = displayed_results_with_checkbox[columns_to_show]
-            
-            # Reorder columns - move Head Rated/M and Q Rated/LPM after Pass Solid Dia(mm) if they're selected
-            def reorder_columns(df):
-                """Reorder dataframe columns to put Q Rated/LPM and Head Rated/M after Pass Solid Dia(mm)"""
-                cols = list(df.columns)
-                
-                # Always keep checkbox column first
-                checkbox_col = get_text("Show Curve")
-                if checkbox_col in cols:
-                    cols.remove(checkbox_col)
-                    new_cols = [checkbox_col]
-                else:
-                    new_cols = []
-                
-                # Find the positions of key columns
-                pass_solid_idx = None
-                q_rated_idx = None
-                head_rated_idx = None
-                
-                for i, col in enumerate(cols):
-                    if "Pass Solid Dia" in str(col):
-                        pass_solid_idx = i
-                    elif col == "Q Rated/LPM":
-                        q_rated_idx = i
-                    elif col == "Head Rated/M":
-                        head_rated_idx = i
-                
-                # If we have the required columns, reorder them
-                if pass_solid_idx is not None and (q_rated_idx is not None or head_rated_idx is not None):
-                    # Remove Q Rated/LPM and Head Rated/M from their current positions
-                    reorder_cols = ["Q Rated/LPM", "Head Rated/M"]
-                    new_cols_remaining = [col for col in cols if col not in reorder_cols]
-                    
-                    # Insert them after Pass Solid Dia(mm)
-                    insert_position = pass_solid_idx + 1
-                    if "Q Rated/LPM" in cols:
-                        new_cols_remaining.insert(insert_position, "Q Rated/LPM")
-                        insert_position += 1
-                    if "Head Rated/M" in cols:
-                        new_cols_remaining.insert(insert_position, "Head Rated/M")
-                    
-                    new_cols.extend(new_cols_remaining)
-                else:
-                    # If we can't find the reference columns, return as is
-                    new_cols.extend(cols)
-                
-                return df[new_cols]
-            
-            # Apply column reordering
-            displayed_results_filtered = reorder_columns(displayed_results_filtered)
             
             # Display the results
             st.write(get_text("Matching Results"))
@@ -1076,13 +1096,20 @@ if st.session_state.table_state:
                         )
                     else:
                         # For any other column, make it read-only
-                        if pd.api.types.is_numeric_dtype(displayed_results_filtered[col]):
-                            column_config[col] = st.column_config.NumberColumn(
-                                col,
-                                disabled=True  # Make read-only
-                            )
-                        else:
-                            column_config[col] = st.column_config.TextColumn(
+                        try:
+                            if pd.api.types.is_numeric_dtype(displayed_results_filtered[col]):
+                                column_config[col] = st.column_config.NumberColumn(
+                                    col,
+                                    disabled=True  # Make read-only
+                                )
+                            else:
+                                column_config[col] = st.column_config.TextColumn(
+                                    col,
+                                    disabled=True  # Make read-only
+                                )
+                        except:
+                            # Fallback for any column type issues
+                            column_config[col] = st.column_config.Column(
                                 col,
                                 disabled=True  # Make read-only
                             )
@@ -1122,6 +1149,7 @@ if st.session_state.table_state:
                     
                     # Update session state
                     st.session_state.selected_pumps_for_curves = new_selected_pumps
+                    st.write(f"**🔄 Updated selection:** {list(new_selected_pumps)}")
                 
             except Exception as e:
                 # If the data_editor with column_config fails, fall back to simple dataframe
@@ -1145,21 +1173,42 @@ if st.session_state.table_state:
                 
                 # Get the selected pump models
                 selected_models = list(st.session_state.selected_pumps_for_curves)
+                st.write(f"**🎯 Attempting to create curves for:** {selected_models}")
                 
                 if selected_models and not curve_data.empty:
                     try:
+                        # Debug: Check if the models exist in curve data
+                        if 'Model No.' in curve_data.columns:
+                            available_curve_models = curve_data['Model No.'].dropna().unique()
+                            st.write(f"**📊 Available models in curve data:** {list(available_curve_models)[:10]}")
+                            
+                            # Check for matches
+                            matches = set(selected_models).intersection(set(available_curve_models))
+                            st.write(f"**✅ Models with curve data:** {list(matches)}")
+                            
+                            if not matches:
+                                st.warning("⚠️ **No matching models found between selection and curve data!**")
+                                st.write("**Selected models:**", selected_models)
+                                st.write("**Sample curve models:**", list(available_curve_models)[:5])
+                        
                         # Create and display the COMBINED pump curves using Plotly
                         curve_fig = create_combined_pump_curves(curve_data, selected_models)
                         
                         if curve_fig:
                             st.plotly_chart(curve_fig, use_container_width=True)
+                            st.success("✅ **Pump curves displayed successfully!**")
                         else:
                             st.info(get_text("No Curve Data"))
+                            st.warning("⚠️ **Curve creation returned None - check model matching**")
                             
                     except Exception as e:
                         st.error(get_text("Curve Data Error", error=str(e)))
+                        st.error(f"**Debug error details:** {str(e)}")
                 else:
-                    st.info(get_text("No Curve Data"))
+                    if not selected_models:
+                        st.info("**No models selected for curves**")
+                    if curve_data.empty:
+                        st.warning("**No curve data available**")
             else:
                 st.info(get_text("No Selection"))
                 st.caption(get_text("Curves Info"))
