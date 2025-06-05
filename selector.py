@@ -90,18 +90,19 @@ translations = {
         "Matching Results": "### Matching Pumps Results",
         "Showing Results": "Showing all {count} results",
         "View Product": "View Product",
-        "Show Curve": "Show Curve",
+        "Show Curve": "📈 Show Curve",
+        "Select for Curves": "Select for Curves",
         
         # Pump Curves - NEW
         "Pump Curves": "📈 Pump Performance Curves Comparison",
-        "Curves Info": "Select pumps above to display their performance curves",
+        "Curves Info": "Select pumps in the table to display their performance curves",
         "Curves Selected": "Comparing {count} selected pumps",
         "Flow LPM": "Flow (LPM)",
         "Head M": "Head (m)",
         "Pump Curve": "Performance Comparison",
         "No Curve Data": "No curve data available for selected pumps",
         "Curve Data Error": "Error loading curve data: {error}",
-        "No Selection": "Please select pumps using the checkboxes above to display curves",
+        "No Selection": "Please select pumps using the checkboxes in the table to display curves",
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "Q Rated/LPM",
@@ -207,18 +208,19 @@ translations = {
         "Matching Results": "### 符合幫浦結果",
         "Showing Results": "顯示全部 {count} 筆結果",
         "View Product": "查看產品",
-        "Show Curve": "顯示曲線",
+        "Show Curve": "📈 顯示曲線",
+        "Select for Curves": "選擇用於曲線",
         
         # Pump Curves - NEW
         "Pump Curves": "📈 幫浦性能曲線比較",
-        "Curves Info": "在上方選擇幫浦以顯示其性能曲線",
+        "Curves Info": "在表格中選擇幫浦以顯示其性能曲線",
         "Curves Selected": "比較 {count} 個選中的幫浦",
         "Flow LPM": "流量 (LPM)",
         "Head M": "揚程 (米)",
         "Pump Curve": "性能比較",
         "No Curve Data": "所選幫浦無可用曲線數據",
         "Curve Data Error": "載入曲線數據錯誤: {error}",
-        "No Selection": "請使用上方的復選框選擇幫浦以顯示曲線",
+        "No Selection": "請使用表格中的復選框選擇幫浦以顯示曲線",
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "額定流量 (LPM)",
@@ -682,10 +684,10 @@ st.markdown(get_text("Pond Drainage"))
 
 length = st.number_input(get_text("Pond Length"), min_value=0.0, step=0.1, key="length")
 width = st.number_input(get_text("Pond Width"), min_value=0.0, step=0.1, key="width")
+# Continuation from previous file...
+
 height = st.number_input(get_text("Pond Height"), min_value=0.0, step=0.1, key="height")
 drain_time_hr = st.number_input(get_text("Drain Time"), min_value=0.01, step=0.1, key="drain_time_hr")
-
-# Continuation of the pump selector with combined curves...
 
 pond_volume = length * width * height * 1000
 drain_time_min = drain_time_hr * 60
@@ -930,12 +932,12 @@ if st.session_state.table_state:
             break
     
     if model_column:
-        # Get unique models and their indices for checkbox management
+        # Get unique models from the displayed results
         unique_models = displayed_results[model_column].dropna().unique()
         
-        # Auto-select first 5 pumps for curves if this is a new search (no selections yet)
+        # Auto-select first 3 pumps for curves if this is a new search (no selections yet)
         if len(st.session_state.selected_pumps_for_curves) == 0:
-            st.session_state.selected_pumps_for_curves = set(unique_models[:5])
+            st.session_state.selected_pumps_for_curves = set(unique_models[:3])
         
         # Apply column selection - only show selected columns
         # Determine which columns to show based on user selection
@@ -998,6 +1000,20 @@ if st.session_state.table_state:
             # Apply column reordering
             displayed_results_filtered = reorder_columns(displayed_results_filtered)
             
+            # --- NEW: Create an editable dataframe with checkboxes ---
+            # Add a checkbox column for curve selection
+            displayed_results_with_checkbox = displayed_results_filtered.copy()
+            
+            # Create checkbox column based on current selections
+            displayed_results_with_checkbox[get_text("Select for Curves")] = displayed_results_with_checkbox[model_column].apply(
+                lambda x: x in st.session_state.selected_pumps_for_curves
+            )
+            
+            # Move checkbox column to the front
+            checkbox_col_name = get_text("Select for Curves")
+            cols = [checkbox_col_name] + [col for col in displayed_results_with_checkbox.columns if col != checkbox_col_name]
+            displayed_results_with_checkbox = displayed_results_with_checkbox[cols]
+            
             # Display the results
             st.write(get_text("Matching Results"))
             
@@ -1006,103 +1022,122 @@ if st.session_state.table_state:
                 st.write(get_text("Showing Results", count=len(displayed_results_filtered)))
                 st.caption(f"📋 Displaying {len(displayed_results_filtered.columns)} columns: {', '.join(displayed_results_filtered.columns[:5])}{'...' if len(displayed_results_filtered.columns) > 5 else ''}")
             
-            # Create layout with checkboxes on the left and table on the right
-            checkbox_col, table_col = st.columns([1, 4])
+            # Create column configuration for the editable dataframe
+            column_config = {}
             
-            with checkbox_col:
-                st.markdown(f"**{get_text('Show Curve')}**")
-                st.caption("Select pumps for curves:")
-                
-                # Create checkboxes for each pump
-                for i, model in enumerate(unique_models):
-                    checkbox_key = f"pump_checkbox_{model}_{i}"
-                    is_checked = model in st.session_state.selected_pumps_for_curves
-                    
-                    # Create checkbox with callback handling
-                    if st.checkbox(
-                        f"{model}", 
-                        value=is_checked, 
-                        key=checkbox_key,
-                        help=f"Select {model} for curve comparison"
-                    ):
-                        st.session_state.selected_pumps_for_curves.add(model)
+            # Configure the checkbox column to be editable
+            column_config[checkbox_col_name] = st.column_config.CheckboxColumn(
+                checkbox_col_name,
+                help="Select pumps to display in performance curves",
+                default=False
+            )
+            
+            # Configure the ID column for default sorting if it exists
+            if "DB ID" in displayed_results_with_checkbox.columns:
+                column_config["DB ID"] = st.column_config.NumberColumn(
+                    "DB ID",
+                    help="Database ID",
+                    format="%d",
+                    disabled=True  # Make non-editable
+                )
+            elif "id" in displayed_results_with_checkbox.columns:
+                column_config["id"] = st.column_config.NumberColumn(
+                    "ID",
+                    help="Database ID",
+                    format="%d",
+                    disabled=True  # Make non-editable
+                )
+            elif "ID" in displayed_results_with_checkbox.columns:
+                column_config["ID"] = st.column_config.NumberColumn(
+                    "ID",
+                    help="Database ID",
+                    format="%d",
+                    disabled=True  # Make non-editable
+                )
+            
+            # Configure the Product Link column if it exists
+            if "Product Link" in displayed_results_with_checkbox.columns:
+                column_config["Product Link"] = st.column_config.LinkColumn(
+                    "Product Link",
+                    help="Click to view product details",
+                    display_text=get_text("View Product"),
+                    disabled=True  # Make non-editable
+                )
+            
+            # Better formatting for Q Rated/LPM and Head Rated/M columns
+            if "Q Rated/LPM" in displayed_results_with_checkbox.columns:
+                flow_label = get_text("Q Rated/LPM")
+                flow_help = get_text("Rated flow rate in liters per minute")
+                column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
+                    flow_label,
+                    help=flow_help,
+                    format="%.1f LPM",
+                    disabled=True  # Make non-editable
+                )
+            
+            if "Head Rated/M" in displayed_results_with_checkbox.columns:
+                head_label = get_text("Head Rated/M")
+                head_help = get_text("Rated head in meters")
+                column_config["Head Rated/M"] = st.column_config.NumberColumn(
+                    head_label,
+                    help=head_help,
+                    format="%.1f m",
+                    disabled=True  # Make non-editable
+                )
+            
+            # Configure the translated category column
+            if "Category Display" in displayed_results_with_checkbox.columns:
+                column_config["Category Display"] = st.column_config.TextColumn(
+                    get_text("Category"),
+                    help="Translated pump category",
+                    disabled=True  # Make non-editable
+                )
+            
+            # Make all other columns non-editable by default
+            for col in displayed_results_with_checkbox.columns:
+                if col not in column_config and col != checkbox_col_name:
+                    if displayed_results_with_checkbox[col].dtype in ['int64', 'float64']:
+                        column_config[col] = st.column_config.NumberColumn(
+                            col,
+                            disabled=True
+                        )
                     else:
-                        st.session_state.selected_pumps_for_curves.discard(model)
+                        column_config[col] = st.column_config.TextColumn(
+                            col,
+                            disabled=True
+                        )
             
-            with table_col:
-                # Create column configuration for product links and proper formatting
-                column_config = {}
+            # Display the editable dataframe with checkboxes
+            try:
+                edited_df = st.data_editor(
+                    displayed_results_with_checkbox,
+                    column_config=column_config,
+                    hide_index=True,
+                    use_container_width=True,
+                    key="pump_selection_table"
+                )
                 
-                # Configure the ID column for default sorting if it exists
-                if "DB ID" in displayed_results_filtered.columns:
-                    column_config["DB ID"] = st.column_config.NumberColumn(
-                        "DB ID",
-                        help="Database ID",
-                        format="%d"
-                    )
-                elif "id" in displayed_results_filtered.columns:
-                    column_config["id"] = st.column_config.NumberColumn(
-                        "ID",
-                        help="Database ID",
-                        format="%d"
-                    )
-                elif "ID" in displayed_results_filtered.columns:
-                    column_config["ID"] = st.column_config.NumberColumn(
-                        "ID",
-                        help="Database ID",
-                        format="%d"
-                    )
+                # Update selected pumps based on checkbox changes
+                if edited_df is not None and model_column in edited_df.columns:
+                    # Get the current selections from the edited dataframe
+                    new_selections = set()
+                    for idx, row in edited_df.iterrows():
+                        if row[checkbox_col_name]:  # If checkbox is checked
+                            model_name = row[model_column]
+                            if pd.notna(model_name):
+                                new_selections.add(model_name)
+                    
+                    # Update session state with new selections
+                    st.session_state.selected_pumps_for_curves = new_selections
                 
-                # Configure the Product Link column if it exists
-                if "Product Link" in displayed_results_filtered.columns:
-                    column_config["Product Link"] = st.column_config.LinkColumn(
-                        "Product Link",
-                        help="Click to view product details",
-                        display_text=get_text("View Product")
-                    )
-                
-                # Better formatting for Q Rated/LPM and Head Rated/M columns
-                if "Q Rated/LPM" in displayed_results_filtered.columns:
-                    flow_label = get_text("Q Rated/LPM")
-                    flow_help = get_text("Rated flow rate in liters per minute")
-                    column_config["Q Rated/LPM"] = st.column_config.NumberColumn(
-                        flow_label,
-                        help=flow_help,
-                        format="%.1f LPM"
-                    )
-                
-                if "Head Rated/M" in displayed_results_filtered.columns:
-                    head_label = get_text("Head Rated/M")
-                    head_help = get_text("Rated head in meters")
-                    column_config["Head Rated/M"] = st.column_config.NumberColumn(
-                        head_label,
-                        help=head_help,
-                        format="%.1f m"
-                    )
-                
-                # Configure the translated category column
-                if "Category Display" in displayed_results_filtered.columns:
-                    column_config["Category Display"] = st.column_config.TextColumn(
-                        get_text("Category"),
-                        help="Translated pump category"
-                    )
-                
-                # Display the read-only results table
-                try:
-                    st.dataframe(
-                        displayed_results_filtered,
-                        column_config=column_config,
-                        hide_index=True,
-                        use_container_width=True
-                    )
-                except Exception as e:
-                    # If the dataframe with column_config fails, fall back to simple dataframe
-                    st.error(f"Error displaying table: {e}")
-                    st.dataframe(
-                        displayed_results_filtered,
-                        hide_index=True,
-                        use_container_width=True
-                    )
+            except Exception as e:
+                # If the data_editor fails, fall back to read-only dataframe
+                st.error(f"Error displaying editable table: {e}")
+                st.dataframe(
+                    displayed_results_filtered,
+                    hide_index=True,
+                    use_container_width=True
+                )
             
             # Show selection status
             if st.session_state.selected_pumps_for_curves:
