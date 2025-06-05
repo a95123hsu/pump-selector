@@ -463,14 +463,11 @@ else:
 # Get all available columns from the dataset for later use in column selection
 if not pumps.empty:
     # Define essential columns that are always shown - REMOVED DB ID
-    essential_columns = ["id", "ID", "Model", "Product Link"]
-    available_columns = [col for col in pumps.columns if col not in ["Category"]]  # Exclude original Category
+    essential_columns = ["id", "ID", "Model"]
     
     # Add translated category to available columns
-    available_columns.append("Category Display")
     
     # Separate essential and optional columns
-    optional_columns = [col for col in available_columns if col not in essential_columns]
 else:
     essential_columns = []
     optional_columns = []
