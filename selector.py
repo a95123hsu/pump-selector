@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
 from supabase import create_client
 import os
 from dotenv import load_dotenv
@@ -20,6 +22,7 @@ translations = {
         "Refresh Data": "🔄 Refresh Data",
         "Reset Inputs": "🔄 Reset Inputs",
         "Search": "🔍 Search",
+        "Show Curve": "📈 Show Pump Curve",
         
         # Step 1
         "Step 1": "### 🔧 Step 1: Select Basic Criteria",
@@ -89,6 +92,23 @@ translations = {
         "Showing Results": "Showing all {count} results",
         "View Product": "View Product",
         
+        # Pump Curve Section - NEW
+        "Pump Curves": "### 📈 Pump Performance Curves",
+        "Select Pump": "Select a pump to view its performance curve:",
+        "No Curve Data": "No curve data available for this pump model",
+        "Curve Data Loaded": "Curve data loaded: {count} pumps with curve data",
+        "Performance Curve": "Performance Curve - {model}",
+        "Flow Rate": "Flow Rate (LPM)",
+        "Head": "Head (M)",
+        "Operating Point": "Your Operating Point",
+        "Efficiency Curve": "Efficiency Curve - {model}",
+        "Efficiency": "Efficiency (%)",
+        "Power Curve": "Power Curve - {model}",
+        "Power": "Power (kW)",
+        "Multiple Curves": "Performance Comparison",
+        "Compare Pumps": "Compare Selected Pumps",
+        "Select Multiple": "Select multiple pumps to compare:",
+        
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "Q Rated/LPM",
         "Rated flow rate in liters per minute": "Rated flow rate in liters per minute",
@@ -112,7 +132,8 @@ translations = {
         "Failed Connection": "❌ Failed to connect to Supabase: {error}",
         "Failed Data": "❌ Failed to load data from Supabase: {error}",
         "Failed CSV": "❌ Failed to load CSV file: {error}",
-        "No Data": "❌ No pump data available. Please check your Supabase connection or CSV file."
+        "No Data": "❌ No pump data available. Please check your Supabase connection or CSV file.",
+        "Failed Curve Data": "❌ Failed to load curve data: {error}"
     },
     "繁體中文": {
         # App title and headers
@@ -124,6 +145,7 @@ translations = {
         "Refresh Data": "🔄 刷新資料",
         "Reset Inputs": "🔄 重置輸入",
         "Search": "🔍 搜尋",
+        "Show Curve": "📈 顯示泵浦曲線",
         
         # Step 1
         "Step 1": "### 🔧 步驟一: 選擇基本條件",
@@ -193,6 +215,23 @@ translations = {
         "Showing Results": "顯示全部 {count} 筆結果",
         "View Product": "查看產品",
         
+        # Pump Curve Section - NEW
+        "Pump Curves": "### 📈 幫浦性能曲線",
+        "Select Pump": "選擇幫浦以查看其性能曲線:",
+        "No Curve Data": "此幫浦型號無曲線資料",
+        "Curve Data Loaded": "曲線資料已載入: {count} 個幫浦有曲線資料",
+        "Performance Curve": "性能曲線 - {model}",
+        "Flow Rate": "流量 (LPM)",
+        "Head": "揚程 (M)",
+        "Operating Point": "您的操作點",
+        "Efficiency Curve": "效率曲線 - {model}",
+        "Efficiency": "效率 (%)",
+        "Power Curve": "功率曲線 - {model}",
+        "Power": "功率 (kW)",
+        "Multiple Curves": "性能比較",
+        "Compare Pumps": "比較選定的幫浦",
+        "Select Multiple": "選擇多個幫浦進行比較:",
+        
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "額定流量 (LPM)",
         "Rated flow rate in liters per minute": "每分鐘額定流量（公升）",
@@ -216,7 +255,8 @@ translations = {
         "Failed Connection": "❌ 連接到 Supabase 失敗: {error}",
         "Failed Data": "❌ 從 Supabase 載入資料失敗: {error}",
         "Failed CSV": "❌ 載入 CSV 檔案失敗: {error}",
-        "No Data": "❌ 無可用幫浦資料。請檢查您的 Supabase 連接或 CSV 檔案。"
+        "No Data": "❌ 無可用幫浦資料。請檢查您的 Supabase 連接或 CSV 檔案。",
+        "Failed Curve Data": "❌ 載入曲線資料失敗: {error}"
     }
 }
 
@@ -313,6 +353,202 @@ def load_pump_data():
             st.error(get_text("Failed CSV", error=str(csv_error)))
             return pd.DataFrame()
 
+# --- Load Pump Curve Data ---
+@st.cache_data(ttl=60)
+def load_pump_curve_data():
+    try:
+        # Load curve data from Supabase
+        all_records = []
+        page_size = 1000
+        current_page = 0
+        
+        while True:
+            response = supabase.table("pump_curve_data").select("*") \
+                              .range(current_page * page_size, (current_page + 1) * page_size - 1) \
+                              .execute()
+            
+            if not response.data:
+                break
+                
+            all_records.extend(response.data)
+            current_page += 1
+            
+            if len(response.data) < page_size:
+                break
+        
+        # Convert to DataFrame
+        df = pd.DataFrame(all_records)
+        return df
+    except Exception as e:
+        st.error(get_text("Failed Curve Data", error=str(e)))
+        # Fallback to CSV if Supabase fetch fails
+        try:
+            df = pd.read_csv("pump_curve_data_rows 1.csv")
+            return df
+        except Exception as csv_error:
+            st.error(get_text("Failed CSV", error=str(csv_error)))
+            return pd.DataFrame()
+
+# --- Function to create pump curve chart ---
+def create_pump_curve_chart(curve_data, model_no, user_flow=None, user_head=None):
+    """Create an interactive pump curve chart using Plotly"""
+    
+    # Extract head columns (columns ending with 'M')
+    head_columns = [col for col in curve_data.columns if col.endswith('M') and col not in ['Max Head(M)']]
+    
+    # Extract pressure columns (columns with 'Kg/cm²')
+    pressure_columns = [col for col in curve_data.columns if 'Kg/cm²' in col]
+    
+    fig = go.Figure()
+    
+    # Find the pump data
+    pump_data = curve_data[curve_data['Model No.'] == model_no]
+    
+    if pump_data.empty:
+        return None
+    
+    pump_row = pump_data.iloc[0]
+    
+    # Create head-flow curve
+    if head_columns:
+        flows = []
+        heads = []
+        
+        for col in head_columns:
+            try:
+                head_value = float(col.replace('M', ''))
+                flow_value = pd.to_numeric(pump_row[col], errors='coerce')
+                if not pd.isna(flow_value) and flow_value > 0:
+                    flows.append(flow_value)
+                    heads.append(head_value)
+            except:
+                continue
+        
+        if flows and heads:
+            # Sort by flow for proper curve
+            sorted_data = sorted(zip(flows, heads))
+            flows, heads = zip(*sorted_data)
+            
+            fig.add_trace(go.Scatter(
+                x=flows,
+                y=heads,
+                mode='lines+markers',
+                name=f'{model_no} - Head Curve',
+                line=dict(color='blue', width=3),
+                marker=dict(size=8)
+            ))
+    
+    # Add pressure curves if available
+    if pressure_columns:
+        for i, col in enumerate(pressure_columns[:3]):  # Limit to 3 pressure curves
+            try:
+                pressure_value = float(col.split('Kg/cm²')[0])
+                flow_value = pd.to_numeric(pump_row[col], errors='coerce')
+                if not pd.isna(flow_value) and flow_value > 0:
+                    fig.add_trace(go.Scatter(
+                        x=[flow_value],
+                        y=[pressure_value * 10],  # Convert kg/cm² to approximate meters
+                        mode='markers',
+                        name=f'{pressure_value} Kg/cm²',
+                        marker=dict(size=10, symbol='diamond')
+                    ))
+            except:
+                continue
+    
+    # Add user operating point if provided
+    if user_flow and user_head and user_flow > 0 and user_head > 0:
+        fig.add_trace(go.Scatter(
+            x=[user_flow],
+            y=[user_head],
+            mode='markers',
+            name=get_text("Operating Point"),
+            marker=dict(size=15, color='red', symbol='star'),
+            hovertemplate=f'Flow: {user_flow} LPM<br>Head: {user_head} M<extra></extra>'
+        ))
+    
+    # Update layout
+    fig.update_layout(
+        title=get_text("Performance Curve", model=model_no),
+        xaxis_title=get_text("Flow Rate"),
+        yaxis_title=get_text("Head"),
+        hovermode='closest',
+        showlegend=True,
+        height=500,
+        template='plotly_white'
+    )
+    
+    return fig
+
+# --- Function to create comparison chart ---
+def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=None):
+    """Create a comparison chart for multiple pumps"""
+    
+    fig = go.Figure()
+    colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray']
+    
+    for i, model_no in enumerate(model_nos):
+        pump_data = curve_data[curve_data['Model No.'] == model_no]
+        
+        if pump_data.empty:
+            continue
+            
+        pump_row = pump_data.iloc[0]
+        color = colors[i % len(colors)]
+        
+        # Extract head columns
+        head_columns = [col for col in curve_data.columns if col.endswith('M') and col not in ['Max Head(M)']]
+        
+        flows = []
+        heads = []
+        
+        for col in head_columns:
+            try:
+                head_value = float(col.replace('M', ''))
+                flow_value = pd.to_numeric(pump_row[col], errors='coerce')
+                if not pd.isna(flow_value) and flow_value > 0:
+                    flows.append(flow_value)
+                    heads.append(head_value)
+            except:
+                continue
+        
+        if flows and heads:
+            # Sort by flow for proper curve
+            sorted_data = sorted(zip(flows, heads))
+            flows, heads = zip(*sorted_data)
+            
+            fig.add_trace(go.Scatter(
+                x=flows,
+                y=heads,
+                mode='lines+markers',
+                name=model_no,
+                line=dict(color=color, width=3),
+                marker=dict(size=6)
+            ))
+    
+    # Add user operating point if provided
+    if user_flow and user_head and user_flow > 0 and user_head > 0:
+        fig.add_trace(go.Scatter(
+            x=[user_flow],
+            y=[user_head],
+            mode='markers',
+            name=get_text("Operating Point"),
+            marker=dict(size=15, color='red', symbol='star'),
+            hovertemplate=f'Flow: {user_flow} LPM<br>Head: {user_head} M<extra></extra>'
+        ))
+    
+    # Update layout
+    fig.update_layout(
+        title=get_text("Multiple Curves"),
+        xaxis_title=get_text("Flow Rate"),
+        yaxis_title=get_text("Head"),
+        hovermode='closest',
+        showlegend=True,
+        height=500,
+        template='plotly_white'
+    )
+    
+    return fig
+
 # --- Default values ---
 default_values = {
     "floors": 0, "faucets": 0,
@@ -352,13 +588,19 @@ st.title(get_text("Pump Selection Tool"))
 
 # Load the data
 pumps = load_pump_data()
+curve_data = load_pump_curve_data()
 
 if pumps.empty:
     st.error(get_text("No Data"))
     st.stop()
 
 # Show data freshness information
-st.caption(get_text("Data loaded", n_records=len(pumps), timestamp=pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')))
+col_data1, col_data2 = st.columns(2)
+with col_data1:
+    st.caption(get_text("Data loaded", n_records=len(pumps), timestamp=pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')))
+with col_data2:
+    if not curve_data.empty:
+        st.caption(get_text("Curve Data Loaded", count=len(curve_data)))
 
 # Create columns with buttons close together on the left side
 col1, col2, col_space = st.columns([1, 1.2, 5.8])
@@ -451,6 +693,8 @@ if "Phase" in pumps.columns:
     phase_options = [p for p in sorted(pumps["Phase"].dropna().unique()) if p in [1, 3]]
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase")] + phase_options)
 else:
+    # Continuation from previous code...
+
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
 # Get all available columns from the dataset for later use in column selection
@@ -667,6 +911,11 @@ if st.button(get_text("Search")):
         filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce").fillna(0)
         filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
 
+    # Store filtered pumps in session state for curve visualization
+    st.session_state.filtered_pumps = filtered_pumps
+    st.session_state.user_flow = flow_lpm
+    st.session_state.user_head = head_m
+
     st.subheader(get_text("Matching Pumps"))
     st.write(get_text("Found Pumps", count=len(filtered_pumps)))
 
@@ -703,9 +952,6 @@ if st.button(get_text("Search")):
         # Apply percentage limit after sorting by ID
         max_to_show = max(1, int(len(results) * (result_percent / 100)))
         displayed_results = results.head(max_to_show).copy()
-        
-        # KEEP ORIGINAL CATEGORY - DO NOT CREATE TRANSLATED VERSION
-        # The original Category column will be displayed as-is with English values
         
         # Apply column selection - build columns in logical order
         columns_to_show = []
@@ -811,38 +1057,6 @@ if st.button(get_text("Search")):
                     format="%.1f m"
                 )
             
-            # Configure the ORIGINAL category column
-            if "Category" in displayed_results.columns:
-                column_config["Category"] = st.column_config.TextColumn(
-                    get_text("Category"),  # Header will be translated to "類別" in Chinese
-                    help="Pump category"   # But content will be original English like "Dirty Water", "Clean Water"
-                )
-            
-            # Configure Model columns
-            if "Model" in displayed_results.columns:
-                column_config["Model"] = st.column_config.TextColumn(
-                    "Model",
-                    help="Pump model"
-                )
-            elif "Model No." in displayed_results.columns:
-                column_config["Model No."] = st.column_config.TextColumn(
-                    "Model No.",
-                    help="Pump model number"
-                )
-            if "Frequency (Hz)" in displayed_results.columns:
-                column_config["Frequency (Hz)"] = st.column_config.NumberColumn(
-                    "Frequency (Hz)",
-                    help="Operating frequency in Hertz",
-                    format="%d Hz"
-                )
-            
-            if "Phase" in displayed_results.columns:
-                column_config["Phase"] = st.column_config.NumberColumn(
-                    "Phase",
-                    help="Number of phases",
-                    format="%d"
-                )
-            
             # Configure other numeric columns with proper formatting
             if "Max Flow (LPM)" in displayed_results.columns:
                 column_config["Max Flow (LPM)"] = st.column_config.NumberColumn(
@@ -856,13 +1070,6 @@ if st.button(get_text("Search")):
                     "Max Head (M)",
                     help="Maximum head in meters",
                     format="%.1f m"
-                )
-            
-            if "Pass Solid Dia(mm)" in displayed_results.columns:
-                column_config["Pass Solid Dia(mm)"] = st.column_config.NumberColumn(
-                    "Pass Solid Dia(mm)",
-                    help="Maximum solid particle diameter that can pass through",
-                    format="%.1f mm"
                 )
             
             # Display the results with error handling
@@ -881,5 +1088,72 @@ if st.button(get_text("Search")):
                     hide_index=True,
                     use_container_width=True
                 )
+                
+            # --- NEW: Pump Curve Visualization Section ---
+            if not curve_data.empty:
+                st.markdown(get_text("Pump Curves"))
+                
+                # Get available pump models from both selection results and curve data
+                available_models = []
+                model_column = None
+                
+                # Find the model column name
+                for col in ["Model", "Model No."]:
+                    if col in displayed_results.columns:
+                        model_column = col
+                        break
+                
+                if model_column:
+                    # Get models from search results that also have curve data
+                    result_models = displayed_results[model_column].dropna().unique()
+                    curve_models = curve_data["Model No."].dropna().unique()
+                    available_models = [model for model in result_models if model in curve_models]
+                
+                if available_models:
+                    # Single pump curve selection
+                    col_single, col_compare = st.columns([1, 1])
+                    
+                    with col_single:
+                        st.subheader("Single Pump Curve")
+                        selected_model = st.selectbox(
+                            get_text("Select Pump"),
+                            [""] + list(available_models),
+                            key="single_pump_select"
+                        )
+                        
+                        if selected_model:
+                            # Create and display single pump curve
+                            user_flow = st.session_state.get('user_flow', 0)
+                            user_head = st.session_state.get('user_head', 0)
+                            
+                            fig = create_pump_curve_chart(curve_data, selected_model, user_flow, user_head)
+                            if fig:
+                                st.plotly_chart(fig, use_container_width=True)
+                            else:
+                                st.warning(get_text("No Curve Data"))
+                    
+                    with col_compare:
+                        st.subheader(get_text("Compare Pumps"))
+                        # Multi-select for comparison
+                        selected_models = st.multiselect(
+                            get_text("Select Multiple"),
+                            available_models,
+                            key="multi_pump_select"
+                        )
+                        
+                        if len(selected_models) > 1:
+                            # Create and display comparison chart
+                            user_flow = st.session_state.get('user_flow', 0)
+                            user_head = st.session_state.get('user_head', 0)
+                            
+                            fig_comp = create_comparison_chart(curve_data, selected_models, user_flow, user_head)
+                            if fig_comp:
+                                st.plotly_chart(fig_comp, use_container_width=True)
+                        elif len(selected_models) == 1:
+                            st.info("Select at least 2 pumps to compare")
+                else:
+                    st.info("No curve data available for the selected pumps")
+            else:
+                st.info("Curve data not available")
     else:
         st.warning(get_text("No Matches"))
