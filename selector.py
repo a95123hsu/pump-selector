@@ -695,10 +695,6 @@ if "Phase" in pumps.columns:
 else:
     # Continuation from previous code...
 
-    # Continuation from previous code...
-
-   # Continuation from previous code...
-
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
 # Get all available columns from the dataset for later use in column selection
@@ -1114,39 +1110,59 @@ if st.button(get_text("Search")):
                     available_models = [model for model in result_models if model in curve_models]
                 
                 if available_models:
-                    # Pump selection for curve visualization
-                    st.subheader("📈 Select Pumps for Curve Visualization")
+                    # Store available models in session state to prevent reloads
+                    st.session_state.available_models = available_models
                     
-                    # Multi-select for pump selection
-                    selected_models = st.multiselect(
-                        "Select pumps to display their performance curves:",
-                        available_models,
-                        key="curve_pump_select",
-                        help="You can select multiple pumps to compare their performance curves"
-                    )
-                    
-                    if selected_models:
-                        user_flow = st.session_state.get('user_flow', 0)
-                        user_head = st.session_state.get('user_head', 0)
+                    # Pump selection for curve visualization with container to prevent reload
+                    with st.container():
+                        st.subheader("📈 Select Pumps for Curve Visualization")
                         
-                        if len(selected_models) == 1:
-                            # Show single pump curve
-                            st.subheader(f"Performance Curve - {selected_models[0]}")
-                            fig = create_pump_curve_chart(curve_data, selected_models[0], user_flow, user_head)
-                            if fig:
-                                st.plotly_chart(fig, use_container_width=True)
-                            else:
-                                st.warning(get_text("No Curve Data"))
-                                
-                        elif len(selected_models) > 1:
-                            # Show comparison chart
-                            st.subheader(f"Performance Comparison - {len(selected_models)} Pumps")
-                            st.caption(f"Comparing: {', '.join(selected_models)}")
-                            fig_comp = create_comparison_chart(curve_data, selected_models, user_flow, user_head)
-                            if fig_comp:
-                                st.plotly_chart(fig_comp, use_container_width=True)
-                    else:
-                        st.info("👆 Please select one or more pumps above to view their performance curves")
+                        # Initialize selected models in session state if not exists
+                        if 'selected_curve_models' not in st.session_state:
+                            st.session_state.selected_curve_models = []
+                        
+                        # Multi-select for pump selection - use session state to maintain selection
+                        current_selection = st.multiselect(
+                            "Select pumps to display their performance curves:",
+                            available_models,
+                            default=st.session_state.selected_curve_models,
+                            key="curve_pump_select",
+                            help="You can select multiple pumps to compare their performance curves"
+                        )
+                        
+                        # Update session state only if selection changed
+                        if current_selection != st.session_state.selected_curve_models:
+                            st.session_state.selected_curve_models = current_selection
+                        
+                        # Use session state selection for display to prevent reload issues
+                        selected_models = st.session_state.selected_curve_models
+                        
+                        if selected_models:
+                            user_flow = st.session_state.get('user_flow', 0)
+                            user_head = st.session_state.get('user_head', 0)
+                            
+                            # Use container to prevent reloads during chart display
+                            with st.container():
+                                if len(selected_models) == 1:
+                                    # Show single pump curve
+                                    st.subheader(f"Performance Curve - {selected_models[0]}")
+                                    fig = create_pump_curve_chart(curve_data, selected_models[0], user_flow, user_head)
+                                    if fig:
+                                        st.plotly_chart(fig, use_container_width=True, key=f"single_chart_{selected_models[0]}")
+                                    else:
+                                        st.warning(get_text("No Curve Data"))
+                                        
+                                elif len(selected_models) > 1:
+                                    # Show comparison chart
+                                    st.subheader(f"Performance Comparison - {len(selected_models)} Pumps")
+                                    st.caption(f"Comparing: {', '.join(selected_models)}")
+                                    fig_comp = create_comparison_chart(curve_data, selected_models, user_flow, user_head)
+                                    if fig_comp:
+                                        # Use unique key based on selected models to prevent reload issues
+                                        chart_key = f"comp_chart_{'_'.join(sorted(selected_models))}"
+                                        st.plotly_chart(fig_comp, use_container_width=True, key=chart_key)
+                        else:
+                            st.info("👆 Please select one or more pumps above to view their performance curves")
                         
                 else:
                     st.info("No curve data available for the selected pumps")
