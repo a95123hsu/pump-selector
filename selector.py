@@ -697,7 +697,7 @@ else:
 if "Frequency (Hz)" in pumps.columns:
     # Continuation from Part 1...
 
-numeric first to handle consistency
+#numeric first to handle consistency
     pumps["Frequency (Hz)"] = pd.to_numeric(pumps["Frequency (Hz)"], errors='coerce')
     freq_options = sorted(pumps["Frequency (Hz)"].dropna().unique())
     frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")] + freq_options)
