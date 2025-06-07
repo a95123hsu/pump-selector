@@ -92,6 +92,7 @@ translations = {
         "Matching Results": "### Matching Pumps Results",
         "Showing Results": "Showing all {count} results",
         "View Product": "View Product",
+        "Select Pumps": "Select pumps from the table below to view their performance curves",
         
         # Pump Curve Section - NEW
         "Pump Curves": "### 📈 Pump Performance Curves",
@@ -113,6 +114,8 @@ translations = {
         "Charts Update Info": "👆 Please select one or more pumps above and click 'Update Curves' to view their performance curves",
         "Loading Curve": "Loading curve data...",
         "Loading Comparison": "Loading comparison chart...",
+        "Update Curves": "📈 Update Curves",
+        "Selected Pumps": "Selected {count} pump(s) for curve visualization",
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "Q Rated/LPM",
@@ -220,6 +223,7 @@ translations = {
         "Matching Results": "### 符合幫浦結果",
         "Showing Results": "顯示全部 {count} 筆結果",
         "View Product": "查看產品",
+        "Select Pumps": "從下表選擇幫浦以查看其性能曲線",
         
         # Pump Curve Section - NEW
         "Pump Curves": "### 📈 幫浦性能曲線",
@@ -242,6 +246,7 @@ translations = {
         "Loading Curve": "載入曲線資料中...",
         "Loading Comparison": "載入比較圖表中...",
         "Update Curves": "📈 更新曲線",
+        "Selected Pumps": "已選擇 {count} 個幫浦進行曲線視覺化",
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "額定流量 (LPM)",
@@ -1032,6 +1037,7 @@ if st.button(get_text("Search")):
             if len(displayed_results) > 0:
                 st.write(get_text("Showing Results", count=len(displayed_results)))
                 st.caption(f"📋 Displaying {len(displayed_results.columns)} columns: {', '.join(displayed_results.columns[:5])}{'...' if len(displayed_results.columns) > 5 else ''}")
+                st.info(get_text("Select Pumps"))
             
             # Create column configuration for product links and proper formatting
             column_config = {}
@@ -1092,80 +1098,79 @@ if st.button(get_text("Search")):
                     format="%.1f m"
                 )
             
-            # Display the results with error handling
+            # Display the results with selectable rows using st.data_editor
             try:
-                st.dataframe(
+                # Add a unique key for the data editor
+                selected_df = st.data_editor(
                     displayed_results,
                     column_config=column_config,
                     hide_index=True,
-                    use_container_width=True
+                    use_container_width=True,
+                    num_rows="fixed",
+                    disabled=columns_to_show,  # Disable editing but allow selection
+                    key="pump_selection_table"
                 )
+                
+                # Get selected rows from the data editor
+                if "pump_selection_table" in st.session_state:
+                    # Check for selected rows in the editor state
+                    selection = st.session_state.get("pump_selection_table", {}).get("edited_rows", {})
+                    if selection:
+                        # Extract model numbers from selected rows
+                        model_column = "Model" if "Model" in displayed_results.columns else "Model No."
+                        selected_indices = list(selection.keys())
+                        selected_models = displayed_results.iloc[selected_indices][model_column].tolist()
+                        st.session_state.selected_curve_models = selected_models
+                
             except Exception as e:
-                # If the dataframe with column_config fails, fall back to simple dataframe
-                st.error(f"Error displaying results with column configuration: {e}")
-                st.dataframe(
-                    displayed_results,
-                    hide_index=True,
-                    use_container_width=True
-                )
+                # If the data_editor fails, fall back to multiselect
+                st.error(f"Error with table selection: {e}")
+                st.info("Using alternative selection method...")
+                
+                # Get model column
+                model_column = "Model" if "Model" in displayed_results.columns else "Model No."
+                
+                if model_column in displayed_results.columns:
+                    # Create a multiselect as fallback
+                    available_models = displayed_results[model_column].tolist()
+                    selected_models = st.multiselect(
+                        "Select pumps to view curves:",
+                        available_models,
+                        default=st.session_state.get('selected_curve_models', []),
+                        key="pump_multiselect"
+                    )
+                    st.session_state.selected_curve_models = selected_models
     else:
         st.warning(get_text("No Matches"))
 
-# --- FIXED: Pump Curve Visualization Section ---
+# --- PUMP CURVE VISUALIZATION SECTION ---
 # Only show curve section if we have search results and curve data
 if not curve_data.empty and 'filtered_pumps' in st.session_state and not st.session_state.filtered_pumps.empty:
-    st.markdown(get_text("Pump Curves"))
-    
-    # Get available pump models from both selection results and curve data
-    available_models = []
-    model_column = None
-    
-    # Find the model column name
-    for col in ["Model", "Model No."]:
-        if col in st.session_state.filtered_pumps.columns:
-            model_column = col
-            break
-    
-    if model_column:
-        # Get models from search results that also have curve data
-        result_models = st.session_state.filtered_pumps[model_column].dropna().unique()
-        curve_models = curve_data["Model No."].dropna().unique()
-        available_models = [model for model in result_models if model in curve_models]
-    
-    if available_models:
-        st.subheader("📈 Select Pumps for Curve Visualization")
+    # Check if we have selected models
+    if 'selected_curve_models' in st.session_state and st.session_state.selected_curve_models:
+        st.markdown(get_text("Pump Curves"))
         
-        # FIXED: Use form to prevent unwanted reloads
-        with st.form("pump_curve_selection_form"):
-            # Multiselect for pump selection
-            selected_models = st.multiselect(
-                get_text("Select Pumps for Curves"),
-                available_models,
-                default=st.session_state.get('selected_curve_models', []),
-                help="You can select multiple pumps to compare their performance curves"
-            )
-            
-            # Submit button to apply the selection
-            submit_curves = st.form_submit_button(get_text("Update Curves"), type="primary")
+        # Show selected pumps info
+        selected_count = len(st.session_state.selected_curve_models)
+        st.success(get_text("Selected Pumps", count=selected_count))
         
-        # Only update and show charts when form is submitted
-        if submit_curves:
-            # Update session state with new selection
-            st.session_state.selected_curve_models = selected_models
+        # Get user flow and head values
+        user_flow = st.session_state.get('user_flow', 0)
+        user_head = st.session_state.get('user_head', 0)
         
-        # Use the confirmed selection for display
-        confirmed_models = st.session_state.get('selected_curve_models', [])
+        # Check which selected models have curve data
+        available_curve_models = []
+        for model in st.session_state.selected_curve_models:
+            if model in curve_data["Model No."].values:
+                available_curve_models.append(model)
         
-        if confirmed_models:
-            user_flow = st.session_state.get('user_flow', 0)
-            user_head = st.session_state.get('user_head', 0)
-            
-            if len(confirmed_models) == 1:
+        if available_curve_models:
+            if len(available_curve_models) == 1:
                 # Show single pump curve
-                st.subheader(f"Performance Curve - {confirmed_models[0]}")
+                st.subheader(f"Performance Curve - {available_curve_models[0]}")
                 with st.spinner(get_text("Loading Curve")):
                     try:
-                        fig = create_pump_curve_chart(curve_data, confirmed_models[0], user_flow, user_head)
+                        fig = create_pump_curve_chart(curve_data, available_curve_models[0], user_flow, user_head)
                         if fig:
                             st.plotly_chart(fig, use_container_width=True)
                         else:
@@ -1173,19 +1178,33 @@ if not curve_data.empty and 'filtered_pumps' in st.session_state and not st.sess
                     except Exception as e:
                         st.error(f"Error creating pump curve: {e}")
                         
-            elif len(confirmed_models) > 1:
+            elif len(available_curve_models) > 1:
                 # Show comparison chart
-                st.subheader(f"Performance Comparison - {len(confirmed_models)} Pumps")
-                st.caption(f"Comparing: {', '.join(confirmed_models)}")
+                st.subheader(f"Performance Comparison - {len(available_curve_models)} Pumps")
+                st.caption(f"Comparing: {', '.join(available_curve_models)}")
                 with st.spinner(get_text("Loading Comparison")):
                     try:
-                        fig_comp = create_comparison_chart(curve_data, confirmed_models, user_flow, user_head)
+                        fig_comp = create_comparison_chart(curve_data, available_curve_models, user_flow, user_head)
                         if fig_comp:
                             st.plotly_chart(fig_comp, use_container_width=True)
                     except Exception as e:
                         st.error(f"Error creating comparison chart: {e}")
-        else:
-            st.info(get_text("Charts Update Info"))
             
+            # Show individual curves for each pump when multiple are selected
+            if len(available_curve_models) > 1:
+                with st.expander("View Individual Pump Curves", expanded=False):
+                    for model in available_curve_models:
+                        st.subheader(f"Performance Curve - {model}")
+                        try:
+                            fig = create_pump_curve_chart(curve_data, model, user_flow, user_head)
+                            if fig:
+                                st.plotly_chart(fig, use_container_width=True)
+                            else:
+                                st.warning(f"No curve data available for {model}")
+                        except Exception as e:
+                            st.error(f"Error creating curve for {model}: {e}")
+        else:
+            st.warning("The selected pumps do not have curve data available.")
     else:
-        st.info("No curve data available for the selected pumps")
+        # Show message to select pumps from the table
+        st.info("👆 Please search for pumps and select them from the results table to view their performance curves.")
