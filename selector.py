@@ -697,6 +697,8 @@ else:
 
     # Continuation from previous code...
 
+   # Continuation from previous code...
+
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
 # Get all available columns from the dataset for later use in column selection
@@ -1106,64 +1108,46 @@ if st.button(get_text("Search")):
                         break
                 
                 if model_column:
-                    # Get models from search results that also have curve data (maintain order from search results)
-                    result_models = displayed_results[model_column].dropna().tolist()  # Keep as list to maintain order
+                    # Get models from search results that also have curve data
+                    result_models = displayed_results[model_column].dropna().unique()
                     curve_models = curve_data["Model No."].dropna().unique()
                     available_models = [model for model in result_models if model in curve_models]
                 
                 if available_models:
-                    # Automatically show top 5 pumps comparison chart
-                    top_models = available_models[:5]  # Get first 5 models
-                    user_flow = st.session_state.get('user_flow', 0)
-                    user_head = st.session_state.get('user_head', 0)
+                    # Pump selection for curve visualization
+                    st.subheader("📈 Select Pumps for Curve Visualization")
                     
-                    # Show automatic comparison chart for top 5
-                    st.subheader(f"🏆 Top {len(top_models)} Pump Performance Comparison")
-                    st.caption(f"Automatically showing curves for: {', '.join(top_models)}")
+                    # Multi-select for pump selection
+                    selected_models = st.multiselect(
+                        "Select pumps to display their performance curves:",
+                        available_models,
+                        key="curve_pump_select",
+                        help="You can select multiple pumps to compare their performance curves"
+                    )
                     
-                    fig_auto = create_comparison_chart(curve_data, top_models, user_flow, user_head)
-                    if fig_auto:
-                        st.plotly_chart(fig_auto, use_container_width=True)
-                    
-                    # Interactive selection section below the automatic chart
-                    st.markdown("---")
-                    col_single, col_compare = st.columns([1, 1])
-                    
-                    with col_single:
-                        st.subheader("🔍 Individual Pump Analysis")
-                        selected_model = st.selectbox(
-                            get_text("Select Pump"),
-                            [""] + list(available_models),
-                            key="single_pump_select"
-                        )
+                    if selected_models:
+                        user_flow = st.session_state.get('user_flow', 0)
+                        user_head = st.session_state.get('user_head', 0)
                         
-                        if selected_model:
-                            # Create and display single pump curve
-                            fig = create_pump_curve_chart(curve_data, selected_model, user_flow, user_head)
+                        if len(selected_models) == 1:
+                            # Show single pump curve
+                            st.subheader(f"Performance Curve - {selected_models[0]}")
+                            fig = create_pump_curve_chart(curve_data, selected_models[0], user_flow, user_head)
                             if fig:
                                 st.plotly_chart(fig, use_container_width=True)
                             else:
                                 st.warning(get_text("No Curve Data"))
-                    
-                    with col_compare:
-                        st.subheader("🔄 Custom Comparison")
-                        # Multi-select for comparison with default selection
-                        selected_models = st.multiselect(
-                            get_text("Select Multiple"),
-                            available_models,
-                            default=top_models[:3] if len(top_models) >= 3 else top_models,  # Default to first 3
-                            key="multi_pump_select"
-                        )
-                        
-                        if len(selected_models) > 1:
-                            # Create and display comparison chart
+                                
+                        elif len(selected_models) > 1:
+                            # Show comparison chart
+                            st.subheader(f"Performance Comparison - {len(selected_models)} Pumps")
+                            st.caption(f"Comparing: {', '.join(selected_models)}")
                             fig_comp = create_comparison_chart(curve_data, selected_models, user_flow, user_head)
                             if fig_comp:
                                 st.plotly_chart(fig_comp, use_container_width=True)
-                        elif len(selected_models) == 1:
-                            st.info("Select at least 2 pumps to compare")
-                        elif len(selected_models) == 0:
-                            st.info("Select pumps to compare")
+                    else:
+                        st.info("👆 Please select one or more pumps above to view their performance curves")
+                        
                 else:
                     st.info("No curve data available for the selected pumps")
             else:
