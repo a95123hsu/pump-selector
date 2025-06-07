@@ -846,15 +846,13 @@ if not pumps.empty and optional_columns:
             if deselect_all:
                 st.session_state.selected_columns = []
             
-            # Create checkboxes for each optional column - store current state without immediate update
-            current_selection = []
-            for col in optional_columns:
-                is_selected = col in st.session_state.selected_columns
-                if st.checkbox(col, value=is_selected, key=f"col_check_{col}"):
-                    current_selection.append(col)
-            
-            # Store the current selection in a temporary state (don't update main state yet)
-            st.session_state.temp_selected_columns = current_selection
+            selected = st.multiselect(
+                label=get_text("Select Columns"),
+                options=optional_columns,
+                default=st.session_state.get("selected_columns", []),
+                key="column_selector"
+            )
+            st.session_state.temp_selected_columns = selected
 else:
     # Use the last confirmed selection from search, or default if none
     selected_optional_columns = st.session_state.get('selected_columns', [])
