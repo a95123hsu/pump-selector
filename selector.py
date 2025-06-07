@@ -811,40 +811,55 @@ if category == "Booster":
 # --- Result Display Limit ---
 st.markdown(get_text("Result Display"))
 
-
 # Column Selection in Result Display Control section
 if not pumps.empty and optional_columns:
     with st.expander(get_text("Column Selection"), expanded=False):
+        # Create two columns for the selection interface
         col_selection_left, col_selection_right = st.columns([1, 1])
-
+        
         with col_selection_left:
             st.caption(get_text("Essential Columns"))
             st.write(", ".join([col for col in essential_columns if col in available_columns]))
-
+            
+            # Select/Deselect All buttons
             col_btn1, col_btn2 = st.columns(2)
             with col_btn1:
-                if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
-                    st.session_state.selected_columns = optional_columns.copy()
+                select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
             with col_btn2:
-                if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
-                    st.session_state.selected_columns = []
-
+                deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
+        
         with col_selection_right:
             st.caption(get_text("Select Columns"))
+            
+            # Initialize selected columns in session state if not exists
             if 'selected_columns' not in st.session_state:
+                # Default selection - Model will be first as essential, then these optional columns
                 default_selected = [
-                    "Category", "Frequency (Hz)", "Phase", "Q Rated/LPM", "Head Rated/M",
-                    "Max Flow (LPM)", "Max Head (M)", "Product Link"
+                    "Category", "Frequency (Hz)", "Phase", "Q Rated/LPM", "Head Rated/M", "Max Flow (LPM)", "Max Head (M)",
+                    "Product Link"
                 ]
                 st.session_state.selected_columns = [col for col in default_selected if col in optional_columns]
+            
+            # Handle Select All / Deselect All button clicks
+            if select_all:
+                st.session_state.selected_columns = optional_columns.copy()
+            if deselect_all:
+                st.session_state.selected_columns = []
+            
+            # Create checkboxes for each optional column - store current state without immediate update
+            current_selection = []
+            for col in optional_columns:
+                is_selected = col in st.session_state.selected_columns
+                if st.checkbox(col, value=is_selected, key=f"col_check_{col}"):
+                    current_selection.append(col)
+            
+            # Store the current selection in a temporary state (don't update main state yet)
+            st.session_state.temp_selected_columns = current_selection
+else:
+    # Use the last confirmed selection from search, or default if none
+    selected_optional_columns = st.session_state.get('selected_columns', [])
 
-            selected = st.multiselect(
-                label=get_text("Select Columns"),
-                options=optional_columns,
-                default=st.session_state.selected_columns,
-                key="column_selector"
-            )
-
+result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Search Logic ---
 if st.button(get_text("Search")):
