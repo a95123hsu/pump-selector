@@ -1098,48 +1098,65 @@ if st.button(get_text("Search")):
                     format="%.1f m"
                 )
             
-            # Display the results with selectable rows using st.data_editor
-            try:
-                # Add a unique key for the data editor
-                selected_df = st.data_editor(
-                    displayed_results,
-                    column_config=column_config,
-                    hide_index=True,
-                    use_container_width=True,
-                    num_rows="fixed",
-                    disabled=columns_to_show,  # Disable editing but allow selection
-                    key="pump_selection_table"
-                )
-                
-                # Get selected rows from the data editor
-                if "pump_selection_table" in st.session_state:
-                    # Check for selected rows in the editor state
-                    selection = st.session_state.get("pump_selection_table", {}).get("edited_rows", {})
-                    if selection:
-                        # Extract model numbers from selected rows
-                        model_column = "Model" if "Model" in displayed_results.columns else "Model No."
-                        selected_indices = list(selection.keys())
-                        selected_models = displayed_results.iloc[selected_indices][model_column].tolist()
-                        st.session_state.selected_curve_models = selected_models
-                
-            except Exception as e:
-                # If the data_editor fails, fall back to multiselect
-                st.error(f"Error with table selection: {e}")
-                st.info("Using alternative selection method...")
-                
-                # Get model column
-                model_column = "Model" if "Model" in displayed_results.columns else "Model No."
-                
-                if model_column in displayed_results.columns:
-                    # Create a multiselect as fallback
-                    available_models = displayed_results[model_column].tolist()
-                    selected_models = st.multiselect(
-                        "Select pumps to view curves:",
-                        available_models,
-                        default=st.session_state.get('selected_curve_models', []),
-                        key="pump_multiselect"
-                    )
+            # METHOD 1: Add checkbox column for selection
+            # Get model column
+            model_column = "Model" if "Model" in displayed_results.columns else "Model No."
+            
+            # Create a copy with checkbox column
+            display_df = displayed_results.copy()
+            
+            # Add selection column at the beginning
+            display_df.insert(0, "Select", False)
+            
+            # Configure checkbox column
+            column_config["Select"] = st.column_config.CheckboxColumn(
+                "Select",
+                help="Select pumps to view performance curves",
+                default=False,
+            )
+            
+            # Display the dataframe with checkboxes
+            edited_df = st.data_editor(
+                display_df,
+                column_config=column_config,
+                hide_index=True,
+                use_container_width=True,
+                num_rows="fixed",
+                disabled=[col for col in columns_to_show if col != "Select"],  # Only enable Select column
+                key="pump_selection_table"
+            )
+            
+            # Get selected pumps
+            if "Select" in edited_df.columns:
+                selected_rows = edited_df[edited_df["Select"] == True]
+                if not selected_rows.empty and model_column in selected_rows.columns:
+                    selected_models = selected_rows[model_column].tolist()
                     st.session_state.selected_curve_models = selected_models
+            
+            # METHOD 2: Alternative approach with multiselect below table
+            st.markdown("---")
+            
+            # Check which models have curve data available
+            if model_column in displayed_results.columns:
+                available_models = displayed_results[model_column].dropna().unique().tolist()
+                curve_models = curve_data["Model No."].dropna().unique()
+                models_with_curves = [model for model in available_models if model in curve_models]
+                
+                if models_with_curves:
+                    # Create multiselect for pump selection
+                    selected_models_multi = st.multiselect(
+                        "📈 Select pumps to view performance curves:",
+                        models_with_curves,
+                        default=st.session_state.get('selected_curve_models', []),
+                        help="You can select multiple pumps to compare their curves",
+                        key="pump_curve_multiselect"
+                    )
+                    
+                    # Update session state if multiselect is used
+                    if selected_models_multi:
+                        st.session_state.selected_curve_models = selected_models_multi
+                else:
+                    st.info("ℹ️ No curve data available for the pumps in your search results.")
     else:
         st.warning(get_text("No Matches"))
 
