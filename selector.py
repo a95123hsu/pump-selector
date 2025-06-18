@@ -282,7 +282,6 @@ def get_text(key, **kwargs):
     if key in translations[lang]:
         text = translations[lang][key]
         return text.format(**kwargs) if kwargs else text
-    # fallback to English
     if key in translations["English"]:
         return translations["English"][key].format(**kwargs) if kwargs else translations["English"][key]
     return key
@@ -434,6 +433,7 @@ st.session_state.setdefault('selected_columns', [])
 st.session_state.setdefault('filtered_pumps', None)
 st.session_state.setdefault('user_flow', 0)
 st.session_state.setdefault('user_head', 0)
+st.session_state.setdefault('result_percent', 100)
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -485,6 +485,7 @@ with col2:
         st.session_state.selected_curve_models = []
         st.session_state.filtered_pumps = None
         st.session_state.selected_columns = []
+        st.session_state.result_percent = 100
 
 # --- Step 1: Basic Search Inputs ---
 st.markdown(get_text("Step 1"))
@@ -519,36 +520,6 @@ if "Phase" in pumps.columns:
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase")] + phase_options)
 else:
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
-
-# --- Column Selection Section ---
-essential_columns = ["Model", "Model No."]
-all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
-optional_columns = [col for col in all_columns if col not in essential_columns]
-
-with st.expander(get_text("Column Selection"), expanded=False):
-    col_left, col_right = st.columns([1, 1])
-    with col_left:
-        st.caption(get_text("Essential Columns"))
-        st.write(", ".join([col for col in essential_columns if col in all_columns]))
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
-            if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
-                st.session_state.selected_columns = optional_columns.copy()
-        with col_btn2:
-            if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
-                st.session_state.selected_columns = []
-    with col_right:
-        st.caption(get_text("Select Columns"))
-        for col in optional_columns:
-            checked = col in st.session_state.selected_columns
-            if st.checkbox(col, value=checked, key=f"col_check_{col}"):
-                if col not in st.session_state.selected_columns:
-                    st.session_state.selected_columns.append(col)
-            else:
-                if col in st.session_state.selected_columns:
-                    st.session_state.selected_columns.remove(col)
-
-result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Application Section ---
 if category == "Booster":
@@ -609,10 +580,49 @@ if category == "Booster":
     col1.metric(get_text("Estimated Floors"), estimated_floors)
     col2.metric(get_text("Estimated Faucets"), estimated_faucets)
 
-# --- Search FORM ---
+# --- Column Selection and Show Percentage (Move INSIDE the search form, right before the Search button) ---
+essential_columns = ["Model", "Model No."]
+all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
+optional_columns = [col for col in all_columns if col not in essential_columns]
+
 with st.form("search_form"):
+    # --- Column Selection inside form ---
+    with st.expander(get_text("Column Selection"), expanded=False):
+        col_left, col_right = st.columns([1, 1])
+        with col_left:
+            st.caption(get_text("Essential Columns"))
+            st.write(", ".join([col for col in essential_columns if col in all_columns]))
+            col_btn1, col_btn2 = st.columns(2)
+            with col_btn1:
+                select_all_clicked = st.form_submit_button(get_text("Select All"), key="select_all_cols_form")
+            with col_btn2:
+                deselect_all_clicked = st.form_submit_button(get_text("Deselect All"), key="deselect_all_cols_form")
+        with col_right:
+            st.caption(get_text("Select Columns"))
+            for col in optional_columns:
+                checked = col in st.session_state.selected_columns
+                if st.checkbox(col, value=checked, key=f"col_check_{col}"):
+                    if col not in st.session_state.selected_columns:
+                        st.session_state.selected_columns.append(col)
+                else:
+                    if col in st.session_state.selected_columns:
+                        st.session_state.selected_columns.remove(col)
+        # Handle select all/deselect all after checkboxes
+        if 'select_all_clicked' in locals() and select_all_clicked:
+            st.session_state.selected_columns = optional_columns.copy()
+        if 'deselect_all_clicked' in locals() and deselect_all_clicked:
+            st.session_state.selected_columns = []
+
+    # --- Show Percentage inside form ---
+    result_percent = st.slider(get_text("Show Percentage"),
+                               min_value=5, max_value=100,
+                               value=st.session_state.get("result_percent", 100),
+                               step=1, key="result_percent")
+
+    # --- Search Button ---
     submit_search = st.form_submit_button(get_text("Search"))
     if submit_search:
+        st.session_state.result_percent = result_percent
         filtered_pumps = pumps.copy()
         filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
         filtered_pumps["Phase"] = pd.to_numeric(filtered_pumps["Phase"], errors='coerce')
