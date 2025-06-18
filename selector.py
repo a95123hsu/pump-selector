@@ -279,9 +279,10 @@ translations = {
 
 def get_text(key, **kwargs):
     lang = st.session_state.get("language", "English")
-    if key in translations.get(lang, {}):
+    if key in translations[lang]:
         text = translations[lang][key]
         return text.format(**kwargs) if kwargs else text
+    # fallback to English
     if key in translations["English"]:
         return translations["English"][key].format(**kwargs) if kwargs else translations["English"][key]
     return key
@@ -433,7 +434,6 @@ st.session_state.setdefault('selected_columns', [])
 st.session_state.setdefault('filtered_pumps', None)
 st.session_state.setdefault('user_flow', 0)
 st.session_state.setdefault('user_head', 0)
-st.session_state.setdefault('result_percent', 100)
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -485,7 +485,6 @@ with col2:
         st.session_state.selected_curve_models = []
         st.session_state.filtered_pumps = None
         st.session_state.selected_columns = []
-        st.session_state.result_percent = 100
 
 # --- Step 1: Basic Search Inputs ---
 st.markdown(get_text("Step 1"))
@@ -521,7 +520,7 @@ if "Phase" in pumps.columns:
 else:
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
-# --- Column Selection (OUTSIDE the form) ---
+# --- Column Selection Section ---
 essential_columns = ["Model", "Model No."]
 all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
 optional_columns = [col for col in all_columns if col not in essential_columns]
@@ -549,10 +548,7 @@ with st.expander(get_text("Column Selection"), expanded=False):
                 if col in st.session_state.selected_columns:
                     st.session_state.selected_columns.remove(col)
 
-result_percent = st.slider(get_text("Show Percentage"),
-                           min_value=5, max_value=100,
-                           value=st.session_state.get("result_percent", 100),
-                           step=1, key="result_percent")
+result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Application Section ---
 if category == "Booster":
@@ -613,11 +609,10 @@ if category == "Booster":
     col1.metric(get_text("Estimated Floors"), estimated_floors)
     col2.metric(get_text("Estimated Faucets"), estimated_faucets)
 
-# --- Search FORM (only filters and button!) ---
+# --- Search FORM ---
 with st.form("search_form"):
     submit_search = st.form_submit_button(get_text("Search"))
     if submit_search:
-        st.session_state.result_percent = result_percent
         filtered_pumps = pumps.copy()
         filtered_pumps["Frequency (Hz)"] = pd.to_numeric(filtered_pumps["Frequency (Hz)"], errors='coerce')
         filtered_pumps["Phase"] = pd.to_numeric(filtered_pumps["Phase"], errors='coerce')
@@ -650,7 +645,7 @@ with st.form("search_form"):
         if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
             filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce").fillna(0)
             filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
-        max_to_show = max(1, int(len(filtered_pumps) * (st.session_state.result_percent / 100)))
+        max_to_show = max(1, int(len(filtered_pumps) * (result_percent / 100)))
         filtered_pumps = filtered_pumps.head(max_to_show).reset_index(drop=True)
         st.session_state.filtered_pumps = filtered_pumps
         st.session_state.user_flow = flow_lpm
@@ -662,6 +657,7 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     filtered_pumps = st.session_state.filtered_pumps
     st.subheader(get_text("Matching Pumps"))
     st.write(get_text("Found Pumps", count=len(filtered_pumps)))
+    # build columns to show: essential + user-selected
     columns_to_show = []
     for col in essential_columns:
         if col in filtered_pumps.columns:
@@ -669,14 +665,18 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     for col in st.session_state.selected_columns:
         if col in filtered_pumps.columns and col not in columns_to_show:
             columns_to_show.append(col)
+    # Always show Select column first
     if "Select" in filtered_pumps.columns and "Select" not in columns_to_show:
         columns_to_show.insert(0, "Select")
+    # Add Product Link column at the end if present
     if "Product Link" in filtered_pumps.columns and "Product Link" in columns_to_show:
         columns_to_show.remove("Product Link")
         columns_to_show.append("Product Link")
     display_df = filtered_pumps[columns_to_show].copy()
+    # selection column
     model_column = "Model" if "Model" in display_df.columns else "Model No."
     display_df.insert(0, "Select", display_df[model_column].isin(st.session_state.selected_curve_models))
+    # column_config
     column_config = {}
     if "Product Link" in display_df.columns:
         column_config["Product Link"] = st.column_config.LinkColumn(
@@ -696,6 +696,7 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
         disabled=[col for col in columns_to_show if col != "Select"],
         key="pump_table_editor"
     )
+    # update session state selection
     selected_rows = edited_df[edited_df["Select"] == True]
     st.session_state.selected_curve_models = selected_rows[model_column].tolist()
     st.write("You selected:", st.session_state.selected_curve_models)
