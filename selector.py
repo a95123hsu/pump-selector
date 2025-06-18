@@ -440,7 +440,6 @@ if 'initialized' not in st.session_state:
     st.session_state.category_selection = None
     st.session_state.frequency_selection = None
     st.session_state.phase_selection = None
-    st.session_state.result_percent = 100
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -502,7 +501,6 @@ with col2:
         st.session_state.category_selection = None
         st.session_state.frequency_selection = None
         st.session_state.phase_selection = None
-        st.session_state.result_percent = 100
         st.rerun()
 
 # --- Step 1: Basic Search Inputs ---
@@ -622,59 +620,36 @@ essential_columns = ["Model", "Model No."]
 all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
 optional_columns = [col for col in all_columns if col not in essential_columns]
 
-# --- Column Selection and Percentage Control with Update Button ---
 with st.expander(get_text("Column Selection"), expanded=False):
-    # Use temp variables, initialized from session_state
-    temp_selected_columns = st.session_state.get("selected_columns", []).copy()
-    temp_result_percent = st.session_state.get("result_percent", 100)
-
     col_left, col_right = st.columns([1, 1])
     with col_left:
         st.caption(get_text("Essential Columns"))
         st.write(", ".join([col for col in essential_columns if col in all_columns]))
         col_btn1, col_btn2 = st.columns(2)
         with col_btn1:
-            select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
-            if select_all:
-                temp_selected_columns = optional_columns.copy()
+            if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
+                st.session_state.selected_columns = optional_columns.copy()
+                st.rerun()
         with col_btn2:
-            deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
-            if deselect_all:
-                temp_selected_columns = []
-    
+            if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
+                st.session_state.selected_columns = []
+                st.rerun()
     with col_right:
         st.caption(get_text("Select Columns"))
-        # Build checkboxes for all optional columns
-        updated_columns = []
+        # Only update session_state.selected_columns ONCE, after the loop
+        new_selected_columns = []
         for col in optional_columns:
-            # Handle select/deselect all button effects
-            if select_all:
-                checked = True
-            elif deselect_all:
-                checked = False
-            else:
-                checked = col in temp_selected_columns
-            
-            if st.checkbox(col, value=checked, key=f"col_check_{col}_temp"):
-                updated_columns.append(col)
-        temp_selected_columns = updated_columns
+            checked = st.checkbox(
+                col, 
+                value=(col in st.session_state.selected_columns),
+                key=f"col_check_{col}"
+            )
+            if checked:
+                new_selected_columns.append(col)
+        st.session_state.selected_columns = new_selected_columns
 
-    # Percentage slider
-    temp_result_percent = st.slider(
-        get_text("Show Percentage"),
-        min_value=5, max_value=100,
-        value=temp_result_percent,
-        step=1, key="result_percent_temp"
-    )
-
-    # Update Button
-    if st.button("📊 Update Display", type="primary", use_container_width=True):
-        st.session_state.selected_columns = temp_selected_columns
-        st.session_state.result_percent = temp_result_percent
-        st.rerun()
-
-# --- Result percentage value for filtering (using saved value) ---
-result_percent = st.session_state.get('result_percent', 100)
+# --- Result percentage slider (MOVED HERE) ---
+result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Search FORM ---
 with st.form("search_form"):
