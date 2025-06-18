@@ -419,21 +419,27 @@ def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=Non
     )
     return fig
 
-# --- Default values ---
-default_values = {
-    "floors": 0, "faucets": 0,
-    "length": 0.0, "width": 0.0, "height": 0.0,
-    "drain_time_hr": 0.01, "underground_depth": 0.0, "particle_size": 0.0,
-    "flow_value": 0.0, "head_value": 0.0
-}
-for key, val in default_values.items():
-    st.session_state.setdefault(key, val)
-st.session_state.setdefault('language', "English")
-st.session_state.setdefault('selected_curve_models', [])
-st.session_state.setdefault('selected_columns', [])
-st.session_state.setdefault('filtered_pumps', None)
-st.session_state.setdefault('user_flow', 0)
-st.session_state.setdefault('user_head', 0)
+# --- Initialize Session State ---
+if 'initialized' not in st.session_state:
+    st.session_state.initialized = True
+    # Default values
+    default_values = {
+        "floors": 0, "faucets": 0,
+        "length": 0.0, "width": 0.0, "height": 0.0,
+        "drain_time_hr": 0.01, "underground_depth": 0.0, "particle_size": 0.0,
+        "flow_value": 0.0, "head_value": 0.0
+    }
+    for key, val in default_values.items():
+        st.session_state[key] = val
+    st.session_state.language = "English"
+    st.session_state.selected_curve_models = []
+    st.session_state.selected_columns = []
+    st.session_state.filtered_pumps = None
+    st.session_state.user_flow = 0
+    st.session_state.user_head = 0
+    st.session_state.category_selection = None
+    st.session_state.frequency_selection = None
+    st.session_state.phase_selection = None
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -480,11 +486,22 @@ with col1:
         st.rerun()
 with col2:
     if st.button(get_text("Reset Inputs"), key="reset_button", help="Reset all fields to default", type="secondary", use_container_width=True):
+        # Reset all input values
+        default_values = {
+            "floors": 0, "faucets": 0,
+            "length": 0.0, "width": 0.0, "height": 0.0,
+            "drain_time_hr": 0.01, "underground_depth": 0.0, "particle_size": 0.0,
+            "flow_value": 0.0, "head_value": 0.0
+        }
         for key, val in default_values.items():
             st.session_state[key] = val
         st.session_state.selected_curve_models = []
         st.session_state.filtered_pumps = None
         st.session_state.selected_columns = []
+        st.session_state.category_selection = None
+        st.session_state.frequency_selection = None
+        st.session_state.phase_selection = None
+        st.rerun()
 
 # --- Step 1: Basic Search Inputs ---
 st.markdown(get_text("Step 1"))
@@ -504,21 +521,40 @@ if "Category" in pumps.columns:
 else:
     category_options = [get_text("All Categories")]
     translated_to_original = {get_text("All Categories"): get_text("All Categories")}
-category_translated = st.selectbox(get_text("Category"), category_options)
+category_translated = st.selectbox(
+    get_text("Category"), 
+    category_options,
+    index=category_options.index(st.session_state.get('category_selection', category_options[0])) if st.session_state.get('category_selection') in category_options else 0,
+    key="category_select"
+)
 category = translated_to_original.get(category_translated, category_translated)
+st.session_state.category_selection = category_translated
 
 if "Frequency (Hz)" in pumps.columns:
     pumps["Frequency (Hz)"] = pd.to_numeric(pumps["Frequency (Hz)"], errors='coerce')
     freq_options = sorted(pumps["Frequency (Hz)"].dropna().unique())
-    frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")] + freq_options)
+    all_freq_options = [get_text("Show All Frequency")] + freq_options
+    freq_index = 0
+    if st.session_state.get('frequency_selection') in all_freq_options:
+        freq_index = all_freq_options.index(st.session_state.get('frequency_selection'))
+    frequency = st.selectbox(get_text("Frequency"), all_freq_options, index=freq_index, key="frequency_select")
+    st.session_state.frequency_selection = frequency
 else:
-    frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")])
+    frequency = st.selectbox(get_text("Frequency"), [get_text("Show All Frequency")], key="frequency_select")
+    st.session_state.frequency_selection = frequency
+
 if "Phase" in pumps.columns:
     pumps["Phase"] = pd.to_numeric(pumps["Phase"], errors='coerce')
     phase_options = [p for p in sorted(pumps["Phase"].dropna().unique()) if p in [1, 3]]
-    phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase")] + phase_options)
+    all_phase_options = [get_text("Show All Phase")] + phase_options
+    phase_index = 0
+    if st.session_state.get('phase_selection') in all_phase_options:
+        phase_index = all_phase_options.index(st.session_state.get('phase_selection'))
+    phase = st.selectbox(get_text("Phase"), all_phase_options, index=phase_index, key="phase_select")
+    st.session_state.phase_selection = phase
 else:
-    phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
+    phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3], key="phase_select")
+    st.session_state.phase_selection = phase
 
 # --- Application Section ---
 if category == "Booster":
@@ -599,13 +635,15 @@ with st.expander(get_text("Column Selection"), expanded=False):
     with col_right:
         st.caption(get_text("Select Columns"))
         for col in optional_columns:
-            checked = col in st.session_state.selected_columns
-            if st.checkbox(col, value=checked, key=f"col_check_{col}"):
-                if col not in st.session_state.selected_columns:
-                    st.session_state.selected_columns.append(col)
-            else:
-                if col in st.session_state.selected_columns:
-                    st.session_state.selected_columns.remove(col)
+            checked = st.checkbox(
+                col, 
+                value=(col in st.session_state.selected_columns),
+                key=f"col_check_{col}"
+            )
+            if checked and col not in st.session_state.selected_columns:
+                st.session_state.selected_columns.append(col)
+            elif not checked and col in st.session_state.selected_columns:
+                st.session_state.selected_columns.remove(col)
 
 # --- Result percentage slider (MOVED HERE) ---
 result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
