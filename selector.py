@@ -722,7 +722,7 @@ if (curve_data is not None and
                 with st.spinner(get_text("Loading Curve")):
                     fig = create_pump_curve_chart(curve_data, available_curve_models[0], user_flow, user_head)
                     if fig:
-                        st.plotly_chart(fig, use_container_width=True, key=f"curve_{available_curve_models[0]}")
+                        st.plotly_chart(fig, use_container_width=True, key=f"single_curve_{available_curve_models[0]}")
                     else:
                         st.warning(get_text("No Curve Data"))
             elif len(available_curve_models) > 1:
@@ -731,13 +731,13 @@ if (curve_data is not None and
                 with st.spinner(get_text("Loading Comparison")):
                     fig_comp = create_comparison_chart(curve_data, available_curve_models, user_flow, user_head)
                     if fig_comp:
-                        st.plotly_chart(fig_comp, use_container_width=True, key="multi_curve")
+                        st.plotly_chart(fig_comp, use_container_width=True, key="multi_curve_comparison")
                 with st.expander("View Individual Pump Curves", expanded=False):
-                    for model in available_curve_models:
+                    for idx, model in enumerate(available_curve_models):
                         st.subheader(f"Performance Curve - {model}")
                         fig = create_pump_curve_chart(curve_data, model, user_flow, user_head)
                         if fig:
-                            st.plotly_chart(fig, use_container_width=True, key=f"curve_{model}")
+                            st.plotly_chart(fig, use_container_width=True, key=f"individual_curve_{idx}_{model}")
                         else:
                             st.warning(f"No curve data available for {model}")
         else:
