@@ -586,7 +586,6 @@ all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
 optional_columns = [col for col in all_columns if col not in essential_columns]
 
 with st.form("search_form"):
-
     # --- Column Selection inside form ---
     with st.expander(get_text("Column Selection"), expanded=False):
         col_left, col_right = st.columns([1, 1])
@@ -595,11 +594,9 @@ with st.form("search_form"):
             st.write(", ".join([col for col in essential_columns if col in all_columns]))
             col_btn1, col_btn2 = st.columns(2)
             with col_btn1:
-                if st.form_submit_button(get_text("Select All"), key="select_all_cols_form"):
-                    st.session_state.selected_columns = optional_columns.copy()
+                select_all_clicked = st.form_submit_button(get_text("Select All"), key="select_all_cols_form")
             with col_btn2:
-                if st.form_submit_button(get_text("Deselect All"), key="deselect_all_cols_form"):
-                    st.session_state.selected_columns = []
+                deselect_all_clicked = st.form_submit_button(get_text("Deselect All"), key="deselect_all_cols_form")
         with col_right:
             st.caption(get_text("Select Columns"))
             for col in optional_columns:
@@ -610,6 +607,11 @@ with st.form("search_form"):
                 else:
                     if col in st.session_state.selected_columns:
                         st.session_state.selected_columns.remove(col)
+        # Handle select all/deselect all after checkboxes
+        if 'select_all_clicked' in locals() and select_all_clicked:
+            st.session_state.selected_columns = optional_columns.copy()
+        if 'deselect_all_clicked' in locals() and deselect_all_clicked:
+            st.session_state.selected_columns = []
 
     # --- Show Percentage inside form ---
     result_percent = st.slider(get_text("Show Percentage"),
