@@ -671,24 +671,24 @@ with st.expander(get_text("Column Selection"), expanded=False):
         step=1, 
         key="result_percent_slider_temp"
     )
+
+# Update Display Button - OUTSIDE the expander
+col_update1, col_update2, col_update3 = st.columns([1, 2, 1])
+with col_update2:
+    # Show current vs pending changes
+    current_cols = len(st.session_state.get('selected_columns', []))
+    pending_cols = len(st.session_state.get('temp_selected_columns', []))
+    current_pct = st.session_state.get('result_percent', 100)
+    pending_pct = st.session_state.get('temp_result_percent', 100)
     
-    # Update Display Button
-    col_update1, col_update2, col_update3 = st.columns([1, 2, 1])
-    with col_update2:
-        if st.button("📊 Update Display", type="primary", use_container_width=True):
-            st.session_state.selected_columns = st.session_state.temp_selected_columns.copy()
-            st.session_state.result_percent = st.session_state.temp_result_percent
-            st.success("Display settings updated!")
-            st.rerun()
-        
-        # Show current vs pending changes
-        current_cols = len(st.session_state.get('selected_columns', []))
-        pending_cols = len(st.session_state.temp_selected_columns)
-        current_pct = st.session_state.get('result_percent', 100)
-        pending_pct = st.session_state.temp_result_percent
-        
-        if current_cols != pending_cols or current_pct != pending_pct:
-            st.info(f"Pending changes: {pending_cols} columns, {pending_pct}% results (Current: {current_cols} columns, {current_pct}%)")
+    if current_cols != pending_cols or current_pct != pending_pct:
+        st.info(f"Pending changes: {pending_cols} columns, {pending_pct}% results")
+    
+    if st.button("📊 Update Display", type="primary", use_container_width=True):
+        st.session_state.selected_columns = st.session_state.get('temp_selected_columns', []).copy()
+        st.session_state.result_percent = st.session_state.get('temp_result_percent', 100)
+        st.success("Display settings updated!")
+        st.rerun()
 
 # --- Result percentage value for filtering (using saved value) ---
 result_percent = st.session_state.get('result_percent', 100)
