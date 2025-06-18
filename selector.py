@@ -440,6 +440,7 @@ if 'initialized' not in st.session_state:
     st.session_state.category_selection = None
     st.session_state.frequency_selection = None
     st.session_state.phase_selection = None
+    st.session_state.result_percent = 100
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -501,6 +502,12 @@ with col2:
         st.session_state.category_selection = None
         st.session_state.frequency_selection = None
         st.session_state.phase_selection = None
+        st.session_state.result_percent = 100
+        # Reset temp values too
+        if 'temp_selected_columns' in st.session_state:
+            del st.session_state.temp_selected_columns
+        if 'temp_result_percent' in st.session_state:
+            del st.session_state.temp_result_percent
         st.rerun()
 
 # --- Step 1: Basic Search Inputs ---
@@ -621,6 +628,12 @@ all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
 optional_columns = [col for col in all_columns if col not in essential_columns]
 
 with st.expander(get_text("Column Selection"), expanded=False):
+    # Initialize temp values from session state
+    if 'temp_selected_columns' not in st.session_state:
+        st.session_state.temp_selected_columns = st.session_state.get("selected_columns", []).copy()
+    if 'temp_result_percent' not in st.session_state:
+        st.session_state.temp_result_percent = st.session_state.get("result_percent", 100)
+    
     col_left, col_right = st.columns([1, 1])
     with col_left:
         st.caption(get_text("Essential Columns"))
@@ -628,28 +641,57 @@ with st.expander(get_text("Column Selection"), expanded=False):
         col_btn1, col_btn2 = st.columns(2)
         with col_btn1:
             if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
-                st.session_state.selected_columns = optional_columns.copy()
+                st.session_state.temp_selected_columns = optional_columns.copy()
                 st.rerun()
         with col_btn2:
             if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
-                st.session_state.selected_columns = []
+                st.session_state.temp_selected_columns = []
                 st.rerun()
+    
     with col_right:
         st.caption(get_text("Select Columns"))
-        # Only update session_state.selected_columns ONCE, after the loop
-        new_selected_columns = []
+        # Build checkboxes for all optional columns
+        updated_columns = []
         for col in optional_columns:
             checked = st.checkbox(
                 col, 
-                value=(col in st.session_state.selected_columns),
-                key=f"col_check_{col}"
+                value=(col in st.session_state.temp_selected_columns),
+                key=f"col_check_{col}_temp"
             )
             if checked:
-                new_selected_columns.append(col)
-        st.session_state.selected_columns = new_selected_columns
+                updated_columns.append(col)
+        st.session_state.temp_selected_columns = updated_columns
+    
+    # Percentage slider
+    st.session_state.temp_result_percent = st.slider(
+        get_text("Show Percentage"),
+        min_value=5, 
+        max_value=100,
+        value=st.session_state.temp_result_percent,
+        step=1, 
+        key="result_percent_slider_temp"
+    )
+    
+    # Update Display Button
+    col_update1, col_update2, col_update3 = st.columns([1, 2, 1])
+    with col_update2:
+        if st.button("📊 Update Display", type="primary", use_container_width=True):
+            st.session_state.selected_columns = st.session_state.temp_selected_columns.copy()
+            st.session_state.result_percent = st.session_state.temp_result_percent
+            st.success("Display settings updated!")
+            st.rerun()
+        
+        # Show current vs pending changes
+        current_cols = len(st.session_state.get('selected_columns', []))
+        pending_cols = len(st.session_state.temp_selected_columns)
+        current_pct = st.session_state.get('result_percent', 100)
+        pending_pct = st.session_state.temp_result_percent
+        
+        if current_cols != pending_cols or current_pct != pending_pct:
+            st.info(f"Pending changes: {pending_cols} columns, {pending_pct}% results (Current: {current_cols} columns, {current_pct}%)")
 
-# --- Result percentage slider (MOVED HERE) ---
-result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
+# --- Result percentage value for filtering (using saved value) ---
+result_percent = st.session_state.get('result_percent', 100)
 
 # --- Search FORM ---
 with st.form("search_form"):
