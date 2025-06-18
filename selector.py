@@ -629,21 +629,24 @@ with st.expander(get_text("Column Selection"), expanded=False):
         with col_btn1:
             if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
                 st.session_state.selected_columns = optional_columns.copy()
+                st.rerun()
         with col_btn2:
             if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
                 st.session_state.selected_columns = []
+                st.rerun()
     with col_right:
         st.caption(get_text("Select Columns"))
+        # Only update session_state.selected_columns ONCE, after the loop
+        new_selected_columns = []
         for col in optional_columns:
             checked = st.checkbox(
                 col, 
                 value=(col in st.session_state.selected_columns),
                 key=f"col_check_{col}"
             )
-            if checked and col not in st.session_state.selected_columns:
-                st.session_state.selected_columns.append(col)
-            elif not checked and col in st.session_state.selected_columns:
-                st.session_state.selected_columns.remove(col)
+            if checked:
+                new_selected_columns.append(col)
+        st.session_state.selected_columns = new_selected_columns
 
 # --- Result percentage slider (MOVED HERE) ---
 result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
