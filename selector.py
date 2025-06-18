@@ -440,7 +440,6 @@ if 'initialized' not in st.session_state:
     st.session_state.category_selection = None
     st.session_state.frequency_selection = None
     st.session_state.phase_selection = None
-    st.session_state.result_percent = 100
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -502,7 +501,6 @@ with col2:
         st.session_state.category_selection = None
         st.session_state.frequency_selection = None
         st.session_state.phase_selection = None
-        st.session_state.result_percent = 100
         st.rerun()
 
 # --- Step 1: Basic Search Inputs ---
@@ -622,59 +620,33 @@ essential_columns = ["Model", "Model No."]
 all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
 optional_columns = [col for col in all_columns if col not in essential_columns]
 
-# --- Column Selection and Percentage Control with Update Button ---
 with st.expander(get_text("Column Selection"), expanded=False):
-    # Use temp variables, initialized from session_state
-    temp_selected_columns = st.session_state.get("selected_columns", []).copy()
-    temp_result_percent = st.session_state.get("result_percent", 100)
-
     col_left, col_right = st.columns([1, 1])
     with col_left:
         st.caption(get_text("Essential Columns"))
         st.write(", ".join([col for col in essential_columns if col in all_columns]))
         col_btn1, col_btn2 = st.columns(2)
         with col_btn1:
-            select_all = st.button(get_text("Select All"), key="select_all_cols", use_container_width=True)
-            if select_all:
-                temp_selected_columns = optional_columns.copy()
+            if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
+                st.session_state.selected_columns = optional_columns.copy()
         with col_btn2:
-            deselect_all = st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True)
-            if deselect_all:
-                temp_selected_columns = []
-    
+            if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
+                st.session_state.selected_columns = []
     with col_right:
         st.caption(get_text("Select Columns"))
-        # Build checkboxes for all optional columns
-        updated_columns = []
         for col in optional_columns:
-            # Handle select/deselect all button effects
-            if select_all:
-                checked = True
-            elif deselect_all:
-                checked = False
-            else:
-                checked = col in temp_selected_columns
-            
-            if st.checkbox(col, value=checked, key=f"col_check_{col}_temp"):
-                updated_columns.append(col)
-        temp_selected_columns = updated_columns
+            checked = st.checkbox(
+                col, 
+                value=(col in st.session_state.selected_columns),
+                key=f"col_check_{col}"
+            )
+            if checked and col not in st.session_state.selected_columns:
+                st.session_state.selected_columns.append(col)
+            elif not checked and col in st.session_state.selected_columns:
+                st.session_state.selected_columns.remove(col)
 
-    # Percentage slider
-    temp_result_percent = st.slider(
-        get_text("Show Percentage"),
-        min_value=5, max_value=100,
-        value=temp_result_percent,
-        step=1, key="result_percent_temp"
-    )
-
-    # Update Button
-    if st.button("📊 Update Display", type="primary", use_container_width=True):
-        st.session_state.selected_columns = temp_selected_columns
-        st.session_state.result_percent = temp_result_percent
-        st.rerun()
-
-# --- Result percentage value for filtering (using saved value) ---
-result_percent = st.session_state.get('result_percent', 100)
+# --- Result percentage slider (MOVED HERE) ---
+result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Search FORM ---
 with st.form("search_form"):
@@ -724,7 +696,6 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     filtered_pumps = st.session_state.filtered_pumps
     st.subheader(get_text("Matching Pumps"))
     st.write(get_text("Found Pumps", count=len(filtered_pumps)))
-    
     # build columns to show: essential + user-selected
     columns_to_show = []
     for col in essential_columns:
@@ -733,80 +704,40 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     for col in st.session_state.selected_columns:
         if col in filtered_pumps.columns and col not in columns_to_show:
             columns_to_show.append(col)
-    
+    # Always show Select column first
+    if "Select" in filtered_pumps.columns and "Select" not in columns_to_show:
+        columns_to_show.insert(0, "Select")
     # Add Product Link column at the end if present
     if "Product Link" in filtered_pumps.columns and "Product Link" in columns_to_show:
         columns_to_show.remove("Product Link")
         columns_to_show.append("Product Link")
-    
     display_df = filtered_pumps[columns_to_show].copy()
-    
-    # Add a unique row identifier to avoid selection conflicts
-    display_df.insert(0, "row_id", range(len(display_df)))
-    
-    # Determine model column
+    # selection column
     model_column = "Model" if "Model" in display_df.columns else "Model No."
-    
-    # Create selection based on row indices instead of model names
-    if 'selected_row_indices' not in st.session_state:
-        st.session_state.selected_row_indices = []
-    
-    # Check which rows are selected based on model names
-    selected_indices = []
-    for idx, row in display_df.iterrows():
-        if row[model_column] in st.session_state.selected_curve_models:
-            # Only add if this exact model at this index was selected
-            if idx in st.session_state.selected_row_indices:
-                selected_indices.append(idx)
-    
-    display_df.insert(1, "Select", display_df.index.isin(selected_indices))
-    
-    # Hide row_id from display
-    column_config = {"row_id": st.column_config.Column(width="small", disabled=True)}
-    
+    display_df.insert(0, "Select", display_df[model_column].isin(st.session_state.selected_curve_models))
+    # column_config
+    column_config = {}
     if "Product Link" in display_df.columns:
         column_config["Product Link"] = st.column_config.LinkColumn(
             "Product Link",
             help="Click to view product details",
             display_text=get_text("View Product")
         )
-    
     column_config["Select"] = st.column_config.CheckboxColumn(
         "Select", help="Select pumps to view performance curves", default=False
     )
-    
-    # Remove row_id from columns to show
-    display_columns = [col for col in display_df.columns if col != "row_id"]
-    
     edited_df = st.data_editor(
-        display_df[display_columns],
+        display_df,
         column_config=column_config,
         hide_index=True,
         use_container_width=True,
         num_rows="fixed",
-        disabled=[col for col in display_columns if col != "Select"],
+        disabled=[col for col in columns_to_show if col != "Select"],
         key="pump_table_editor"
     )
-    
-    # Update session state selection based on edited dataframe
+    # update session state selection
     selected_rows = edited_df[edited_df["Select"] == True]
-    st.session_state.selected_curve_models = []
-    st.session_state.selected_row_indices = []
-    
-    for idx in selected_rows.index:
-        model = display_df.loc[idx, model_column]
-        st.session_state.selected_curve_models.append(model)
-        st.session_state.selected_row_indices.append(idx)
-    
-    # Remove duplicates while preserving order
-    seen = set()
-    unique_models = []
-    for model in st.session_state.selected_curve_models:
-        if model not in seen:
-            seen.add(model)
-            unique_models.append(model)
-    st.session_state.selected_curve_models = unique_models
-    
+    st.session_state.selected_curve_models = selected_rows[model_column].tolist()
     st.write("You selected:", st.session_state.selected_curve_models)
 else:
     st.info("Run a search to see results.")
