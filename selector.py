@@ -520,36 +520,6 @@ if "Phase" in pumps.columns:
 else:
     phase = st.selectbox(get_text("Phase"), [get_text("Show All Phase"), 1, 3])
 
-# --- Column Selection Section ---
-essential_columns = ["Model", "Model No."]
-all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
-optional_columns = [col for col in all_columns if col not in essential_columns]
-
-with st.expander(get_text("Column Selection"), expanded=False):
-    col_left, col_right = st.columns([1, 1])
-    with col_left:
-        st.caption(get_text("Essential Columns"))
-        st.write(", ".join([col for col in essential_columns if col in all_columns]))
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
-            if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
-                st.session_state.selected_columns = optional_columns.copy()
-        with col_btn2:
-            if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
-                st.session_state.selected_columns = []
-    with col_right:
-        st.caption(get_text("Select Columns"))
-        for col in optional_columns:
-            checked = col in st.session_state.selected_columns
-            if st.checkbox(col, value=checked, key=f"col_check_{col}"):
-                if col not in st.session_state.selected_columns:
-                    st.session_state.selected_columns.append(col)
-            else:
-                if col in st.session_state.selected_columns:
-                    st.session_state.selected_columns.remove(col)
-
-result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
-
 # --- Application Section ---
 if category == "Booster":
     st.markdown(get_text("Application Input"))
@@ -608,6 +578,37 @@ if category == "Booster":
     col1, col2 = st.columns(2)
     col1.metric(get_text("Estimated Floors"), estimated_floors)
     col2.metric(get_text("Estimated Faucets"), estimated_faucets)
+
+# --- Column Selection Section (MOVED HERE) ---
+essential_columns = ["Model", "Model No."]
+all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
+optional_columns = [col for col in all_columns if col not in essential_columns]
+
+with st.expander(get_text("Column Selection"), expanded=False):
+    col_left, col_right = st.columns([1, 1])
+    with col_left:
+        st.caption(get_text("Essential Columns"))
+        st.write(", ".join([col for col in essential_columns if col in all_columns]))
+        col_btn1, col_btn2 = st.columns(2)
+        with col_btn1:
+            if st.button(get_text("Select All"), key="select_all_cols", use_container_width=True):
+                st.session_state.selected_columns = optional_columns.copy()
+        with col_btn2:
+            if st.button(get_text("Deselect All"), key="deselect_all_cols", use_container_width=True):
+                st.session_state.selected_columns = []
+    with col_right:
+        st.caption(get_text("Select Columns"))
+        for col in optional_columns:
+            checked = col in st.session_state.selected_columns
+            if st.checkbox(col, value=checked, key=f"col_check_{col}"):
+                if col not in st.session_state.selected_columns:
+                    st.session_state.selected_columns.append(col)
+            else:
+                if col in st.session_state.selected_columns:
+                    st.session_state.selected_columns.remove(col)
+
+# --- Result percentage slider (MOVED HERE) ---
+result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Search FORM ---
 with st.form("search_form"):
