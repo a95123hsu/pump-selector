@@ -67,7 +67,7 @@ translations = {
         "Pond Height": "Pond Height (m)",
         "Drain Time": "Drain Time (hours)",
         "Pond Volume": "📏 Pond Volume: {volume} L",
-        "Required Flow": "💧 Required Flow to drain pond: {flow} LPM",
+        "Required Flow": "💧 Required Flow to drain pond: {flow} {unit}",
         
         # Underground
         "Pump Depth": "Pump Depth Below Ground (m)",
@@ -101,8 +101,8 @@ translations = {
         "No Curve Data": "No curve data available for this pump model",
         "Curve Data Loaded": "Curve data loaded: {count} pumps with curve data",
         "Performance Curve": "Performance Curve - {model}",
-        "Flow Rate": "Flow Rate (LPM)",
-        "Head": "Head (M)",
+        "Flow Rate": "Flow Rate ({unit})",
+        "Head": "Head ({unit})",
         "Operating Point": "Your Operating Point",
         "Efficiency Curve": "Efficiency Curve - {model}",
         "Efficiency": "Efficiency (%)",
@@ -120,8 +120,10 @@ translations = {
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "Q Rated/LPM",
+        "Q Rated": "Q Rated ({unit})",
         "Rated flow rate in liters per minute": "Rated flow rate in liters per minute",
         "Head Rated/M": "Head Rated/M",
+        "Head Rated": "Head Rated ({unit})",
         "Rated head in meters": "Rated head in meters",
         
         # Flow units
@@ -198,7 +200,7 @@ translations = {
         "Pond Height": "池塘高度 (米)",
         "Drain Time": "排水時間 (小時)",
         "Pond Volume": "📏 池塘體積: {volume} 升",
-        "Required Flow": "💧 所需排水流量: {flow} LPM",
+        "Required Flow": "💧 所需排水流量: {flow} {unit}",
         
         # Underground
         "Pump Depth": "幫浦地下深度 (米)",
@@ -232,8 +234,8 @@ translations = {
         "No Curve Data": "此幫浦型號無曲線資料",
         "Curve Data Loaded": "曲線資料已載入: {count} 個幫浦有曲線資料",
         "Performance Curve": "性能曲線 - {model}",
-        "Flow Rate": "流量 (LPM)",
-        "Head": "揚程 (M)",
+        "Flow Rate": "流量 ({unit})",
+        "Head": "揚程 ({unit})",
         "Operating Point": "您的操作點",
         "Efficiency Curve": "效率曲線 - {model}",
         "Efficiency": "效率 (%)",
@@ -251,8 +253,10 @@ translations = {
         
         # Column headers - UPDATED FOR NEW FIELDS
         "Q Rated/LPM": "額定流量 (LPM)",
+        "Q Rated": "額定流量 ({unit})",
         "Rated flow rate in liters per minute": "每分鐘額定流量（公升）",
         "Head Rated/M": "額定揚程 (M)",
+        "Head Rated": "額定揚程 ({unit})",
         "Rated head in meters": "額定揚程（米）",
         
         # Flow units
@@ -286,6 +290,51 @@ def get_text(key, **kwargs):
     if key in translations["English"]:
         return translations["English"][key].format(**kwargs) if kwargs else translations["English"][key]
     return key
+
+# Unit conversion functions
+def convert_flow_from_lpm(value, to_unit):
+    """Convert flow from LPM to specified unit"""
+    if to_unit == "L/min":
+        return value
+    elif to_unit == "L/sec":
+        return value / 60
+    elif to_unit == "m³/hr":
+        return value * 60 / 1000
+    elif to_unit == "m³/min":
+        return value / 1000
+    elif to_unit == "US gpm":
+        return value / 3.785
+    return value
+
+def convert_flow_to_lpm(value, from_unit):
+    """Convert flow to LPM from specified unit"""
+    if from_unit == "L/min":
+        return value
+    elif from_unit == "L/sec":
+        return value * 60
+    elif from_unit == "m³/hr":
+        return value * 1000 / 60
+    elif from_unit == "m³/min":
+        return value * 1000
+    elif from_unit == "US gpm":
+        return value * 3.785
+    return value
+
+def convert_head_from_m(value, to_unit):
+    """Convert head from meters to specified unit"""
+    if to_unit == "m":
+        return value
+    elif to_unit == "ft":
+        return value * 3.28084
+    return value
+
+def convert_head_to_m(value, from_unit):
+    """Convert head to meters from specified unit"""
+    if from_unit == "m":
+        return value
+    elif from_unit == "ft":
+        return value * 0.3048
+    return value
 
 @st.cache_resource
 def init_connection():
@@ -337,7 +386,7 @@ def load_pump_curve_data():
             st.error(get_text("Failed CSV", error=str(csv_error)))
             return pd.DataFrame()
 
-def create_pump_curve_chart(curve_data, model_no, user_flow=None, user_head=None):
+def create_pump_curve_chart(curve_data, model_no, user_flow=None, user_head=None, flow_unit="L/min", head_unit="m"):
     head_columns = [col for col in curve_data.columns if col.endswith('M') and col not in ['Max Head(M)']]
     fig = go.Figure()
     pump_data = curve_data[curve_data['Model No.'] == model_no]
@@ -350,8 +399,9 @@ def create_pump_curve_chart(curve_data, model_no, user_flow=None, user_head=None
             head_value = float(col.replace('M', ''))
             flow_value = pd.to_numeric(pump_row[col], errors='coerce')
             if not pd.isna(flow_value) and flow_value > 0:
-                flows.append(flow_value)
-                heads.append(head_value)
+                # Convert from LPM and M to user's units
+                flows.append(convert_flow_from_lpm(flow_value, flow_unit))
+                heads.append(convert_head_from_m(head_value, head_unit))
         except:
             continue
     if flows and heads:
@@ -361,23 +411,27 @@ def create_pump_curve_chart(curve_data, model_no, user_flow=None, user_head=None
             x=flows, y=heads, mode='lines+markers',
             name=f'{model_no} - Head Curve',
             line=dict(color='blue', width=3), marker=dict(size=8),
-            hovertemplate='Flow: %{x} LPM<br>Head: %{y} M<extra></extra>'
+            hovertemplate=f'Flow: %{{x:.2f}} {flow_unit}<br>Head: %{{y:.2f}} {head_unit}<extra></extra>'
         ))
     if user_flow and user_head and user_flow > 0 and user_head > 0:
+        # Convert user operating point to display units
+        display_flow = convert_flow_from_lpm(user_flow, flow_unit)
+        display_head = convert_head_from_m(user_head, head_unit)
         fig.add_trace(go.Scatter(
-            x=[user_flow], y=[user_head], mode='markers',
+            x=[display_flow], y=[display_head], mode='markers',
             name=get_text("Operating Point"),
             marker=dict(size=15, color='red', symbol='star'),
-            hovertemplate=f'Flow: {user_flow} LPM<br>Head: {user_head} M<extra></extra>'
+            hovertemplate=f'Flow: {display_flow:.2f} {flow_unit}<br>Head: {display_head:.2f} {head_unit}<extra></extra>'
         ))
     fig.update_layout(
         title=get_text("Performance Curve", model=model_no),
-        xaxis_title=get_text("Flow Rate"), yaxis_title=get_text("Head"),
+        xaxis_title=get_text("Flow Rate", unit=flow_unit), 
+        yaxis_title=get_text("Head", unit=head_unit),
         hovermode='closest', showlegend=True, height=500, template='plotly_white'
     )
     return fig
 
-def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=None):
+def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=None, flow_unit="L/min", head_unit="m"):
     fig = go.Figure()
     colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray']
     for i, model_no in enumerate(model_nos):
@@ -392,8 +446,9 @@ def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=Non
                 head_value = float(col.replace('M', ''))
                 flow_value = pd.to_numeric(pump_row[col], errors='coerce')
                 if not pd.isna(flow_value) and flow_value > 0:
-                    flows.append(flow_value)
-                    heads.append(head_value)
+                    # Convert from LPM and M to user's units
+                    flows.append(convert_flow_from_lpm(flow_value, flow_unit))
+                    heads.append(convert_head_from_m(head_value, head_unit))
             except:
                 continue
         if flows and heads:
@@ -404,19 +459,22 @@ def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=Non
                 name=model_no,
                 line=dict(color=colors[i % len(colors)], width=3),
                 marker=dict(size=6),
-                hovertemplate='Flow: %{x} LPM<br>Head: %{y} M<extra></extra>'
+                hovertemplate=f'Flow: %{{x:.2f}} {flow_unit}<br>Head: %{{y:.2f}} {head_unit}<extra></extra>'
             ))
     if user_flow and user_head and user_flow > 0 and user_head > 0:
+        # Convert user operating point to display units
+        display_flow = convert_flow_from_lpm(user_flow, flow_unit)
+        display_head = convert_head_from_m(user_head, head_unit)
         fig.add_trace(go.Scatter(
-            x=[user_flow], y=[user_head], mode='markers',
+            x=[display_flow], y=[display_head], mode='markers',
             name=get_text("Operating Point"),
             marker=dict(size=15, color='red', symbol='star'),
-            hovertemplate=f'Flow: {user_flow} LPM<br>Head: {user_head} M<extra></extra>'
+            hovertemplate=f'Flow: {display_flow:.2f} {flow_unit}<br>Head: {display_head:.2f} {head_unit}<extra></extra>'
         ))
     fig.update_layout(
         title=get_text("Multiple Curves"),
-        xaxis_title=get_text("Flow Rate"),
-        yaxis_title=get_text("Head"),
+        xaxis_title=get_text("Flow Rate", unit=flow_unit),
+        yaxis_title=get_text("Head", unit=head_unit),
         hovermode='closest', showlegend=True, height=500, template='plotly_white'
     )
     return fig
@@ -442,6 +500,8 @@ if 'initialized' not in st.session_state:
     st.session_state.category_selection = None
     st.session_state.frequency_selection = None
     st.session_state.phase_selection = None
+    st.session_state.flow_unit = "L/min"
+    st.session_state.head_unit = "m"
 
 # --- App Config & Header ---
 st.set_page_config(page_title="Pump Selector", layout="wide")
@@ -582,8 +642,6 @@ drain_time_min = drain_time_hr * 60
 pond_lpm = pond_volume / drain_time_min if drain_time_min > 0 else 0
 if pond_volume > 0:
     st.caption(get_text("Pond Volume", volume=round(pond_volume)))
-if pond_lpm > 0:
-    st.success(get_text("Required Flow", flow=round(pond_lpm)))
 
 underground_depth = st.number_input(get_text("Pump Depth"), min_value=0.0, step=0.1, key="underground_depth")
 particle_size = st.number_input(get_text("Particle Size"), min_value=0.0, step=1.0, key="particle_size")
@@ -601,23 +659,40 @@ flow_unit_translated = [get_text(unit) for unit in flow_unit_options]
 flow_unit_map = dict(zip(flow_unit_translated, flow_unit_options))
 flow_unit = st.radio(get_text("Flow Unit"), flow_unit_translated, horizontal=True)
 flow_unit_original = flow_unit_map.get(flow_unit, "L/min")
-flow_value = st.number_input(get_text("Flow Value"), min_value=0.0, step=10.0, value=float(auto_flow), key="flow_value")
+st.session_state.flow_unit = flow_unit_original
+
+# Convert auto_flow to selected unit for display
+auto_flow_display = convert_flow_from_lpm(auto_flow, flow_unit_original)
+flow_value = st.number_input(get_text("Flow Value"), min_value=0.0, step=10.0, value=float(auto_flow_display), key="flow_value")
+
 head_unit_options = ["m", "ft"]
 head_unit_translated = [get_text(unit) for unit in head_unit_options]
 head_unit_map = dict(zip(head_unit_translated, head_unit_options))
 head_unit = st.radio(get_text("Head Unit"), head_unit_translated, horizontal=True)
 head_unit_original = head_unit_map.get(head_unit, "m")
-head_value = st.number_input(get_text("TDH"), min_value=0.0, step=1.0, value=float(auto_tdh), key="head_value")
+st.session_state.head_unit = head_unit_original
+
+# Convert auto_tdh to selected unit for display
+auto_tdh_display = convert_head_from_m(auto_tdh, head_unit_original)
+head_value = st.number_input(get_text("TDH"), min_value=0.0, step=1.0, value=float(auto_tdh_display), key="head_value")
+
+# Display pond flow in selected unit
+if pond_lpm > 0:
+    pond_flow_display = convert_flow_from_lpm(pond_lpm, flow_unit_original)
+    st.success(get_text("Required Flow", flow=round(pond_flow_display, 2), unit=flow_unit_original))
 
 if category == "Booster":
-    estimated_floors = round(head_value / 3.5) if head_value > 0 else 0
-    estimated_faucets = round(flow_value / 15) if flow_value > 0 else 0
+    # Convert back to meters for estimation
+    head_in_m = convert_head_to_m(head_value, head_unit_original)
+    flow_in_lpm = convert_flow_to_lpm(flow_value, flow_unit_original)
+    estimated_floors = round(head_in_m / 3.5) if head_in_m > 0 else 0
+    estimated_faucets = round(flow_in_lpm / 15) if flow_in_lpm > 0 else 0
     st.markdown(get_text("Estimated Application"))
     col1, col2 = st.columns(2)
     col1.metric(get_text("Estimated Floors"), estimated_floors)
     col2.metric(get_text("Estimated Faucets"), estimated_faucets)
 
-# --- Column Selection Section (MOVED HERE) ---
+# --- Column Selection Section ---
 essential_columns = ["Model", "Model No."]
 all_columns = [col for col in pumps.columns if col not in ["DB ID"]]
 optional_columns = [col for col in all_columns if col not in essential_columns]
@@ -643,7 +718,7 @@ with st.expander(get_text("Column Selection"), expanded=False):
                 new_selected_columns.append(col)
         st.session_state.selected_columns = new_selected_columns
 
-# --- Result percentage slider (MOVED HERE) ---
+# --- Result percentage slider ---
 result_percent = st.slider(get_text("Show Percentage"), min_value=5, max_value=100, value=100, step=1)
 
 # --- Search FORM ---
@@ -667,12 +742,11 @@ with st.form("search_form"):
                 filtered_pumps = filtered_pumps[filtered_pumps["Phase"] == phase]
         if category != get_text("All Categories"):
             filtered_pumps = filtered_pumps[filtered_pumps["Category"] == category]
-        flow_lpm = flow_value
-        if flow_unit_original == "L/sec": flow_lpm *= 60
-        elif flow_unit_original == "m³/hr": flow_lpm = flow_value * 1000 / 60
-        elif flow_unit_original == "m³/min": flow_lpm *= 1000
-        elif flow_unit_original == "US gpm": flow_lpm *= 3.785
-        head_m = head_value if head_unit_original == "m" else head_value * 0.3048
+        
+        # Convert user input to LPM and meters for filtering
+        flow_lpm = convert_flow_to_lpm(flow_value, flow_unit_original)
+        head_m = convert_head_to_m(head_value, head_unit_original)
+        
         filtered_pumps["Q Rated/LPM"] = pd.to_numeric(filtered_pumps["Q Rated/LPM"], errors="coerce").fillna(0)
         filtered_pumps["Head Rated/M"] = pd.to_numeric(filtered_pumps["Head Rated/M"], errors="coerce").fillna(0)
         if flow_lpm > 0:
@@ -682,6 +756,15 @@ with st.form("search_form"):
         if particle_size > 0 and "Pass Solid Dia(mm)" in filtered_pumps.columns:
             filtered_pumps["Pass Solid Dia(mm)"] = pd.to_numeric(filtered_pumps["Pass Solid Dia(mm)"], errors="coerce").fillna(0)
             filtered_pumps = filtered_pumps[filtered_pumps["Pass Solid Dia(mm)"] >= particle_size]
+        
+        # Add converted columns for display
+        filtered_pumps[f"Q Rated ({flow_unit_original})"] = filtered_pumps["Q Rated/LPM"].apply(
+            lambda x: round(convert_flow_from_lpm(x, flow_unit_original), 2)
+        )
+        filtered_pumps[f"Head Rated ({head_unit_original})"] = filtered_pumps["Head Rated/M"].apply(
+            lambda x: round(convert_head_from_m(x, head_unit_original), 2)
+        )
+        
         max_to_show = max(1, int(len(filtered_pumps) * (result_percent / 100)))
         filtered_pumps = filtered_pumps.head(max_to_show).reset_index(drop=True)
         st.session_state.filtered_pumps = filtered_pumps
@@ -694,25 +777,37 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     filtered_pumps = st.session_state.filtered_pumps
     st.subheader(get_text("Matching Pumps"))
     st.write(get_text("Found Pumps", count=len(filtered_pumps)))
-    # build columns to show: essential + user-selected
+    
+    # Build columns to show: essential + user-selected + converted columns
     columns_to_show = []
     for col in essential_columns:
         if col in filtered_pumps.columns:
             columns_to_show.append(col)
+    
+    # Add converted flow and head columns
+    flow_unit_display = st.session_state.flow_unit
+    head_unit_display = st.session_state.head_unit
+    columns_to_show.append(f"Q Rated ({flow_unit_display})")
+    columns_to_show.append(f"Head Rated ({head_unit_display})")
+    
     for col in st.session_state.selected_columns:
-        if col in filtered_pumps.columns and col not in columns_to_show:
+        if col in filtered_pumps.columns and col not in columns_to_show and col not in ["Q Rated/LPM", "Head Rated/M"]:
             columns_to_show.append(col)
+    
     # Always show Select column first
     if "Select" in filtered_pumps.columns and "Select" not in columns_to_show:
         columns_to_show.insert(0, "Select")
+    
     # Add Product Link column at the end if present
-    if "Product Link" in filtered_pumps.columns and "Product Link" in columns_to_show:
-        columns_to_show.remove("Product Link")
+    if "Product Link" in filtered_pumps.columns and "Product Link" not in columns_to_show:
         columns_to_show.append("Product Link")
+    
     display_df = filtered_pumps[columns_to_show].copy()
+    
     # selection column
     model_column = "Model" if "Model" in display_df.columns else "Model No."
     display_df.insert(0, "Select", display_df[model_column].isin(st.session_state.selected_curve_models))
+    
     # column_config
     column_config = {}
     if "Product Link" in display_df.columns:
@@ -724,6 +819,17 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     column_config["Select"] = st.column_config.CheckboxColumn(
         "Select", help="Select pumps to view performance curves", default=False
     )
+    column_config[f"Q Rated ({flow_unit_display})"] = st.column_config.NumberColumn(
+        get_text("Q Rated", unit=flow_unit_display),
+        help=f"Rated flow rate in {flow_unit_display}",
+        format="%.2f"
+    )
+    column_config[f"Head Rated ({head_unit_display})"] = st.column_config.NumberColumn(
+        get_text("Head Rated", unit=head_unit_display),
+        help=f"Rated head in {head_unit_display}",
+        format="%.2f"
+    )
+    
     edited_df = st.data_editor(
         display_df,
         column_config=column_config,
@@ -733,6 +839,7 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
         disabled=[col for col in columns_to_show if col != "Select"],
         key="pump_table_editor"
     )
+    
     # update session state selection
     selected_rows = edited_df[edited_df["Select"] == True]
     st.session_state.selected_curve_models = selected_rows[model_column].tolist()
@@ -749,14 +856,20 @@ if (curve_data is not None and
         st.markdown(get_text("Pump Curves"))
         selected_count = len(selected_models)
         st.success(get_text("Selected Pumps", count=selected_count))
-        user_flow = st.session_state.get('user_flow', flow_value)
-        user_head = st.session_state.get('user_head', head_value)
+        user_flow = st.session_state.get('user_flow', 0)
+        user_head = st.session_state.get('user_head', 0)
+        flow_unit_display = st.session_state.flow_unit
+        head_unit_display = st.session_state.head_unit
+        
         available_curve_models = [model for model in selected_models if model in curve_data["Model No."].values]
         if available_curve_models:
             if len(available_curve_models) == 1:
                 st.subheader(f"Performance Curve - {available_curve_models[0]}")
                 with st.spinner(get_text("Loading Curve")):
-                    fig = create_pump_curve_chart(curve_data, available_curve_models[0], user_flow, user_head)
+                    fig = create_pump_curve_chart(
+                        curve_data, available_curve_models[0], user_flow, user_head,
+                        flow_unit_display, head_unit_display
+                    )
                     if fig:
                         st.plotly_chart(fig, use_container_width=True, key=f"single_curve_{available_curve_models[0]}")
                     else:
@@ -765,13 +878,19 @@ if (curve_data is not None and
                 st.subheader(f"Performance Comparison - {len(available_curve_models)} Pumps")
                 st.caption(f"Comparing: {', '.join(available_curve_models)}")
                 with st.spinner(get_text("Loading Comparison")):
-                    fig_comp = create_comparison_chart(curve_data, available_curve_models, user_flow, user_head)
+                    fig_comp = create_comparison_chart(
+                        curve_data, available_curve_models, user_flow, user_head,
+                        flow_unit_display, head_unit_display
+                    )
                     if fig_comp:
                         st.plotly_chart(fig_comp, use_container_width=True, key="multi_curve_comparison")
                 with st.expander("View Individual Pump Curves", expanded=False):
                     for idx, model in enumerate(available_curve_models):
                         st.subheader(f"Performance Curve - {model}")
-                        fig = create_pump_curve_chart(curve_data, model, user_flow, user_head)
+                        fig = create_pump_curve_chart(
+                            curve_data, model, user_flow, user_head,
+                            flow_unit_display, head_unit_display
+                        )
                         if fig:
                             st.plotly_chart(fig, use_container_width=True, key=f"individual_curve_{idx}_{model}")
                         else:
