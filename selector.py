@@ -778,31 +778,36 @@ if st.session_state.filtered_pumps is not None and not st.session_state.filtered
     st.subheader(get_text("Matching Pumps"))
     st.write(get_text("Found Pumps", count=len(filtered_pumps)))
     
-    # Build columns to show: essential + user-selected + converted columns
+    # Build columns to show: essential + user-selected
     columns_to_show = []
     for col in essential_columns:
         if col in filtered_pumps.columns:
             columns_to_show.append(col)
     
-    # Add converted flow and head columns
-    flow_unit_display = st.session_state.flow_unit
-    head_unit_display = st.session_state.head_unit
-    columns_to_show.append(f"Q Rated ({flow_unit_display})")
-    columns_to_show.append(f"Head Rated ({head_unit_display})")
-    
     for col in st.session_state.selected_columns:
         if col in filtered_pumps.columns and col not in columns_to_show and col not in ["Q Rated/LPM", "Head Rated/M"]:
             columns_to_show.append(col)
-    
-    # Always show Select column first
-    if "Select" in filtered_pumps.columns and "Select" not in columns_to_show:
-        columns_to_show.insert(0, "Select")
     
     # Add Product Link column at the end if present
     if "Product Link" in filtered_pumps.columns and "Product Link" not in columns_to_show:
         columns_to_show.append("Product Link")
     
+    # Create display dataframe with selected columns first
     display_df = filtered_pumps[columns_to_show].copy()
+    
+    # Now add the converted flow and head columns to display_df
+    flow_unit_display = st.session_state.flow_unit
+    head_unit_display = st.session_state.head_unit
+    
+    # Insert converted columns after Model/Model No.
+    insert_pos = 2  # After Model and Model No.
+    if f"Q Rated ({flow_unit_display})" in filtered_pumps.columns:
+        display_df.insert(insert_pos, f"Q Rated ({flow_unit_display})", 
+                         filtered_pumps[f"Q Rated ({flow_unit_display})"])
+        insert_pos += 1
+    if f"Head Rated ({head_unit_display})" in filtered_pumps.columns:
+        display_df.insert(insert_pos, f"Head Rated ({head_unit_display})", 
+                         filtered_pumps[f"Head Rated ({head_unit_display})"])
     
     # selection column
     model_column = "Model" if "Model" in display_df.columns else "Model No."
