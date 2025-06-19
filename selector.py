@@ -360,7 +360,8 @@ def create_pump_curve_chart(curve_data, model_no, user_flow=None, user_head=None
         fig.add_trace(go.Scatter(
             x=flows, y=heads, mode='lines+markers',
             name=f'{model_no} - Head Curve',
-            line=dict(color='blue', width=3), marker=dict(size=8)
+            line=dict(color='blue', width=3), marker=dict(size=8),
+            hovertemplate='Flow: %{x} LPM<br>Head: %{y} M<extra></extra>'
         ))
     if user_flow and user_head and user_flow > 0 and user_head > 0:
         fig.add_trace(go.Scatter(
@@ -402,7 +403,8 @@ def create_comparison_chart(curve_data, model_nos, user_flow=None, user_head=Non
                 x=flows, y=heads, mode='lines+markers',
                 name=model_no,
                 line=dict(color=colors[i % len(colors)], width=3),
-                marker=dict(size=6)
+                marker=dict(size=6),
+                hovertemplate='Flow: %{x} LPM<br>Head: %{y} M<extra></extra>'
             ))
     if user_flow and user_head and user_flow > 0 and user_head > 0:
         fig.add_trace(go.Scatter(
